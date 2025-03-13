@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "Nombre": "Luna Vega",
+    "Genero": "Pop",
+    "Foto": "https://example.com/luna_vega.jpg",
+  },
+  {
+    "id": 2,
+    "Nombre": "Midnight Echo",
+    "Genero": "Rock Alternativo",
+    "Foto": "https://example.com/midnight_echo.jpg",
+  },
+  {
+    "id": 3,
+    "Nombre": "DJ Chromatic",
+    "Genero": "Electrónica",
+    "Foto": "https://example.com/dj_chromatic.jpg",
+  },
+  {
+    "id": 4,
+    "Nombre": "Blaze X",
+    "Genero": "Hip-Hop",
+    "Foto": "https://example.com/blaze_x.jpg",
+  },
+  {
+    "id": 5,
+    "Nombre": "Neon Pulse",
+    "Genero": "Synthwave",
+    "Foto": "https://example.com/neon_pulse.jpg",
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "titulo": "Nuevo album sorpresa de Midnight Echo",
+    "descripcion": "La banda de rock alternativo Midnight Echo lanzo inesperadamente su nuevo album 'Shadows & Neon', disponible en todas las plataformas.",
+    "cancion": "midnight_echo_album.mp3",
+    "foto": "url_a_foto_midnight_echo.jpg"
+  },
+  {
+    "id": 2,
+    "titulo": "Colaboracion epica entre Luna Vega y DJ Chromatic",
+    "descripcion": "La cantante pop Luna Vega se une al famoso DJ Chromatic para lanzar 'Electric Dreams', una cancion que promete arrasar en las listas de exitos.",
+    "cancion": "electric_dreams_song.mp3",
+    "foto": "url_a_foto_luna_vega_dj_chromatic.jpg"
+  },
+  {
+    "id": 3,
+    "titulo": "El regreso triunfal de The Wild Strings",
+    "descripcion": "Tras cinco anos de ausencia, la banda de folk rock The Wild Strings anuncia su gira mundial con nuevas canciones y un sonido renovado.",
+    "cancion": "wild_strings_come_back.mp3",
+    "foto": "url_a_foto_the_wild_strings.jpg"
+  },
+  {
+    "id": 4,
+    "titulo": "El polemico mensaje en la ultima cancion de Blaze X",
+    "descripcion": "El rapero Blaze X genera controversia con su nuevo tema 'Realidades Crudas', que critica el estado actual de la industria musical.",
+    "cancion": "realidades_crudas_song.mp3",
+    "foto": "url_a_foto_blaze_x.jpg"
+  },
+  {
+    "id": 5,
+    "titulo": "Synthwave Revival: Neon Pulse lidera la tendencia",
+    "descripcion": "La banda Neon Pulse esta impulsando el resurgimiento del synthwave con su album 'RetroFuture', conquistando tanto a viejos fans como a nuevas generaciones.",
+    "cancion": "neon_pulse_synthwave.mp3",
+    "foto": "url_a_foto_neon_pulse.jpg"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {"id": "0", "tipo": "artista", "descripcion": "Cantante reconocido", "genero": "Pop", "nombre": "Artista A"},
+  {"id": "1", "tipo": "artista", "descripcion": "Banda de rock", "genero": "Rock", "nombre": "Banda B"},
+  {"id": "2", "tipo": "artista", "descripcion": "Rapero famoso", "genero": "Hip-Hop", "nombre": "MC C"},
+  {"id": "3", "tipo": "artista", "descripcion": "Guitarrista virtuoso", "genero": "Blues", "nombre": "Guitar D"},
+  {"id": "4", "tipo": "artista", "descripcion": "Cantante de jazz", "genero": "Jazz", "nombre": "Vocalista E"},
+  {"id": "5", "tipo": "sencillo", "descripcion": "Éxito del verano", "genero": "Pop", "nombre": "Hit A"},
+  {"id": "6", "tipo": "sencillo", "descripcion": "Balada romántica", "genero": "Balada", "nombre": "Balada B"},
+  {"id": "7", "tipo": "sencillo", "descripcion": "Rap underground", "genero": "Hip-Hop", "nombre": "Rap C"},
+  {"id": "8", "tipo": "sencillo", "descripcion": "Instrumental de guitarra", "genero": "Blues", "nombre": "Solo D"},
+  {"id": "9", "tipo": "sencillo", "descripcion": "Clásico del jazz", "genero": "Jazz", "nombre": "Swing E"},
+  {"id": "10", "tipo": "album", "descripcion": "Álbum debut", "genero": "Pop", "nombre": "Álbum A"},
+  {"id": "11", "tipo": "album", "descripcion": "Rock alternativo", "genero": "Rock", "nombre": "Disco B"},
+  {"id": "12", "tipo": "album", "descripcion": "Rap hardcore", "genero": "Hip-Hop", "nombre": "LP C"},
+  {"id": "13", "tipo": "album", "descripcion": "Antología de guitarra", "genero": "Blues", "nombre": "Colección D"},
+  {"id": "14", "tipo": "album", "descripcion": "Mejores éxitos", "genero": "Jazz", "nombre": "Recopilación E"},
+  {"id": "15", "tipo": "fan", "descripcion": "Fan número 1", "genero": "Pop", "nombre": "Fan A"},
+  {"id": "16", "tipo": "fan", "descripcion": "Seguidor leal", "genero": "Rock", "nombre": "Fan B"},
+  {"id": "17", "tipo": "fan", "descripcion": "Coleccionista de vinilos", "genero": "Hip-Hop", "nombre": "Fan C"},
+  {"id": "18", "tipo": "fan", "descripcion": "Asistente a conciertos", "genero": "Blues", "nombre": "Fan D"},
+  {"id": "19", "tipo": "fan", "descripcion": "Aficionado al jazz", "genero": "Jazz", "nombre": "Fan E"}
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "idArticulo": "A001",
+    "Nombre": "Camiseta Oficial de Artista A",
+    "Precio": 25.99,
+    "Artista": "Artista A",
+    "Descripcion": "Producto oficial de Artista A. Perfecto para los fanáticos."
+  },
+  {
+    "id": 2,
+    "idArticulo": "A002",
+    "Nombre": "Vinilo 'Grandes Éxitos de Artista A'",
+    "Precio": 40.0,
+    "Artista": "Artista A'",
+    "Descripcion": "Producto oficial de Artista A'. Perfecto para los fanáticos."
+  },
+  {
+    "id": 3,
+    "idArticulo": "B001",
+    "Nombre": "Gorra de Banda B",
+    "Precio": 19.99,
+    "Artista": "Banda B",
+    "Descripcion": "Producto oficial de Banda B. Perfecto para los fanáticos."
+  },
+  {
+    "id": 4,
+    "idArticulo": "B002",
+    "Nombre": "CD 'Rock & Baladas de Banda B'",
+    "Precio": 15.5,
+    "Artista": "Banda B'",
+    "Descripcion": "Producto oficial de Banda B'. Perfecto para los fanáticos."
+  },
+  {
+    "id": 5,
+    "idArticulo": "C001",
+    "Nombre": "Sudadera de MC C",
+    "Precio": 35.0,
+    "Artista": "MC C",
+    "Descripcion": "Producto oficial de MC C. Perfecto para los fanáticos."
+  },
+  {
+    "id": 6,
+    "idArticulo": "C002",
+    "Nombre": "Poster 'Rimas de MC C'",
+    "Precio": 10.0,
+    "Artista": "MC C'",
+    "Descripcion": "Producto oficial de MC C'. Perfecto para los fanáticos."
+  },
+  {
+    "id": 7,
+    "idArticulo": "D001",
+    "Nombre": "Púa de guitarra de Guitar D",
+    "Precio": 5.0,
+    "Artista": "Guitar D",
+    "Descripcion": "Producto oficial de Guitar D. Perfecto para los fanáticos."
+  },
+  {
+    "id": 8,
+    "idArticulo": "D002",
+    "Nombre": "CD 'Solos de Guitar D'",
+    "Precio": 18.75,
+    "Artista": "Guitar D'",
+    "Descripcion": "Producto oficial de Guitar D'. Perfecto para los fanáticos."
+  },
+  {
+    "id": 9,
+    "idArticulo": "E001",
+    "Nombre": "Taza de Vocalista E",
+    "Precio": 12.99,
+    "Artista": "Vocalista E",
+    "Descripcion": "Producto oficial de Vocalista E. Perfecto para los fanáticos."
+  },
+  {
+    "id": 10,
+    "idArticulo": "E002",
+    "Nombre": "Vinilo 'Jazz Clásico de Vocalista E'",
+    "Precio": 42.5,
+    "Artista": "Vocalista E'",
+    "Descripcion": "Producto oficial de Vocalista E'. Perfecto para los fanáticos."
+  }
+]

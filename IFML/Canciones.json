@@ -1,0 +1,42 @@
+[
+  {
+    "id": "0",
+    "Titulo": "Hit A",
+    "artista": "Artista A",
+    "Duracion": "3:45",
+    "letra": "Letra de la canción Hit A...",
+    "streams": 10500000
+  },
+  {
+    "id": "1",
+    "Titulo": "Balada B",
+    "artista": "Banda B",
+    "Duracion": "4:12",
+    "letra": "Letra de la canción Balada B...",
+    "streams": 8700000
+  },
+  {
+    "id": "2",
+    "Titulo": "Rap C",
+    "artista": "MC C",
+    "Duracion": "2:58",
+    "letra": "Letra de la canción Rap C...",
+    "streams": 12000000
+  },
+  {
+    "id": "3",
+    "Titulo": "Solo D",
+    "artista": "Guitar D",
+    "Duracion": "5:23",
+    "letra": "Letra de la canción Solo D...",
+    "streams": 6500000
+  },
+  {
+    "id": "4",
+    "Titulo": "Swing E",
+    "artista": "Vocalista E",
+    "Duracion": "3:33",
+    "letra": "Letra de la canción Swing E...",
+    "streams": 9400000
+  }
+]

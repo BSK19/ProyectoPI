@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "Titulo": "Grandes Éxitos de Artista A",
+    "Artista": "Artista A",
+    "Canciones": ["Hit A", "Balada Romántica", "Pop Sensation"],
+    "Duracion": "12:45"
+  },
+  {
+    "id": 2,
+    "Titulo": "Pop Hits de Artista A",
+    "Artista": "Artista A",
+    "Canciones": ["Hit A", "Melodía Suave", "Verano Inolvidable"],
+    "Duracion": "11:32"
+  },
+  {
+    "id": 3,
+    "Titulo": "Rock & Baladas de Banda B",
+    "Artista": "Banda B",
+    "Canciones": ["Balada B", "Rock Clásico", "Balada Épica"],
+    "Duracion": "13:15"
+  },
+  {
+    "id": 4,
+    "Titulo": "Sonidos de Banda B",
+    "Artista": "Banda B",
+    "Canciones": ["Balada B", "Rock Alternativo", "Guitarra y Voz"],
+    "Duracion": "14:02"
+  },
+  {
+    "id": 5,
+    "Titulo": "Rimas de MC C",
+    "Artista": "MC C",
+    "Canciones": ["Rap C", "Estilo Callejero", "Batalla Lírico"],
+    "Duracion": "10:50"
+  },
+  {
+    "id": 6,
+    "Titulo": "Hip-Hop Underground",
+    "Artista": "MC C",
+    "Canciones": ["Rap C", "Flow Mortal", "Barras de Oro"],
+    "Duracion": "11:28"
+  },
+  {
+    "id": 7,
+    "Titulo": "Solos de Guitar D",
+    "Artista": "Guitar D",
+    "Canciones": ["Solo D", "Guitarra Eléctrica", "Blues en la Noche"],
+    "Duracion": "15:05"
+  },
+  {
+    "id": 8,
+    "Titulo": "Melodías de Guitar D",
+    "Artista": "Guitar D",
+    "Canciones": ["Solo D", "Improvisación", "Arpegios Eternos"],
+    "Duracion": "14:30"
+  },
+  {
+    "id": 9,
+    "Titulo": "Jazz Clásico de Vocalista E",
+    "Artista": "Vocalista E",
+    "Canciones": ["Swing E", "Noche de Jazz", "Balada de la Luna"],
+    "Duracion": "12:15"
+  },
+  {
+    "id": 10,
+    "Titulo": "Vibraciones de Jazz",
+    "Artista": "Vocalista E",
+    "Canciones": ["Swing E", "Improvisando", "Sueño Musical"],
+    "Duracion": "13:40"
+  }
+]

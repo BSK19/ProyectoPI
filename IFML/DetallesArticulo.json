@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "idArticulo": "A001",
+    "Nombre": "Camiseta Oficial de Artista A",
+    "Precio": 25.99
+  },
+  {
+    "id": 2,
+    "idArticulo": "A002",
+    "Nombre": "Vinilo 'Grandes Éxitos de Artista A'",
+    "Precio": 40.00
+  },
+  {
+    "id": 3,
+    "idArticulo": "B001",
+    "Nombre": "Gorra de Banda B",
+    "Precio": 19.99
+  },
+  {
+    "id": 4,
+    "idArticulo": "B002",
+    "Nombre": "CD 'Rock & Baladas de Banda B'",
+    "Precio": 15.50
+  },
+  {
+    "id": 5,
+    "idArticulo": "C001",
+    "Nombre": "Sudadera de MC C",
+    "Precio": 35.00
+  },
+  {
+    "id": 6,
+    "idArticulo": "C002",
+    "Nombre": "Poster 'Rimas de MC C'",
+    "Precio": 10.00
+  },
+  {
+    "id": 7,
+    "idArticulo": "D001",
+    "Nombre": "Púa de guitarra de Guitar D",
+    "Precio": 5.00
+  },
+  {
+    "id": 8,
+    "idArticulo": "D002",
+    "Nombre": "CD 'Solos de Guitar D'",
+    "Precio": 18.75
+  },
+  {
+    "id": 9,
+    "idArticulo": "E001",
+    "Nombre": "Taza de Vocalista E",
+    "Precio": 12.99
+  },
+  {
+    "id": 10,
+    "idArticulo": "E002",
+    "Nombre": "Vinilo 'Jazz Clásico de Vocalista E'",
+    "Precio": 42.50
+  }
+]
