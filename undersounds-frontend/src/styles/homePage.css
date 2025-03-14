@@ -1,0 +1,56 @@
+/* Reset y estilos globales */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+}
+
+/* Contenedor principal */
+.homepage {
+    animation: fadeIn 1s ease-in;
+    padding-bottom: 40px;
+}
+
+/* Títulos generales */
+.homepage h1 {
+    text-align: center;
+    font-size: 3em;
+    margin: 20px 0 10px;
+    color: #d35400;
+}
+
+.homepage h2 {
+    text-align: center;
+    font-size: 2em;
+    margin: 10px 0 20px;
+    color: #2980b9;
+}
+
+/* Album list como grid */
+.album-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Estilos base para cada album */
+.album-item {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease;
+}
+
+.album-item:hover {
+    transform: translateY(-5px);
+}
