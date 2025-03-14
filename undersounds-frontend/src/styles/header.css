@@ -1,0 +1,85 @@
+.header-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Logo en la parte izquierda */
+.header-left .logo img {
+    height: 80px;
+    width: auto;
+    display: block;
+}
+
+/* Formulario de búsqueda en el centro */
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.header-search-form {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.header-search-form input {
+    padding: 8px 12px;
+    border: none;
+    font-size: 14px;
+    width: 220px;
+}
+
+.header-search-form input:focus {
+    outline: none;
+}
+
+.header-search-form button {
+    padding: 8px 16px;
+    background-color: #1da0c3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.header-search-form button:hover {
+    background-color: #1790b0;
+}
+
+/* Enlaces de Sign Up y Log In en la parte derecha */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-right a {
+    text-decoration: none;
+    color: #1da0c3;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.header-right a:hover {
+    color: #1790b0;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .header-search-form input {
+        width: 150px;
+    }
+    .header-right {
+        gap: 10px;
+    }
+}

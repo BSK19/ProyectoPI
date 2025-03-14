@@ -3,25 +3,22 @@ import { Link } from 'react-router-dom';
 
 const Navigation = () => {
     return (
-        <nav className="navigation">
+        <nav className="navigation-menu">
             <ul>
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/discover">Discover</Link>
                 </li>
                 <li>
-                    <Link to="/explore">Explore</Link>
+                    <Link to="/discover?filter=vinyl">Vinyl</Link>
                 </li>
                 <li>
-                    <Link to="/albums">Albums</Link>
+                    <Link to="/discover?filter=cds">CDs</Link>
                 </li>
                 <li>
-                    <Link to="/artists">Artists</Link>
+                    <Link to="/discover?filter=cassettes">Cassettes</Link>
                 </li>
                 <li>
-                    <Link to="/login">Login</Link>
-                </li>
-                <li>
-                    <Link to="/register">Register</Link>
+                    <Link to="/discover?filter=tshirts">T Shirts</Link>
                 </li>
             </ul>
         </nav>

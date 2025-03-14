@@ -6,51 +6,232 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: #f7f7f7;
-    color: #333;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f8f8f8;
+    color: #404040;
+    line-height: 1.5;
 }
 
 /* Contenedor principal */
 .homepage {
-    animation: fadeIn 1s ease-in;
-    padding-bottom: 40px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
 }
 
-/* Títulos generales */
-.homepage h1 {
+/* Banner principal */
+.homepage-banner {
+    background-color: #1DA0C3;
+    color: white;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    border-radius: 4px;
     text-align: center;
-    font-size: 3em;
-    margin: 20px 0 10px;
-    color: #d35400;
 }
 
-.homepage h2 {
-    text-align: center;
-    font-size: 2em;
-    margin: 10px 0 20px;
-    color: #2980b9;
+.homepage-banner h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: white;
 }
 
-/* Album list como grid */
-.album-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 0 20px;
-    max-width: 1200px;
+.homepage-banner p {
+    font-size: 1.2rem;
+    max-width: 600px;
     margin: 0 auto;
 }
 
-/* Estilos base para cada album */
+/* Sección de novedades */
+.featured-section {
+    margin: 40px 0;
+}
+
+.featured-section h2 {
+    font-size: 1.5rem;
+    color: #161113;
+    margin-bottom: 20px;
+    font-weight: 500;
+    border-bottom: 1px solid #e3e3e3;
+    padding-bottom: 10px;
+}
+
+/* Album grid */
+.album-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Estilo de cada álbum */
 .album-item {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.3s ease;
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .album-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.album-cover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.album-info {
+    padding: 12px;
+}
+
+.album-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #161113;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-artist {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.album-genre, .album-price {
+    font-size: 0.8rem;
+    color: #666;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Navigation bar styling */
+.navigation {
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navigation ul {
+    display: flex;
+    list-style: none;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navigation li {
+    padding: 15px 0;
+    margin-right: 25px;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: #161113;
+    font-weight: 500;
+    font-size: 15px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.navigation a:hover,
+.navigation a.active {
+    border-bottom-color: #1DA0C3;
+}
+
+/* Search bar styling */
+.search-bar {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.search-bar form {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    font-size: 16px;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-bar button {
+    background: #1DA0C3;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-bar button:hover {
+    background: #1790b0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .album-list {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
+    .homepage-banner h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Estilos para resultados de búsqueda */
+.search-results {
+    margin-top: 30px;
+}
+
+.search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clear-search {
+    background: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #505050;
+    transition: background-color 0.2s;
+}
+
+.clear-search:hover {
+    background: #e0e0e0;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+    font-size: 1.1rem;
+    background: white;
+    border-radius: 5px;
+    margin: 20px 0;
 }
