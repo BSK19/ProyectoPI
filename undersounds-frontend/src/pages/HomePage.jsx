@@ -3,10 +3,13 @@ import SearchBar from '../components/Search/SearchBar';
 import albums from '../mockData/albums';
 import '../styles/homePage.css';
 import { Link } from 'react-router-dom';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Divider, Typography, Box } from '@mui/material';
+import noticiasMusica from '../mockData/noticiasMusica'; // Asegúrate de que la ruta sea correcta
 
 const HomePage = () => {
     const [searchResults, setSearchResults] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
+    const noticia = noticiasMusica[0]; 
 
     const handleSearch = (query) => {
         if (!query.trim()) {
@@ -36,10 +39,32 @@ const HomePage = () => {
 
     return (
         <div className="homepage">
-            <div className="homepage-banner">
-                <h1>Discover and support independent musicians</h1>
-                <p>UnderSounds is where independent artists and listeners come together.</p>
-            </div>
+        <Grid
+        container
+        sx={{
+
+            margin: 0, // Elimina cualquier margen extra
+            backgroundColor: '#1da0c3', // Color de fondo
+            color: 'white', // Color del texto
+
+        }}
+        justifyContent="center" // Centra el contenido horizontalmente
+        >
+
+            {/* Aquí mostramos la imagen y el título de la noticia */}
+            <Grid item xs={12} sm={6} md={4} textAlign="center" sx={{ mt: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <img
+                        src={noticia.imagen} // Ruta de la imagen de la noticia
+                        alt={noticia.titulo} // Título de la noticia como alt (solo para accesibilidad)
+                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px' }}
+                    />
+                    <Typography variant="h6" sx={{ mt: 2 }}>
+                        {noticia.titulo} {/* Título de la noticia que se muestra en la UI */}
+                    </Typography>
+                </Box>
+            </Grid>
+        </Grid>
             
             <SearchBar onSearch={handleSearch} />
             

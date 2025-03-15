@@ -1,28 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Button, Box } from '@mui/material';
 
 const Navigation = () => {
-    return (
-        <nav className="navigation-menu">
-            <ul>
-                <li>
-                    <Link to="/discover">Discover</Link>
-                </li>
-                <li>
-                    <Link to="/discover?filter=vinyl">Vinyl</Link>
-                </li>
-                <li>
-                    <Link to="/discover?filter=cds">CDs</Link>
-                </li>
-                <li>
-                    <Link to="/discover?filter=cassettes">Cassettes</Link>
-                </li>
-                <li>
-                    <Link to="/discover?filter=tshirts">T Shirts</Link>
-                </li>
-            </ul>
-        </nav>
-    );
+  const navigate = useNavigate();
+
+  const handleFilter = (filter) => {
+    navigate(`/discover?filter=${filter}`);
+  };
+
+  return (
+    <AppBar position="static" color="secondary" elevation={0}>
+      <Toolbar sx={{ justifyContent: 'center' }}>
+        <Button color="inherit" component={Link} to="/discover">
+          Discover
+        </Button>
+        <Button color="inherit" onClick={() => handleFilter('vinyl')}>
+          Vinyl
+        </Button>
+        <Button color="inherit" onClick={() => handleFilter('cds')}>
+          CDs
+        </Button>
+        <Button color="inherit" onClick={() => handleFilter('cassettes')}>
+          Cassettes
+        </Button>
+        <Button color="inherit" onClick={() => handleFilter('tshirts')}>
+          T Shirts
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Navigation;
