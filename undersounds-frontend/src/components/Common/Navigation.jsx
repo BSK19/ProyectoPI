@@ -11,7 +11,7 @@ const Navigation = () => {
 
   return (
     <AppBar position="static" color="secondary" elevation={0}>
-      <Toolbar sx={{ justifyContent: 'center' }}>
+      <Toolbar sx={{ justifyContent: 'center'}}>
         <Button color="inherit" component={Link} to="/discover">
           Discover
         </Button>

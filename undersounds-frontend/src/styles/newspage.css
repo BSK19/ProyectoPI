@@ -1,0 +1,75 @@
+/* Estilo global */
+body {
+    
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Contenedor principal */
+  .news-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-size: cover; /* Hace que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-attachment: fixed; /* Fija la imagen cuando se hace scroll */
+  }
+  
+  
+  /* Título de la noticia */
+  .news-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Imagen de la noticia */
+  .news-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  /* Descripción de la noticia */
+  .news-description {
+    font-family: 'Arial', sans-serif;  /* Fuente más neutral y profesional */
+    font-size: 1.1rem;  /* Tamaño de fuente un poco más grande para mejor legibilidad */
+    color: #333;  /* Color de texto más oscuro para mejor contraste */
+    line-height: 1.8;  /* Mayor altura de línea para mejorar la legibilidad */
+    margin-top: 20px;
+    margin-bottom: 20px;  /* Añadir espacio en la parte inferior para separar de otros elementos */
+    text-align: justify;  /* Alineación justificada para un aspecto de párrafo limpio */
+    text-indent: 30px;  /* Sangría al comienzo de cada párrafo */
+    background-color: #f9f9f9;  /* Color de fondo suave para resaltar el área de texto */
+    max-width: 800px;  /* Limitar el ancho máximo para que no se extienda demasiado */
+    margin-left: auto;  /* Centrar el bloque de texto */
+    margin-right: auto;  /* Centrar el bloque de texto */
+    padding: 20px;  /* Añadir espacio interno para que el texto no esté pegado al borde */
+  }
+  
+  
+  /* Autor y fecha de la noticia */
+  .news-author,
+  .news-date {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0px;
+    text-align: center;
+  }
+  
+  /* Estilo para el texto de 'noticia no encontrada' */
+  .not-found {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff0000;
+  }
+  

@@ -1,0 +1,145 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .profile-image {
+    border-radius: 50%;           /* Mantener las esquinas redondeadas */
+    width: 400px;
+    height: 400px;
+    object-fit: cover;            /* Asegura que la imagen cubra el área sin deformarse */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Agregar sombra suave alrededor de la imagen */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para el efecto de hover */
+  }
+  
+  .artist-name {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
+  }
+  
+  .artist-bio {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 20px;
+    text-align: center;
+    padding: 0 10px;
+  }
+  
+  .tab-label {
+    font-size: 1.2rem;
+  }
+  
+  .tab-panel {
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .tab-content {
+    margin-top: 20px;
+  }
+  
+  .tab-content .grid-container {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    justify-items: center;
+  }
+  
+  .tab-content .grid-item {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(117, 105, 105, 0.815);
+    text-align: center;
+    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Asegura que el contenido esté centrado verticalmente */
+    align-items: center;      /* Asegura que el contenido esté centrado horizontalmente */
+  }
+  
+  .tab-content img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* Asegura que la imagen cubra todo el contenedor */
+    object-position: center;  /* Centra la imagen dentro de su contenedor */
+  }
+  
+  
+  .tab-content .item-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #000000;
+  }
+  
+  .tab-content .item-details {
+    font-size: 0.75rem;
+    color: #000000;
+  }
+  
+  /* Tabs y navegación */
+  .MuiTab-root {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .MuiTabs-indicator {
+    background-color: #333;
+  }
+  
+  .Mui-selected {
+    color: #333 !important;
+    font-weight: bold;
+  }
+  
+  .MuiTabs-root {
+    margin-bottom: 16px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .profile-image {
+      width: 120px;
+      height: 120px;
+    }
+  
+  
+    .artist-bio {
+      font-size: 0.9rem;
+    }
+  
+    .tab-content .grid-container {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+  }
+  
+  .tab-content .grid-item div {
+    width: 100%;
+    padding-top: 100%;  /* Mantiene la relación 1:1 */
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra el contenido verticalmente */
+  }
+
+  
+
+
+  

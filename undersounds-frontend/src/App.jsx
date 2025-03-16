@@ -6,6 +6,8 @@ import Navigation from './components/Common/Navigation';
 import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import AlbumPage from './pages/AlbumPage';
+import News from './pages/News';  // Importar componente News
+import ArtistProfile from './pages/ArtistProfile';  // Importar componente News
 import ArtistDashboard from './pages/ArtistDashboard';
 import UserProfile from './pages/UserProfile';
 import Login from './components/Auth/Login';
@@ -41,9 +43,11 @@ const App = () => {
             <Route path="/user/profile" element={<UserProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/artistProfile/:id" element={<ArtistProfile />} /> {/* Ruta dinámica de noticias */}
+            <Route path="/news/:noticiaId" element={<News />} /> {/* Ruta dinámica de noticias */}
           </Routes>
           <Footer />
-          <SignUpDialog /> {/* Movido dentro del Router */}
+          <SignUpDialog />
         </Router>
       </RegisterProvider>
     </ThemeProvider>

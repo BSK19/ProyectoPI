@@ -3,7 +3,7 @@ const albums = [
         id: 1,
         title: "Echoes of Time",
         artist: "The Soundscapers",
-        coverImage: "/assets/images/echoes_of_time.jpg",
+        coverImage: "../assets/images/albumPrueba.jpeg",
         price: 9.99,
         releaseYear: 2023,
         genre: "Ambient",
@@ -53,6 +53,24 @@ const albums = [
             { userId: 6, rating: 3, comment: "Some songs are a bit slow." },
         ],
     },
+    {
+        id: 4,
+        title: "Scaled and Icyt",
+        artist: "Twenty One Pilots",
+        coverImage: "/assets/images/melodies_of_the_heart.jpg",
+        price: 8.99,
+        releaseYear: 2021,
+        genre: "Pop",
+        tracks: [
+            { id: 1, title: "Good Day", duration: "3:30" },
+            { id: 2, title: "Shy Away", duration: "4:00" },
+            { id: 3, title: "Saturday", duration: "4:50" },
+        ],
+        ratings: [
+            { userId: 5, rating: 5, comment: "A masterpiece!" },
+            { userId: 6, rating: 3, comment: "Some songs are a bit slow." },
+        ],
+    }
 ];
 
 export default albums;
