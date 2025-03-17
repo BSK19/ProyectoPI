@@ -1,9 +1,14 @@
+import albumPrueba from '../assets/images/albumPrueba.jpeg';
+import albumPrueba2 from '../assets/images/MOTH.jpg';
+import albumPrueba3 from '../assets/images/ROTN.jpg';
+import albumPrueba4 from '../assets/images/EOT.jpeg';
+
 const albums = [
     {
         id: 1,
         title: "Echoes of Time",
         artist: "The Soundscapers",
-        coverImage: "../assets/images/albumPrueba.jpeg",
+        coverImage: albumPrueba4,
         price: 9.99,
         releaseYear: 2023,
         genre: "Ambient",
@@ -21,7 +26,7 @@ const albums = [
         id: 2,
         title: "Rhythms of the Night",
         artist: "DJ Beats",
-        coverImage: "/assets/images/rhythms_of_the_night.jpg",
+        coverImage: albumPrueba3,
         price: 12.99,
         releaseYear: 2022,
         genre: "Electronic",
@@ -39,7 +44,7 @@ const albums = [
         id: 3,
         title: "Melodies of the Heart",
         artist: "Soulful Voices",
-        coverImage: "/assets/images/melodies_of_the_heart.jpg",
+        coverImage: albumPrueba2,
         price: 8.99,
         releaseYear: 2021,
         genre: "Pop",
@@ -57,7 +62,7 @@ const albums = [
         id: 4,
         title: "Scaled and Icyt",
         artist: "Twenty One Pilots",
-        coverImage: "/assets/images/melodies_of_the_heart.jpg",
+        coverImage: albumPrueba,
         price: 8.99,
         releaseYear: 2021,
         genre: "Pop",

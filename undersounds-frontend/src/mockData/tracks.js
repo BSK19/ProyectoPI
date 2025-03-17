@@ -1,3 +1,5 @@
+import coverImage1 from "../assets/images/EOT.jpeg";
+
 const tracks = [
   {
     id: 1,
@@ -9,6 +11,7 @@ const tracks = [
     format: ["MP3", "FLAC", "WAV"],
     releaseDate: "2023-01-15",
     genre: "Rock",
+    coverImage: coverImage1,
     comments: [
       {
         user: "User1",
@@ -32,6 +35,7 @@ const tracks = [
     format: ["MP3", "WAV"],
     releaseDate: "2023-02-20",
     genre: "Pop",
+    coverImage: coverImage1,
     comments: [
       {
         user: "User3",
@@ -50,6 +54,7 @@ const tracks = [
     format: ["MP3", "FLAC"],
     releaseDate: "2023-03-10",
     genre: "Jazz",
+    coverImage: coverImage1,
     comments: [],
   },
 ];

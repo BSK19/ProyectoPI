@@ -1,7 +1,10 @@
+import imagenPFP from '../assets/images/artista.jpg';
+
 const artists = [
     {
         id: 1,
         name: "Artist One",
+        profileImage: imagenPFP,
         genre: "Rock",
         bio: "An up-and-coming rock artist known for their energetic performances.",
         albums: [
@@ -59,6 +62,7 @@ const artists = [
     {
         id: 2,
         name: "Artist Two",
+        profileImage: imagenPFP,
         genre: "Pop",
         bio: "A pop sensation with catchy tunes and a vibrant style.",
         albums: [
@@ -96,6 +100,7 @@ const artists = [
     {
         id: 3,
         name: "Artist Three",
+        profileImage: imagenPFP, 
         genre: "Jazz",
         bio: "A talented jazz musician with a unique sound.",
         albums: [
