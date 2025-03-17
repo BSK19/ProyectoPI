@@ -1,20 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import  albums  from '../mockData/albums';
-import Album from '../components/Album/Album';
+import albums from '../mockData/albums';
+import '../styles/album.css';
+import { AlbumContext } from '../context/AlbumContext';
 
 const AlbumPage = () => {
-    const { albumId } = useParams();
-    const album = albums.find((album) => album.id === parseInt(albumId));
+    const { id } = useParams();
+    const { selectedAlbumId } = useContext(AlbumContext);
+    const albumId = selectedAlbumId || parseInt(id);
+    const album = albums.find((album) => album.id === albumId);
 
     if (!album) {
         return <div>Album not found</div>;
     }
 
     return (
-        <div>
+        <div className="album-page">
             <h1>{album.title}</h1>
-            <Album album={album} />
+            <img src={album.coverImage || '/assets/images/default-cover.jpg'} alt={`${album.title} cover`} />
+            <p>Artist: {album.artist}</p>
+            <p>Release Year: {album.releaseYear}</p>
+            <p>Genre: {album.genre}</p>
+            <p>Price: ${album.price.toFixed(2)}</p>
+            <h2>Track List:</h2>
+            <ul>
+                {album.tracks.map((track) => (
+                    <li key={track.id}>
+                        {track.title} - {track.duration}
+                    </li>
+                ))}
+            </ul>
+            <h2>Ratings:</h2>
+            <ul>
+                {album.ratings.map((rating, index) => (
+                    <li key={index}>
+                        {rating.comment} - {rating.rating} stars
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };

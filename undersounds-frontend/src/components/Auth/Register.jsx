@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RegisterContext } from './RegisterContext';
+import { RegisterContext } from '../../context/RegisterContext.jsx';
 import { register } from '../../services/authService';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -96,7 +96,7 @@ const Register = (props) => {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Register as {registerType.charAt(0).toUpperCase() + registerType.slice(1)}
+            Registrate como {registerType.charAt(0).toUpperCase() + registerType.slice(1)}
           </Typography>
           {error && <Alert severity="error">{error}</Alert>}
           <Box
@@ -111,7 +111,7 @@ const Register = (props) => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="username">Username</FormLabel>
+              <FormLabel htmlFor="username">Nombre de Usuario</FormLabel>
               <TextField
                 id="username"
                 type="text"
@@ -125,12 +125,12 @@ const Register = (props) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="email">Email Address</FormLabel>
+              <FormLabel htmlFor="email">Correo electrónico</FormLabel>
               <TextField
                 id="email"
                 type="email"
                 name="email"
-                placeholder="your@email.com"
+                placeholder="tu@email.com"
                 autoComplete="email"
                 required
                 fullWidth
@@ -140,7 +140,7 @@ const Register = (props) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password">Contraseña</FormLabel>
               <TextField
                 name="password"
                 placeholder="••••••"
@@ -157,12 +157,12 @@ const Register = (props) => {
             {registerType === 'band' && (
               <>
                 <FormControl>
-                  <FormLabel htmlFor="bandName">Band Name</FormLabel>
+                  <FormLabel htmlFor="bandName">Nombre de banda</FormLabel>
                   <TextField
                     id="bandName"
                     type="text"
                     name="bandName"
-                    placeholder="Band Name"
+                    placeholder="Nombre de banda"
                     required
                     fullWidth
                     variant="outlined"
@@ -171,12 +171,12 @@ const Register = (props) => {
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="genre">Genre</FormLabel>
+                  <FormLabel htmlFor="genre">Género</FormLabel>
                   <TextField
                     id="genre"
                     type="text"
                     name="genre"
-                    placeholder="Genre"
+                    placeholder="Género"
                     required
                     fullWidth
                     variant="outlined"
@@ -189,12 +189,12 @@ const Register = (props) => {
             {registerType === 'label' && (
               <>
                 <FormControl>
-                  <FormLabel htmlFor="labelName">Label Name</FormLabel>
+                  <FormLabel htmlFor="labelName">Nombre del sello</FormLabel>
                   <TextField
                     id="labelName"
                     type="text"
                     name="labelName"
-                    placeholder="Label Name"
+                    placeholder="Nombre del Sello"
                     required
                     fullWidth
                     variant="outlined"
@@ -203,12 +203,12 @@ const Register = (props) => {
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="website">Website</FormLabel>
+                  <FormLabel htmlFor="website">Página Web</FormLabel>
                   <TextField
                     id="website"
                     type="text"
                     name="website"
-                    placeholder="Website"
+                    placeholder="Sitio Web"
                     required
                     fullWidth
                     variant="outlined"
@@ -219,7 +219,7 @@ const Register = (props) => {
               </>
             )}
             <Button type="submit" fullWidth variant="contained">
-              Register
+              Registrarse
             </Button>
           </Box>
         </Card>

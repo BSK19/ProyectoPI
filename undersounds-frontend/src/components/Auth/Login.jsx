@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/authService';
+import { RegisterContext } from '../../context/RegisterContext.jsx';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -68,6 +69,7 @@ export default function Login(props) {
   const [errorMessage, setErrorMessage] = useState('');
   const [openForgot, setOpenForgot] = useState(false);
   const navigate = useNavigate();
+  const { setRegisterType } = useContext(RegisterContext);
 
   const handleForgotOpen = () => {
     setOpenForgot(true);
@@ -85,7 +87,7 @@ export default function Login(props) {
       await login(email, password);
       navigate('/'); // Si el login es exitoso, redirige al home
     } catch (err) {
-      setErrorMessage('Invalid email or password');
+      setErrorMessage('Su email o contraseña no es válido');
     }
   };
 
@@ -99,7 +101,7 @@ export default function Login(props) {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign in
+            Inicio sesión	
           </Typography>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           <Box
@@ -114,12 +116,12 @@ export default function Login(props) {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email Address</FormLabel>
+              <FormLabel htmlFor="email">Correo electrónico</FormLabel>
               <TextField
                 id="email"
                 type="email"
                 name="email"
-                placeholder="your@email.com"
+                placeholder="tu@email.com"
                 autoComplete="email"
                 required
                 fullWidth
@@ -129,7 +131,7 @@ export default function Login(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password">Contraseña</FormLabel>
               <TextField
                 name="password"
                 placeholder="••••••"
@@ -145,12 +147,11 @@ export default function Login(props) {
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Recuérdame"
             />
-            {/* Puedes agregar aquí el componente ForgotPassword */}
             <ForgotPassword open={openForgot} handleClose={handleForgotClose} />
             <Button type="submit" fullWidth variant="contained">
-              Sign in
+              Inicia sesión
             </Button>
             <Link
               component="button"
@@ -159,15 +160,48 @@ export default function Login(props) {
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
-              Forgot your password?
+              ¿Olvidaste tu contraseña?
             </Link>
           </Box>
           <Divider>or</Divider>
+          {/* Texto de Sign up usando RegisterContext para establecer el tipo */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
-              <Link href="/register" variant="body2" sx={{ alignSelf: 'center' }}>
-                Sign up
+              ¿No tienes cuenta todavía? Registrate como{' '}
+              <Link
+                component="button"
+                variant="body2"
+                sx={{ mx: 0.5 }}
+                onClick={() => {
+                  setRegisterType('fan');
+                  navigate('/register');
+                }}
+              >
+                Fan
+              </Link>
+              |
+              <Link
+                component="button"
+                variant="body2"
+                sx={{ mx: 0.5 }}
+                onClick={() => {
+                  setRegisterType('band');
+                  navigate('/register');
+                }}
+              >
+                Banda
+              </Link>
+              |
+              <Link
+                component="button"
+                variant="body2"
+                sx={{ mx: 0.5 }}
+                onClick={() => {
+                  setRegisterType('label');
+                  navigate('/register');
+                }}
+              >
+                Sello discográfico
               </Link>
             </Typography>
           </Box>

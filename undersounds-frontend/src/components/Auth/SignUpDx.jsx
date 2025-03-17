@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Divider, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { RegisterContext } from './RegisterContext';
+import { RegisterContext } from '../../context/RegisterContext';
 import signupFan from '../../assets/images/icon-fans.svg';
 import signupBand from '../../assets/images/icon-artists.svg';
 import signupLabel from '../../assets/images/icon-labels.svg';

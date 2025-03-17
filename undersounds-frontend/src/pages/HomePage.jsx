@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import albums from '../mockData/albums';
 import artists from '../mockData/artists';
 import '../styles/homePage.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Grid, Typography, Box, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 import noticiasMusica from '../mockData/noticiasMusica'; // Asegúrate de que la ruta sea correcta
+import { AlbumContext } from '../context/AlbumContext';
 import imagen from '../assets/images/images2.webp';
 import imagen2 from '../assets/images/imagen2.jpeg';
 import imagen3 from '../assets/images/images3.webp'; //arreglar esto, provisional. No consigo que cargue las imgs desde imagen.urlimagen
@@ -14,6 +15,14 @@ const HomePage = () => {
     const noticia = noticiasMusica[0];
     const noticia2 = noticiasMusica[1];
     const noticia3 = noticiasMusica[2];
+
+    const { setSelectedAlbumId } = useContext(AlbumContext);
+    const navigate = useNavigate();
+
+    const handleAlbumClick = (albumId) => {
+        setSelectedAlbumId(albumId);
+        navigate(`/album/${albumId}`);
+    };
 
     return (
         <div className="homepage">
@@ -27,21 +36,19 @@ const HomePage = () => {
                 justifyContent="center"
             >
                 {/* Primera columna (65%) */}
-
                 <Grid item xs={12} md={8} textAlign="center" sx={{ mt: 2 }}>
                     <Link to={`news/${noticia.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <Box
                             sx={{
                                 position: 'relative',
                                 width: '100%',
-                                height: '100%', // Esto hace que ocupe toda la altura disponible
+                                height: '100%', // Ocupa toda la altura disponible
                                 overflow: 'hidden',
                                 borderRadius: '0px',
                                 backgroundColor: '#000', // Fondo negro para evitar espacios vacíos
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-
                             }}
                         >
                             <img
@@ -51,7 +58,7 @@ const HomePage = () => {
                                 style={{
                                     width: '100%',
                                     height: '100%',
-                                    objectFit: 'fill', // Ajuste para no distorsionar la imagen
+                                    objectFit: 'fill',
                                     borderRadius: '0px',
                                 }}
                             />
@@ -83,30 +90,31 @@ const HomePage = () => {
                     sx={{
                         mt: 2,
                         display: 'flex',
-                        flexDirection: 'column', // Esto permite organizar las filas verticalmente
-                        height: '100%', // Hace que ocupe todo el espacio disponible
+                        flexDirection: 'column',
+                        height: '100%',
                     }}
-                >   <Link to={`/news/${noticia2.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                >
+                    <Link to={`/news/${noticia2.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                         {/* Primera fila */}
                         <Grid
                             container
                             sx={{
-                                flex: 1, // Hace que esta fila ocupe la mitad de la altura
+                                flex: 1,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                position: 'relative', // Esto asegura que el texto se posicione relativo al contenedor de la imagen
-                                height: '50%', // Hace que esta fila ocupe el 50% del espacio vertical disponible
+                                position: 'relative',
+                                height: '50%',
                             }}
                         >
                             <img
-                                src={imagen2} // Ruta de la imagen de la noticia
-                                alt={noticia2.titulo} // Título de la noticia como alt
+                                src={imagen2}
+                                alt={noticia2.titulo}
                                 className="img-hover"
                                 style={{
                                     width: '100%',
                                     height: '100%',
-                                    objectFit: 'fill', // Ajuste para no distorsionar la imagen
+                                    objectFit: 'fill',
                                 }}
                             />
                             {/* Texto sobre la imagen */}
@@ -121,34 +129,34 @@ const HomePage = () => {
                                     color: 'white',
                                     padding: '8px',
                                     textAlign: 'left',
-                                    fontSize: '0.8rem', // Ajusta este valor según necesites
+                                    fontSize: '0.8rem',
                                 }}
                             >
                                 {noticia2.titulo}
                             </Typography>
                         </Grid>
                     </Link>
-                    {/* Segunda fila */}
                     <Link to={`/news/${noticia3.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {/* Segunda fila */}
                         <Grid
                             container
                             sx={{
-                                flex: 1, // Hace que esta fila ocupe la otra mitad de la altura
+                                flex: 1,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 position: 'relative',
-                                height: '50%', // Asegura que esta fila ocupe la otra mitad
+                                height: '50%',
                             }}
                         >
                             <img
-                                src={imagen3} // Ruta de la imagen de la noticia
-                                alt={noticia3.titulo} // Título de la noticia como alt
+                                src={imagen3}
+                                alt={noticia3.titulo}
                                 className="img-hover"
                                 style={{
                                     width: '100%',
                                     height: '100%',
-                                    objectFit: 'cover', // Ajuste para no distorsionar la imagen
+                                    objectFit: 'cover',
                                 }}
                             />
                             {/* Texto sobre la imagen */}
@@ -163,7 +171,7 @@ const HomePage = () => {
                                     color: 'white',
                                     padding: '8px',
                                     textAlign: 'left',
-                                    fontSize: '0.8rem', // Ajusta este valor según necesites
+                                    fontSize: '0.8rem',
                                 }}
                             >
                                 {noticia3.titulo}
@@ -173,28 +181,22 @@ const HomePage = () => {
                 </Grid>
             </Grid>
 
-
-
-
-            {/* Mostrar contenido normal de la página */}
-
+            {/* Sección de Albumes Destacados */}
             <div className="featured-section">
                 <div className="featured-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <h2>Albumes Destacados</h2>
-                    <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', }}>
+                    <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc' }}>
                         <h6>Ver más</h6>
                     </Link>
                 </div>
 
                 <div className="album-list">
                     {albums.map((album) => (
-                        <Link to={`/album/${album.id}`} key={album.id} >
-                            <Card className="item" sx={{ maxWidth: 345 }} >
-
+                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album.id)}>
+                            <Card className="item" sx={{ maxWidth: 345 }}>
                                 <CardMedia
                                     component="img"
                                     alt={`${album.title} cover`}
-
                                     image={album.coverImage}
                                     sx={{ aspectRatio: '1 / 1', padding: '25px' }}
                                 />
@@ -215,29 +217,27 @@ const HomePage = () => {
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-                        </Link>
+                        </div>
                     ))}
                 </div>
-
             </div>
 
+            {/* Sección de Nuevos Albumes */}
             <div className="featured-section">
                 <div className="featured-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <h2>Nuevos Albumes</h2>
-                    <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', }}>
+                    <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc' }}>
                         <h6>Ver más</h6>
                     </Link>
                 </div>
 
                 <div className="album-list">
                     {albums.map((album) => (
-                        <Link to={`/album/${album.id}`} key={album.id} >
-                            <Card className="item" sx={{ maxWidth: 345 }} >
-
+                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album.id)}>
+                            <Card className="item" sx={{ maxWidth: 345 }}>
                                 <CardMedia
                                     component="img"
                                     alt={`${album.title} cover`}
-
                                     image={album.coverImage}
                                     sx={{ aspectRatio: '1 / 1', padding: '25px' }}
                                 />
@@ -252,17 +252,15 @@ const HomePage = () => {
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             Genre: {album.genre}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            ${album.price.toFixed(2)}
-                                        </Typography>
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>
 
+            {/* Sección de Artistas Destacados */}
             <div className="featured-section">
                 <div
                     className="featured-section"
@@ -270,7 +268,7 @@ const HomePage = () => {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        marginBottom: '10px'
+                        marginBottom: '10px',
                     }}
                 >
                     <h2>Artistas destacados</h2>
@@ -304,8 +302,6 @@ const HomePage = () => {
                     ))}
                 </div>
             </div>
-
-
         </div>
     );
 };
