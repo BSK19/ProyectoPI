@@ -34,6 +34,7 @@ Album.propTypes = {
             PropTypes.shape({
                 title: PropTypes.string.isRequired,
                 duration: PropTypes.string.isRequired,
+                url: PropTypes.string.isRequired, // Añadir la propiedad url
             })
         ).isRequired,
     }).isRequired,

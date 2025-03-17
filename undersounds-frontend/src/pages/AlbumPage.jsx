@@ -3,10 +3,13 @@ import { useParams } from 'react-router-dom';
 import albums from '../mockData/albums';
 import '../styles/album.css';
 import { AlbumContext } from '../context/AlbumContext';
+import { PlayerContext } from '../context/PlayerContext';
+import AudioPlayer from '../components/Player/AudioPlayer';
 
 const AlbumPage = () => {
     const { id } = useParams();
     const { selectedAlbumId } = useContext(AlbumContext);
+    const { playTrack } = useContext(PlayerContext);
     const albumId = selectedAlbumId || parseInt(id);
     const album = albums.find((album) => album.id === albumId);
 
@@ -27,6 +30,7 @@ const AlbumPage = () => {
                 {album.tracks.map((track) => (
                     <li key={track.id}>
                         {track.title} - {track.duration}
+                        <button onClick={() => playTrack(track)}>Play</button>
                     </li>
                 ))}
             </ul>
@@ -38,6 +42,7 @@ const AlbumPage = () => {
                     </li>
                 ))}
             </ul>
+            <AudioPlayer />
         </div>
     );
 };

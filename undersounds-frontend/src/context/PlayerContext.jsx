@@ -43,3 +43,5 @@ export const PlayerProvider = ({ children }) => {
 export const usePlayer = () => {
     return useContext(PlayerContext);
 };
+
+export { PlayerContext };
