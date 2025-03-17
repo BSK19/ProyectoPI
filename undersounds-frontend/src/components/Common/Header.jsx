@@ -1,21 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Button,
-  InputBase,
-  Box,
-  Tabs,
-  Tab,
-  Paper,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText
-} from '@mui/material';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, Button, InputBase, Box, Tabs, Tab, Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
@@ -33,6 +18,7 @@ const Header = () => {
   // Estado para controlar la visibilidad del dropdown
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const containerRef = useRef(null);
 
   const handleSearch = () => {
@@ -82,6 +68,13 @@ const Header = () => {
 
     return () => clearTimeout(timeoutId);
   }, [query, filter]);
+
+  // Escucha los cambios en la ubicación y reinicia la búsqueda
+  useEffect(() => {
+    setQuery('');
+    setResults([]);
+    setShowDropdown(false);
+  }, [location]);
 
   const handleFilterChange = (event, newValue) => {
     setFilter(newValue);

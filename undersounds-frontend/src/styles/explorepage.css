@@ -53,6 +53,8 @@
   
   .album-details {
     display: flex;
+    margin: 0;
+    padding: 0;
     flex-direction: column;
     justify-content: center;
   }
@@ -157,3 +159,7 @@
     text-align: center;
     margin-top: 8px;
   }
+
+.item-type {
+  color: #919191;
+}
