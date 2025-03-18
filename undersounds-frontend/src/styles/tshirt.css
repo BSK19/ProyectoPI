@@ -1,0 +1,46 @@
+.tshirt-page {
+    display: flex;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.tshirt-page img {
+    width: 70%; /* Imagen un poco más grande */
+    border-radius: 8px;
+}
+
+.tshirt-details {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tshirt-details h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tshirt-details p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* Nuevo estilo para el botón de compra */
+.buy-button {
+    background-color: #1da0c3; /* color azul */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px; /* Botón un poco más pequeño */
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+}

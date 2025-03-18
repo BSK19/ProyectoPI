@@ -13,6 +13,7 @@ import UserProfile from './pages/UserProfile';
 import DiscoverPage from './pages/DiscoverPage';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
+import TshirtPage from './pages/TshirtPage'; // Importa la página de camiseta
 import Footer from './components/Common/Footer';
 import RegisterProvider from './context/RegisterContext';
 import AlbumProvider from './context/AlbumContext';
@@ -31,10 +32,8 @@ const theme = createTheme({
     },
 });
 
-// Componente que envuelve el contenido que depende de la ubicación
 const AppContent = () => {
     const location = useLocation();
-    // Especificamos las rutas donde queremos ocultar Navigation
     const hideNavRoutes = ['/login', '/register', '/explore'];
     const hideNav = hideNavRoutes.includes(location.pathname);
 
@@ -53,6 +52,7 @@ const AppContent = () => {
                 <Route path="/artistProfile/:id" element={<ArtistProfile />} />
                 <Route path="/news/:noticiaId" element={<News />} />
                 <Route path="/discover" element={<DiscoverPage />} />
+                <Route path="/tshirt/:id" element={<TshirtPage />} /> {/* Nueva ruta */}
             </Routes>
             <Footer />
             <SignUpDialog />
