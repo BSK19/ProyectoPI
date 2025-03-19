@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import albums from "../mockData/albums";
-import artists from "../mockData/artists";
-import tshirts from "../mockData/tshirts";
 import {
   Card,
   CardMedia,
@@ -12,6 +9,9 @@ import {
   Button,
   CardActionArea,
 } from "@mui/material";
+import albums from "../mockData/albums";
+import artists from "../mockData/artists";
+import tshirts from "../mockData/tshirts";
 import { AlbumContext } from "../context/AlbumContext";
 
 const DiscoverPage = () => {
@@ -29,9 +29,11 @@ const DiscoverPage = () => {
     setSelectedFilter(filterParam);
   }, [location.search, query]);
 
-  const handleAlbumClick = (albumId) => {
-    setSelectedAlbumId(albumId);
-    navigate(`/album/${albumId}`);
+  // Al hacer click en un álbum se pasa el objeto album en el state
+  const handleAlbumClick = (album) => {
+    // Si usas setSelectedAlbumId para otros fines, puedes conservarlo;
+    // pero aquí nos aseguramos de pasar el objeto album al navegar.
+    navigate(`/album/${album.id}`, { state: { album } });
   };
 
   const handleTshirtClick = (tshirtId) => {
@@ -66,7 +68,7 @@ const DiscoverPage = () => {
     } else if (selectedFilter === "tshirts") {
       filteredTshirts = tshirts;
     }
-    // No se muestran artistas para filtros especiales
+    // No se muestran artistas para estos filtros especiales
   } else {
     // Filtro por género musical (por ejemplo: ambient, electronic, pop)
     filteredAlbums = albums.filter(
@@ -106,7 +108,7 @@ const DiscoverPage = () => {
         {filteredAlbums.map((album) => (
           <Grid item xs={12} sm={6} md={4} key={album.id}>
             <Card>
-              <CardActionArea onClick={() => handleAlbumClick(album.id)}>
+              <CardActionArea onClick={() => handleAlbumClick(album)}>
                 <CardMedia
                   component="img"
                   alt={`${album.title} cover`}
@@ -135,20 +137,22 @@ const DiscoverPage = () => {
         {filteredArtists.map((artist) => (
           <Grid item xs={12} sm={6} md={4} key={artist.id}>
             <Card>
-              <CardMedia
-                component="img"
-                alt={`${artist.name} profile`}
-                image={artist.profileImage}
-                sx={{ aspectRatio: "1 / 1", padding: "25px" }}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {artist.name}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Genre: {artist.genre}
-                </Typography>
-              </CardContent>
+              <CardActionArea onClick={() => navigate(`/artistProfile/${artist.id}`)}>
+                <CardMedia
+                  component="img"
+                  alt={`${artist.name} profile`}
+                  image={artist.profileImage}
+                  sx={{ aspectRatio: "1 / 1", padding: "25px" }}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {artist.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Genre: {artist.genre}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
             </Card>
           </Grid>
         ))}
