@@ -1,14 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
 import AudioPlayer from '../components/Player/AudioPlayer';
 import artists from '../mockData/artists';
+import tracksData from '../mockData/tracks'; // Importa los datos de tracks
 
 const AlbumPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const { playTrack } = useContext(PlayerContext);
+  const [activeTrackId, setActiveTrackId] = useState(null); // Estado para la pista activa
 
   // Intentamos obtener el álbum enviado vía state desde ArtistProfile.jsx
   const albumFromState = location.state?.album;
@@ -47,9 +49,26 @@ const AlbumPage = () => {
       <h2>Track List:</h2>
       <ul>
         {tracks.map((track) => (
-          <li key={track.id}>
-            {track.title} - {track.duration}
-            <button onClick={() => playTrack(track)}>Play</button>
+          <li key={track.id} className="track-item">
+            <div className="track-info">
+              {track.title} - {track.duration}
+              <button
+                onClick={() => {
+                  const trackDetail = tracksData.find(t => t.id === track.id);
+                  if (trackDetail) {
+                    playTrack(trackDetail);
+                    setActiveTrackId(track.id); // Establece la pista activa
+                  } else {
+                    console.error('Track not found in tracks.js');
+                  }
+                }}
+              >
+                Play
+              </button>
+            </div>
+            {activeTrackId === track.id && (
+              <AudioPlayer track={track} />
+            )}
           </li>
         ))}
       </ul>
@@ -61,7 +80,6 @@ const AlbumPage = () => {
           </li>
         ))}
       </ul>
-      <AudioPlayer />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { Typography, Box, Grid, Tab, Tabs } from '@mui/material';
 import '../styles/artistProfile.css';
 import artistaIMG from '../assets/images/artista.jpg';
 import albumIMG from '../assets/images/albumPortada.jpg';
+import albums from '../mockData/albums';
 
 const ArtistProfile = () => {
   const { id } = useParams(); // Capturamos el parámetro de la URL
@@ -21,6 +22,10 @@ const ArtistProfile = () => {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const getArtistAlbums = (artist) => {
+    return albums.filter((album) => album.artist === artist.name);
   };
 
   // Función de accesibilidad para los tabs
@@ -56,7 +61,7 @@ const ArtistProfile = () => {
               boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
             }}>
               <img 
-                src={albumIMG} 
+                src={album.albumIMG} 
                 alt={album.title} 
                 style={{
                   position: 'absolute',
@@ -64,7 +69,7 @@ const ArtistProfile = () => {
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover'
+                  objectFit: 'fill'
                 }}
               />
             </div>

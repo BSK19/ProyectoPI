@@ -19,9 +19,9 @@ const HomePage = () => {
     const { setSelectedAlbumId } = useContext(AlbumContext);
     const navigate = useNavigate();
 
-    const handleAlbumClick = (albumId) => {
-        setSelectedAlbumId(albumId);
-        navigate(`/album/${albumId}`);
+    const handleAlbumClick = (album) => {
+        setSelectedAlbumId(album.id);
+        navigate(`/album/${album.id}`, { state: { album } });
     };
 
     return (
@@ -192,7 +192,7 @@ const HomePage = () => {
 
                 <div className="album-list">
                     {albums.map((album) => (
-                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album.id)}>
+                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album)}>
                             <Card className="item" sx={{ maxWidth: 345 }}>
                                 <CardMedia
                                     component="img"
@@ -233,7 +233,7 @@ const HomePage = () => {
 
                 <div className="album-list">
                     {albums.map((album) => (
-                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album.id)}>
+                        <div key={album.id} className="album-item" onClick={() => handleAlbumClick(album)}>
                             <Card className="item" sx={{ maxWidth: 345 }}>
                                 <CardMedia
                                     component="img"

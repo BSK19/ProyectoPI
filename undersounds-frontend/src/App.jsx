@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import AlbumPage from './pages/AlbumPage';
 import News from './pages/News';
+import ScrollToTop from './components/Common/ScrollToTop';
 import ArtistProfile from './pages/ArtistProfile';
 import ArtistDashboard from './pages/ArtistDashboard';
 import UserProfile from './pages/UserProfile';
@@ -67,6 +68,7 @@ const App = () => {
                 <RegisterProvider>
                     <AlbumProvider>
                         <Router>
+                            <ScrollToTop />
                             <AppContent />
                         </Router>
                     </AlbumProvider>
