@@ -20,6 +20,7 @@ import RegisterProvider from './context/RegisterContext';
 import AlbumProvider from './context/AlbumContext';
 import SignUpDialog from './components/Auth/SignUpDx';
 import { PlayerProvider } from './context/PlayerContext';
+import { AuthProvider } from './context/AuthContext';
 
 const theme = createTheme({
     palette: {
@@ -67,10 +68,12 @@ const App = () => {
             <PlayerProvider>
                 <RegisterProvider>
                     <AlbumProvider>
-                        <Router>
-                            <ScrollToTop />
-                            <AppContent />
-                        </Router>
+                        <AuthProvider>
+                            <Router>
+                                <ScrollToTop />
+                                <AppContent />
+                            </Router>
+                        </AuthProvider>
                     </AlbumProvider>
                 </RegisterProvider>
             </PlayerProvider>

@@ -1,25 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Button, InputBase, Box, Tabs, Tab, Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Button,
+  InputBase,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
 import albums from '../../mockData/albums';
 import artists from '../../mockData/artists';
 import tracks from '../../mockData/tracks';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header = () => {
   const [query, setQuery] = useState('');
   const [openSignUp, setOpenSignUp] = useState(false);
-  // Estado para el filtro: 'all', 'artists', 'albums' o 'tracks'
   const [filter, setFilter] = useState('all');
-  // Array de resultados filtrados
   const [results, setResults] = useState([]);
-  // Estado para controlar la visibilidad del dropdown
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const containerRef = useRef(null);
+  const { user } = useContext(AuthContext);
 
   const handleSearch = () => {
     let filteredResults = [];
@@ -69,7 +83,7 @@ const Header = () => {
     return () => clearTimeout(timeoutId);
   }, [query, filter]);
 
-  // Escucha los cambios en la ubicación y reinicia la búsqueda
+  // Reinicia la búsqueda al cambiar de ruta
   useEffect(() => {
     setQuery('');
     setResults([]);
@@ -88,7 +102,6 @@ const Header = () => {
     setOpenSignUp(false);
   };
 
-  // Manejador para ocultar el dropdown cuando el mouse sale del área
   const handleDropdownMouseLeave = () => {
     setShowDropdown(false);
   };
@@ -143,13 +156,13 @@ const Header = () => {
   return (
     <AppBar position="sticky" color="primary" elevation={2}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        {/* Logo */}
+        {/* Zona Izquierda: Logo siempre visible */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={logo} alt="UnderSounds Logo" style={{ height: '100px' }} />
           </Link>
         </Box>
-        {/* Contenedor de Search con filtros */}
+        {/* Zona central: Área de búsqueda */}
         <Box
           ref={containerRef}
           sx={{ display: 'flex', flexDirection: 'column', mx: 2, flexGrow: 1, position: 'relative' }}
@@ -162,7 +175,6 @@ const Header = () => {
               onFocus={() => {
                 if (query.trim()) setShowDropdown(true);
               }}
-              // Agregamos onClick para reactivar el dropdown si ya hay texto
               onClick={() => {
                 if (query.trim()) setShowDropdown(true);
               }}
@@ -221,14 +233,26 @@ const Header = () => {
             </Paper>
           )}
         </Box>
-        {/* Botones de Sign Up / Log In */}
+        {/* Zona Derecha: Botones de autenticación o Avatar si está logueado */}
         <Box>
-          <Button color="inherit" onClick={handleOpenSignUp}>
-            Sign Up
-          </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Log In
-          </Button>
+          {user ? (
+            <IconButton onClick={() => navigate('/user/profile')}>
+              <Avatar
+                src={user.profileImage}
+                alt={user.username || user.bandName || 'Usuario'}
+                sx={{ width: 40, height: 40 }}
+              />
+            </IconButton>
+          ) : (
+            <>
+              <Button color="inherit" onClick={handleOpenSignUp}>
+                Sign Up
+              </Button>
+              <Button color="inherit" component={Link} to="/login">
+                Log In
+              </Button>
+            </>
+          )}
         </Box>
       </Toolbar>
       <SignUpDialog open={openSignUp} handleClose={handleCloseSignUp} />

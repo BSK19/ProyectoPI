@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/authService';
 import { RegisterContext } from '../../context/RegisterContext.jsx';
+import { AuthContext } from '../../context/AuthContext';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -63,13 +64,13 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function Login(props) {
-  // Estados para email, password y error
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [openForgot, setOpenForgot] = useState(false);
   const navigate = useNavigate();
   const { setRegisterType } = useContext(RegisterContext);
+  const { setUser } = useContext(AuthContext);
 
   const handleForgotOpen = () => {
     setOpenForgot(true);
@@ -83,9 +84,10 @@ export default function Login(props) {
     event.preventDefault();
     setErrorMessage('');
     try {
-      // Llamada a tu servicio de login
-      await login(email, password);
-      navigate('/'); // Si el login es exitoso, redirige al home
+      // Llamada a tu servicio de login que retorna el objeto usuario
+      const userData = await login(email, password);
+      setUser(userData);
+      navigate('/'); 
     } catch (err) {
       setErrorMessage('Su email o contraseña no es válido');
     }
@@ -163,8 +165,7 @@ export default function Login(props) {
               ¿Olvidaste tu contraseña?
             </Link>
           </Box>
-          <Divider>or</Divider>
-          {/* Texto de Sign up usando RegisterContext para establecer el tipo */}
+          <Divider>o</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
               ¿No tienes cuenta todavía? Registrate como{' '}
