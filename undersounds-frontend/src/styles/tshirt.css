@@ -1,46 +1,61 @@
 .tshirt-page {
     display: flex;
-    max-width: 1000px;
+    max-width: 1200px; /* Aumentar el ancho máximo de la página */
     margin: 20px auto;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    gap: 20px;
+    gap: 40px; /* Aumentar el espacio entre la imagen y los detalles */
     align-items: flex-start;
-}
-
-.tshirt-page img {
-    width: 70%; /* Imagen un poco más grande */
+    text-align: left; /* Alinear el texto a la izquierda */
+  }
+  
+  .tshirt-page img {
+    max-width: 40%; /* Limitar el ancho de la imagen al 40% del contenedor */
+    height: auto;
     border-radius: 8px;
-}
-
-.tshirt-details {
-    width: 60%;
+    margin-bottom: 20px;
+  }
+  
+  .tshirt-details {
+    width: 60%; /* Aumentar el ancho de la caja de detalles al 60% */
     display: flex;
     flex-direction: column;
-}
-
-.tshirt-details h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-.tshirt-details p {
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-/* Nuevo estilo para el botón de compra */
-.buy-button {
-    background-color: #1da0c3; /* color azul */
-    color: #fff;
-    border: none;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 8px 15px; /* Botón un poco más pequeño */
-    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tshirt-page h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .tshirt-page p {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Nuevo estilo para el botón de compra */
+  .buy-button {
+    background-color: #1da0c3;
+    color: white;
+    border: none;
+    padding: 15px 30px;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    margin-top: 10px;
-}
+    border-radius: 4px;
+    font-size: 20px;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+  
+  .buy-button:hover {
+    background-color: #1788a3;
+  }
+  
+  .buy-button:active {
+    background-color: #0f6d82;
+    transform: scale(0.95);
+  }

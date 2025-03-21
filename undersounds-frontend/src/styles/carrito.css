@@ -1,0 +1,59 @@
+.carrito-page {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .carrito-page ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .carrito-page li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px; /* Incrementar el espacio entre elementos */
+  }
+  
+  .carrito-page img {
+    width: 150px; /* Mantener el ancho de la imagen */
+    height: 150px; /* Mantener la altura de la imagen */
+    /*object-fit: contain;  Mostrar la imagen completa sin recortarla */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-right: 30px; /* Espaciado entre la imagen y el texto */
+    display: block; /* Asegurar que la imagen se comporte como un bloque */
+    background-color: #f0f0f0; /* Fondo gris claro para imágenes con transparencia */
+  }
+  
+  .carrito-page span {
+    font-size: 3rem; /* Duplicar el tamaño del texto */
+    font-weight: bold; /* Hacer el texto más destacado */
+  }
+  
+  .carrito-page h2 {
+    font-size: 2.5rem; /* Incrementar el tamaño del total */
+    margin-top: 20px;
+  }
+  
+  .carrito-page button {
+    background-color: #1da0c3;
+    color: white;
+    border: none;
+    padding: 20px 30px; /* Aumentar el tamaño del botón */
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1.5rem; /* Incrementar el tamaño del texto del botón */
+    transition: background-color 0.2s, transform 0.1s;
+  }
+  
+  .carrito-page button:hover {
+    background-color: #1788a3;
+  }
+  
+  .carrito-page button:active {
+    background-color: #0f6d82;
+    transform: scale(0.95);
+  }
