@@ -1,64 +1,120 @@
 .carrito-page {
-  max-width: 800px;
-  margin: 20px auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.carrito-page ul {
-  list-style: none;
-  padding: 0;
-}
-
-.carrito-page li {
+  font-family: Arial, sans-serif;
   display: flex;
-  align-items: center;
-  margin-bottom: 40px; /* Incrementar el espacio entre elementos */
+  flex-direction: column;
+  align-items: center; /* Centraliza el contenido principal horizontalmente */
+  position: relative; /* Para posicionar el contenedor flotante */
+  min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la ventana */
+  box-sizing: border-box; /* Incluye el padding en el cálculo del tamaño */
+  background-color: #ffffff; /* Fondo blanco */
+}
+.cart-summary {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  text-align: center;
 }
 
-.carrito-page img {
-  width: 200px !important;  /* Nuevo ancho, sobrescribe el estilo inline */
-  height: 150px; /* Se conserva la altura original */
-  border-radius: 8px; /* Bordes redondeados */
-  margin-right: 10px !important; /* Nuevo margen derecho */
-  display: block; /* Asegurar que la imagen se comporte como un bloque */
-  background-color: #f0f0f0; /* Fondo gris claro para imágenes con transparencia */
+.cart-summary h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
 }
 
-/* Se reduce el tamaño del texto para una mejor visualización */
-.carrito-page span {
-  font-size: 1.5rem; /* Tamaño del precio de cada producto */
-  font-weight: bold;
+.cart-summary p {
+  margin: 5px 0;
+  font-size: 14px;
 }
 
-.carrito-page h2 {
-  font-size: 1.5rem; /* Se ajusta para que el precio total tenga el mismo tamaño */
-  margin-top: 20px;
-}
-
-.carrito-page h2 .total-label {
-  font-size: 1.2rem; /* La palabra "Total:" se muestra un poco más pequeña */
-  font-weight: normal;
-}
-
-.carrito-page button {
+.proceed-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
   background-color: #1da0c3;
   color: white;
   border: none;
-  padding: 20px 30px; /* Aumentar el tamaño del botón */
-  cursor: pointer;
   border-radius: 4px;
-  font-size: 1.5rem;
-  transition: background-color 0.2s, transform 0.1s;
+  cursor: pointer;
+  width: 100%; /* Asegura que el botón ocupe todo el ancho del contenedor */
 }
 
-.carrito-page button:hover {
-  background-color: #1788a3;
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
 }
 
-.carrito-page button:active {
-  background-color: #0f6d82;
-  transform: scale(0.95);
+.cart-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.cart-item div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cart-item span {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.quantity-controls button {
+  padding: 3px 6px;
+  font-size: 12px;
+  background-color: #1da0c3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quantity-controls span {
+  font-size: 14px;
+}
+
+.remove-button {
+  padding: 3px 6px;
+  font-size: 12px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+h1 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 600px;
 }

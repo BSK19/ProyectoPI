@@ -16,6 +16,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import TshirtPage from './pages/TshirtPage';
 import CarritoPage from './pages/CarritoPage';
+import PaymentPage from './pages/Payment';
 import Footer from './components/Common/Footer';
 import RegisterProvider from './context/RegisterContext';
 import AlbumProvider from './context/AlbumContext';
@@ -57,6 +58,7 @@ const AppContent = () => {
                 <Route path="/discover" element={<DiscoverPage />} />
                 <Route path="/tshirt/:id" element={<TshirtPage />} />
                 <Route path="/cart" element={<CarritoPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
             </Routes>
             <Footer />
             <SignUpDialog />
