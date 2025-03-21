@@ -78,6 +78,13 @@ const Register = (props) => {
     e.preventDefault();
     setError('');
 
+    // Validación del correo electrónico con regex
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('El correo electrónico es inválido');
+      return;
+    }
+
     try {
       await register(formData);
       navigate('/login');

@@ -2,7 +2,6 @@
 import axios from 'axios';
 import defaultAccounts from '../mockData/accounts.js';
 
-
 const API_URL = 'http://localhost:5000/api/auth';
 
 export const login = async (email, password) => {
@@ -10,6 +9,7 @@ export const login = async (email, password) => {
   const storedAccounts = JSON.parse(localStorage.getItem('accounts')) || defaultAccounts;
   
   // Busca una cuenta que tenga el email y password correctos
+  console.log(storedAccounts);
   const account = storedAccounts.find(
     (acc) => acc.email === email && acc.password === password
   );
@@ -84,13 +84,46 @@ export const register = async (formData) => {
 };
 
 export const updateUserProfile = async (data) => {
-    try {
-        // Simulación de actualización exitosa del perfil:
-        return { userId: data.userId, name: data.name, email: data.email, token: 'fake-jwt-token' };
-    } catch (error) {
-        console.error('Error updating user profile:', error);
-        throw error;
+  try {
+    // Lee las cuentas almacenadas desde localStorage
+    let storedAccounts = JSON.parse(localStorage.getItem('accounts'));
+    // Si no hay cuentas o el array está vacío, usamos las cuentas por defecto
+    if (!storedAccounts || storedAccounts.length === 0) {
+      storedAccounts = defaultAccounts;
     }
+    
+    // Filtra los campos enviados para no sobreescribir con undefined o cadena vacía ("")
+    const validData = Object.keys(data).reduce((acc, key) => {
+      if (data[key] !== undefined && data[key] !== '') {
+        acc[key] = data[key];
+      }
+      return acc;
+    }, {});
+    
+    // Actualiza la cuenta que concuerde con el ID del usuario en los datos enviados
+    const updatedAccounts = storedAccounts.map((account) => {
+      if (account.id === validData.id) {
+        return {
+          ...account,
+          ...validData,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      return account;
+    });
+    
+    // Guarda las cuentas actualizadas en localStorage
+    localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
+    // Actualiza la cuenta actual en sesión
+    const updatedUser = updatedAccounts.find(account => account.id === validData.id);
+    localStorage.setItem('currentAccount', JSON.stringify(updatedUser));
+    
+    // Devuelve el estado exitoso de la actualización
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
 };
 
 export const authService = { login, logout, register, updateUserProfile };

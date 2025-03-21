@@ -9,7 +9,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   // Campos generales
-  const [name, setName] = useState(user?.name || '');
+  const [username, setUsername] = useState(user?.username || '');
   const [email, setEmail] = useState(user?.email || '');
   const [bio, setBio] = useState(user?.bio || '');
 
@@ -29,8 +29,7 @@ const UserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Crea el objeto actualizado con los valores de Name, Email y Bio (además de los campos específicos)
-    const updatedUser = { ...user, name, email, bio };
+    const updatedUser = { ...user, username, email, bio };
     if (user.role === 'band') {
       updatedUser.bandName = bandName;
       updatedUser.genre = genre;
@@ -53,7 +52,6 @@ const UserProfile = () => {
     const newBannerUrl = prompt("Introduce la URL de la nueva imagen del banner:");
     if (newBannerUrl) {
       try {
-        // Valida la URL
         new URL(newBannerUrl);
       } catch (err) {
         alert("La URL ingresada no es válida.");
@@ -79,7 +77,6 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile">
-      {/* Banner de perfil: imagen de extremo a extremo */}
       <div className="profile-banner">
         <img 
           src={user.bannerImage || '/assets/default-banner.jpg'} 
@@ -103,12 +100,12 @@ const UserProfile = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="username">Username:</label>
           <input
             type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>

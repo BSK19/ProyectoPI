@@ -83,15 +83,23 @@ export default function Login(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrorMessage('');
+
+    // Validación del correo electrónico con regex usando la variable "email"
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage('El correo electrónico es inválido');
+      return;
+    }
+
     try {
       // Llamada a tu servicio de login que retorna el objeto usuario
       const userData = await login(email, password);
       setUser(userData);
-      navigate('/'); 
+      navigate('/');
     } catch (err) {
       setErrorMessage('Su email o contraseña no es válido');
     }
-  };
+};
 
   return (
     <AppTheme {...props}>
@@ -103,7 +111,7 @@ export default function Login(props) {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Inicio sesión	
+            Inicio sesión
           </Typography>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           <Box
