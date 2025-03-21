@@ -1,17 +1,23 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/carrito.css';
 
 const CarritoPage = () => {
   const { cartItems, clearCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
   const handleCheckout = () => {
+    if (!user) { // if not logged in, navigate to login page
+      navigate('/login');
+      return;
+    }
     clearCart();
-    navigate('/'); // Redirige al inicio
+    navigate('/'); // redirect to home
   };
 
   return (

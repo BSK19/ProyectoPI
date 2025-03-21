@@ -14,13 +14,15 @@ import UserProfile from './pages/UserProfile';
 import DiscoverPage from './pages/DiscoverPage';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import TshirtPage from './pages/TshirtPage'; // Importa la página de camiseta
+import TshirtPage from './pages/TshirtPage';
+import CarritoPage from './pages/CarritoPage';
 import Footer from './components/Common/Footer';
 import RegisterProvider from './context/RegisterContext';
 import AlbumProvider from './context/AlbumContext';
 import SignUpDialog from './components/Auth/SignUpDx';
 import { PlayerProvider } from './context/PlayerContext';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 const theme = createTheme({
     palette: {
@@ -38,7 +40,6 @@ const AppContent = () => {
     const location = useLocation();
     const hideNavRoutes = ['/login', '/register', '/explore'];
     const hideNav = hideNavRoutes.includes(location.pathname);
-
     return (
         <>
             <Header />
@@ -54,7 +55,8 @@ const AppContent = () => {
                 <Route path="/artistProfile/:id" element={<ArtistProfile />} />
                 <Route path="/news/:noticiaId" element={<News />} />
                 <Route path="/discover" element={<DiscoverPage />} />
-                <Route path="/tshirt/:id" element={<TshirtPage />} /> {/* Nueva ruta */}
+                <Route path="/tshirt/:id" element={<TshirtPage />} />
+                <Route path="/cart" element={<CarritoPage />} />
             </Routes>
             <Footer />
             <SignUpDialog />
@@ -69,10 +71,12 @@ const App = () => {
                 <RegisterProvider>
                     <AlbumProvider>
                         <AuthProvider>
-                            <Router>
-                                <ScrollToTop />
-                                <AppContent />
-                            </Router>
+                            <CartProvider>
+                                <Router>
+                                    <ScrollToTop />
+                                    <AppContent />
+                                </Router>
+                            </CartProvider>
                         </AuthProvider>
                     </AlbumProvider>
                 </RegisterProvider>

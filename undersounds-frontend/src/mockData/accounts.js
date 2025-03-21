@@ -1,3 +1,5 @@
+import defaultProfileImage from '../assets/images/default.jpg';
+
 const accounts = [
     {
         "id": 1,
@@ -5,7 +7,7 @@ const accounts = [
         "email": "fan1@example.com",
         "password": "password123",
         "role": "fan",
-        "profileImage": "/assets/images/default-user.jpg",
+        "profileImage": defaultProfileImage,
         "bio": "Soy un fanático de la música y sigo a mis artistas favoritos.",
         "socialLinks": {
             "facebook": "",
@@ -24,7 +26,7 @@ const accounts = [
         "role": "band",
         "bandName": "The Rockers",
         "genre": "Rock",
-        "profileImage": "/assets/images/band1.jpg",
+        "profileImage": defaultProfileImage,
         "bio": "Somos The Rockers, ¡listos para sacudir el escenario!",
         "socialLinks": {
             "facebook": "https://facebook.com/therockers",
@@ -43,7 +45,7 @@ const accounts = [
         "role": "label",
         "labelName": "Super Records",
         "website": "https://superrecords.com",
-        "profileImage": "/assets/images/label1.jpg",
+        "profileImage": defaultProfileImage,
         "bio": "En Super Records, traemos lo mejor de la música.",
         "socialLinks": {
             "facebook": "https://facebook.com/superrecords",

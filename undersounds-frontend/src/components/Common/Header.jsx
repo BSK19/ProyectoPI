@@ -15,8 +15,12 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
 import albums from '../../mockData/albums';
@@ -30,14 +34,14 @@ const Header = () => {
   const [filter, setFilter] = useState('all');
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); // Para el menú del avatar
   const navigate = useNavigate();
   const location = useLocation();
   const containerRef = useRef(null);
-  const { user } = useContext(AuthContext);
+  const { user, logout, setUser } = useContext(AuthContext);
 
   const handleSearch = () => {
     let filteredResults = [];
-
     if (filter === 'all' || filter === 'artists') {
       const artistMatches = artists.filter(artist =>
         artist.name.toLowerCase().includes(query.toLowerCase())
@@ -68,7 +72,7 @@ const Header = () => {
     setResults(filteredResults);
   };
 
-  // Debounce para ejecutar la búsqueda (500ms)
+  // Debounce para la búsqueda
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.trim()) {
@@ -79,7 +83,6 @@ const Header = () => {
         setShowDropdown(false);
       }
     }, 500);
-
     return () => clearTimeout(timeoutId);
   }, [query, filter]);
 
@@ -153,10 +156,35 @@ const Header = () => {
     return null;
   };
 
+  // Funciones para el menú del avatar
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    navigate('/user/profile');
+    handleCloseMenu();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      navigate('/');
+      handleCloseMenu();
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
   return (
     <AppBar position="sticky" color="primary" elevation={2}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        {/* Zona Izquierda: Logo siempre visible */}
+        {/* Zona Izquierda: Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={logo} alt="UnderSounds Logo" style={{ height: '100px' }} />
@@ -233,16 +261,31 @@ const Header = () => {
             </Paper>
           )}
         </Box>
-        {/* Zona Derecha: Botones de autenticación o Avatar si está logueado */}
-        <Box>
+        {/* Zona Derecha: Botones de Carrito y autenticación */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Button color="inherit" onClick={() => navigate('/cart')}>
+            <ShoppingCartIcon />
+          </Button>
           {user ? (
-            <IconButton onClick={() => navigate('/user/profile')}>
-              <Avatar
-                src={user.profileImage}
-                alt={user.username || user.bandName || 'Usuario'}
-                sx={{ width: 40, height: 40 }}
-              />
-            </IconButton>
+            <>
+              <IconButton onClick={handleAvatarClick}>
+                <Avatar
+                  src={user.profileImage}
+                  alt={user.username || user.bandName || 'Usuario'}
+                  sx={{ width: 40, height: 40 }}
+                />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <MenuItem onClick={handleProfile}>Mi perfil</MenuItem>
+                <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+              </Menu>
+            </>
           ) : (
             <>
               <Button color="inherit" onClick={handleOpenSignUp}>

@@ -3,7 +3,7 @@ import albums from '../mockData/albums';
 import artists from '../mockData/artists';
 import '../styles/homePage.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { Grid, Typography, Box, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
+import { Grid, Typography, Box, Card, CardContent, CardMedia, CardActionArea, Button } from '@mui/material';
 import noticiasMusica from '../mockData/noticiasMusica'; // Asegúrate de que la ruta sea correcta
 import { AlbumContext } from '../context/AlbumContext';
 import imagen from '../assets/images/images2.webp';

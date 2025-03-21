@@ -48,7 +48,8 @@ const TshirtPage = () => {
         <h1>{item.name}</h1>
         <p>{item.description}</p>
         <p>Tiempo de envío: {item.shippingTime}</p>
-        <p>Precio: €{item.price.toFixed(2)}</p>
+        <p>Precio: €
+          {typeof item.price === 'number' ? item.price.toFixed(2) : 'Precio no disponible'}</p>
         <button
           className={`buy-button ${feedback ? 'active' : ''}`}
           onClick={handleAddToCart}
