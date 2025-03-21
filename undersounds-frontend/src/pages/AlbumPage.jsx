@@ -3,25 +3,26 @@ import { useParams, useLocation } from 'react-router-dom';
 import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
 import AudioPlayer from '../components/Player/AudioPlayer';
+import { CartContext } from '../context/CartContext';  // <-- Nuevo import
 import artists from '../mockData/artists';
-import tracksData from '../mockData/tracks'; // Importa los datos de tracks
+import tracksData from '../mockData/tracks';
 
 const AlbumPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const { playTrack } = useContext(PlayerContext);
-  const [activeTrackId, setActiveTrackId] = useState(null); // Estado para la pista activa
+  const { addToCart } = useContext(CartContext);  // <-- Nuevo hook
+  const [activeTrackId, setActiveTrackId] = useState(null);
+  const [feedback, setFeedback] = useState(false); // Nuevo estado para feedback
 
-  // Intentamos obtener el álbum enviado vía state desde ArtistProfile.jsx
   const albumFromState = location.state?.album;
   let album = albumFromState;
 
-  // Si no viene en state, buscamos entre todos los álbumes de artists.js
   if (!album) {
     const allArtistAlbums = artists.flatMap(artist =>
       artist.albums.map(albumItem => ({
         ...albumItem,
-        artist: artist.name  // Aseguramos que tengamos el nombre del artista
+        artist: artist.name 
       }))
     );
     album = allArtistAlbums.find(a => a.id === parseInt(id));
@@ -31,9 +32,21 @@ const AlbumPage = () => {
     return <div>Album not found</div>;
   }
 
-  // Valores por defecto para evitar errores si no existen
   const tracks = album.tracks || [];
   const ratings = album.ratings || [];
+
+  // Función para añadir el álbum al carrito
+  const handleAddToCart = () => {
+    addToCart({
+      id: album.id,
+      name: album.title,
+      price: album.price,
+      image: album.coverImage || '/assets/images/default-cover.jpg',
+      type: 'album'
+    });
+    setFeedback(true);
+    setTimeout(() => setFeedback(false), 1000);
+  };
 
   return (
     <div className="album-page">
@@ -46,6 +59,15 @@ const AlbumPage = () => {
       <p>Release Year: {album.releaseYear}</p>
       <p>Genre: {album.genre}</p>
       <p>Price: ${album.price.toFixed(2)}</p>
+
+      <button 
+      className="buy-button small" 
+      onClick={handleAddToCart}
+    >
+      Añadir al carrito
+      </button>
+      {feedback && <p style={{ color: 'green', marginTop: '10px' }}>¡Añadido al carrito!</p>}
+
       <h2>Track List:</h2>
       <ul>
         {tracks.map((track) => (
@@ -57,7 +79,7 @@ const AlbumPage = () => {
                   const trackDetail = tracksData.find(t => t.id === track.id);
                   if (trackDetail) {
                     playTrack(trackDetail);
-                    setActiveTrackId(track.id); // Establece la pista activa
+                    setActiveTrackId(track.id);
                   } else {
                     console.error('Track not found in tracks.js');
                   }

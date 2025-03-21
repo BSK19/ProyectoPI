@@ -9,9 +9,7 @@ import albums from '../mockData/albums';
 
 const ArtistProfile = () => {
   const { id } = useParams(); // Capturamos el parámetro de la URL
-  console.log('id recibido:', id);
   const artist = artists.find((artista) => artista.id === parseInt(id));
-  console.log('artist encontrado:', artist);
   const navigate = useNavigate();
 
   if (!artist) {
@@ -52,25 +50,10 @@ const ArtistProfile = () => {
               navigate(`/album/${album.id}`, { state: { album } })
             }
           >
-            <div style={{
-              width: '100%',
-              paddingTop: '100%',
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: '5px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-            }}>
+            <div className="image-container">
               <img 
                 src={album.albumIMG} 
                 alt={album.title} 
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'fill'
-                }}
               />
             </div>
             <Typography variant="h6" sx={{ textAlign: 'center', marginTop: '8px' }} className="item-title">
@@ -88,7 +71,7 @@ const ArtistProfile = () => {
     );
   };
 
-  // Renderizado de Merchandising (se envía state para indicar que viene desde ArtistProfile)
+  // Renderizado de Merchandising (se ha eliminado la descripción del artículo)
   const renderMerchandise = (merchandise) => {
     return (
       <Grid container spacing={4} justifyContent="flex-start" className="tab-content">
@@ -106,25 +89,10 @@ const ArtistProfile = () => {
               navigate(`/tshirt/${item.id}`, { state: { from: 'artistMerch' } })
             }
           >
-            <div style={{
-              width: '100%',
-              paddingTop: '100%',
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: '10px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-            }}>
+            <div className="image-container">
               <img 
                 src={item.merchImage} 
                 alt={item.name} 
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
               />
             </div>
             <Typography variant="h6" sx={{ textAlign: 'center', marginTop: '8px' }} className="item-title">
@@ -132,9 +100,6 @@ const ArtistProfile = () => {
             </Typography>
             <Typography variant="body2" sx={{ textAlign: 'center' }} className="item-details">
               Precio: ${item.price}
-            </Typography>
-            <Typography variant="body2" sx={{ textAlign: 'center' }} className="item-details">
-              {item.description}
             </Typography>
           </Grid>
         ))}
@@ -157,25 +122,10 @@ const ArtistProfile = () => {
             sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             className="grid-item"
           >
-            <div style={{
-              width: '100%',
-              paddingTop: '100%',
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: '10px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-            }}>
+            <div className="image-container">
               <img 
                 src={concert.concertImage} 
                 alt={`Concert at ${concert.location}`} 
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
               />
             </div>
             <Typography variant="h6" sx={{ textAlign: 'center', marginTop: '8px' }} className="item-title">

@@ -2,138 +2,188 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { updateUserProfile } from '../services/authService';
+import '../styles/userprofile.css';
 
 const UserProfile = () => {
-    const { user, setUser } = useContext(AuthContext);
-    const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    // Campos generales
-    const [name, setName] = useState(user?.name || '');
-    const [email, setEmail] = useState(user?.email || '');
-    const [bio, setBio] = useState(user?.bio || '');
+  // Campos generales
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [bio, setBio] = useState(user?.bio || '');
 
-    // Campos para cuentas de banda
-    const [bandName, setBandName] = useState(user?.bandName || '');
-    const [genre, setGenre] = useState(user?.genre || '');
+  // Campos para cuentas de banda
+  const [bandName, setBandName] = useState(user?.bandName || '');
+  const [genre, setGenre] = useState(user?.genre || '');
 
-    // Campos para cuentas de sello
-    const [labelName, setLabelName] = useState(user?.labelName || '');
-    const [website, setWebsite] = useState(user?.website || '');
+  // Campos para cuentas de sello
+  const [labelName, setLabelName] = useState(user?.labelName || '');
+  const [website, setWebsite] = useState(user?.website || '');
 
-    useEffect(() => {
-      if (!user) {
-        navigate('/login'); // Redirige al login si no hay usuario
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirige al login si no hay usuario
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Crea el objeto actualizado con los valores de Name, Email y Bio (además de los campos específicos)
+    const updatedUser = { ...user, name, email, bio };
+    if (user.role === 'band') {
+      updatedUser.bandName = bandName;
+      updatedUser.genre = genre;
+    }
+    if (user.role === 'label') {
+      updatedUser.labelName = labelName;
+      updatedUser.website = website;
+    }
+    const response = await updateUserProfile(updatedUser);
+    if (response.success) {
+      setUser(updatedUser);
+      alert('Profile updated successfully!');
+    } else {
+      alert('Failed to update profile. Please try again.');
+    }
+  };
+
+  // Manejador para cambiar el banner con validación de URL
+  const handleChangeBanner = async () => {
+    const newBannerUrl = prompt("Introduce la URL de la nueva imagen del banner:");
+    if (newBannerUrl) {
+      try {
+        // Valida la URL
+        new URL(newBannerUrl);
+      } catch (err) {
+        alert("La URL ingresada no es válida.");
+        return;
       }
-    }, [user, navigate]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Construye el objeto actualizado según el rol
-        const updatedUser = { ...user, name, email, bio };
-        if (user.role === 'band') {
-          updatedUser.bandName = bandName;
-          updatedUser.genre = genre;
-        }
-        if (user.role === 'label') {
-          updatedUser.labelName = labelName;
-          updatedUser.website = website;
-        }
+      const updatedUser = { ...user, bannerImage: newBannerUrl };
+      try {
         const response = await updateUserProfile(updatedUser);
         if (response.success) {
-            setUser(updatedUser);
-            alert('Profile updated successfully!');
+          setUser(updatedUser);
+          alert("Banner actualizado correctamente!");
         } else {
-            alert('Failed to update profile. Please try again.');
+          alert("Fallo al actualizar el banner.");
         }
-    };
+      } catch (error) {
+        console.error(error);
+        alert("Ocurrió un error al actualizar el banner.");
+      }
+    }
+  };
 
-    if (!user) return null; // Evita renderizar si no hay usuario
+  if (!user) return null;
 
-    return (
-        <div className="user-profile">
-            <h2>User Profile</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="bio">Bio:</label>
-                    <textarea
-                        id="bio"
-                        value={bio}
-                        onChange={(e) => setBio(e.target.value)}
-                    />
-                </div>
-                {/* Mostrar campos adicionales según el rol */}
-                {user.role === 'band' && (
-                    <>
-                      <div className="form-group">
-                          <label htmlFor="bandName">Nombre de Banda:</label>
-                          <input
-                              type="text"
-                              id="bandName"
-                              value={bandName}
-                              onChange={(e) => setBandName(e.target.value)}
-                              required
-                          />
-                      </div>
-                      <div className="form-group">
-                          <label htmlFor="genre">Género:</label>
-                          <input
-                              type="text"
-                              id="genre"
-                              value={genre}
-                              onChange={(e) => setGenre(e.target.value)}
-                              required
-                          />
-                      </div>
-                    </>
-                )}
-                {user.role === 'label' && (
-                    <>
-                      <div className="form-group">
-                          <label htmlFor="labelName">Nombre del Sello:</label>
-                          <input
-                              type="text"
-                              id="labelName"
-                              value={labelName}
-                              onChange={(e) => setLabelName(e.target.value)}
-                              required
-                          />
-                      </div>
-                      <div className="form-group">
-                          <label htmlFor="website">Página Web:</label>
-                          <input
-                              type="text"
-                              id="website"
-                              value={website}
-                              onChange={(e) => setWebsite(e.target.value)}
-                              required
-                          />
-                      </div>
-                    </>
-                )}
-                <button type="submit">Update Profile</button>
-            </form>
+  return (
+    <div className="user-profile">
+      {/* Banner de perfil: imagen de extremo a extremo */}
+      <div className="profile-banner">
+        <img 
+          src={user.bannerImage || '/assets/default-banner.jpg'} 
+          alt="Profile Banner" 
+        />
+        <button onClick={handleChangeBanner}>Cambiar Banner</button>
+      </div>
+      <div className="profile-header">
+        <img
+          src={user.profileImage}
+          alt={user.username || user.bandName || 'Usuario'}
+          className="profile-image"
+        />
+        <div className="profile-info">
+          <h2>User Profile</h2>
+          <div className="followers">
+            <span className="followers-counter">{user.followers ?? 0}</span>
+            <span className="followers-label">seguidores</span>
+          </div>
         </div>
-    );
+      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="bio">Bio:</label>
+          <textarea
+            id="bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+          />
+        </div>
+        {user.role === 'band' && (
+          <>
+            <div className="form-group">
+              <label htmlFor="bandName">Nombre de Banda:</label>
+              <input
+                type="text"
+                id="bandName"
+                value={bandName}
+                onChange={(e) => setBandName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="genre">Género:</label>
+              <input
+                type="text"
+                id="genre"
+                value={genre}
+                onChange={(e) => setGenre(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
+        {user.role === 'label' && (
+          <>
+            <div className="form-group">
+              <label htmlFor="labelName">Nombre del Sello:</label>
+              <input
+                type="text"
+                id="labelName"
+                value={labelName}
+                onChange={(e) => setLabelName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="website">Página Web:</label>
+              <input
+                type="text"
+                id="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
+        <button type="submit" className="update-button">
+          Update Profile
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default UserProfile;

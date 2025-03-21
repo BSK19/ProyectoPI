@@ -35,7 +35,7 @@ const TshirtPage = () => {
       id: item.id,
       name: item.name,
       price: item.price,
-      image: item.tshirtImage || item.image,
+      image: item.merchImage || item.tshirtImage || item.image,
     });
     setFeedback(true); // Activar feedback
     setTimeout(() => setFeedback(false), 1000); // Desactivar feedback después de 1 segundo
@@ -43,13 +43,18 @@ const TshirtPage = () => {
 
   return (
     <div className="tshirt-page">
-      <img src={item.tshirtImage || item.image} alt={`${item.name} shirt`} />
+      <img
+        src={item.merchImage || item.tshirtImage || item.image}
+        alt={`${item.name} shirt`}
+      />
       <div className="tshirt-details">
         <h1>{item.name}</h1>
         <p>{item.description}</p>
         <p>Tiempo de envío: {item.shippingTime}</p>
-        <p>Precio: €
-          {typeof item.price === 'number' ? item.price.toFixed(2) : 'Precio no disponible'}</p>
+        <p>
+          Precio: €
+          {typeof item.price === 'number' ? item.price.toFixed(2) : 'Precio no disponible'}
+        </p>
         <button
           className={`buy-button ${feedback ? 'active' : ''}`}
           onClick={handleAddToCart}

@@ -39,3 +39,9 @@
     font-size: 1rem;
     margin-bottom: 5px;
 }
+
+.buy-button.small {
+    font-size: 0.8rem;   /* Tamaño de fuente reducido */
+    padding: 6px 10px;   /* Menor padding */
+    border-radius: 4px;  /* Opcional: radio de borde más pequeño */
+  }
