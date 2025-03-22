@@ -1,28 +1,36 @@
 import imagenPFP from '../assets/images/artista.jpg';
+import imagenPFP1 from '../assets/images/soundscapers.jpg';
+import imagenPFP2 from '../assets/images/DJBeats.jpg';
+import imagenPFP3 from '../assets/images/soulfoulvoices.jpeg';
 import merch1 from '../assets/images/merch1.jpg';
 import merch2 from '../assets/images/merch2.jpg';
 import merch3 from '../assets/images/merch3.jpg';
 import merch4 from '../assets/images/merch4.jpg';
 import merch5 from '../assets/images/merch5.jpg';
+import concertNY from '../assets/images/concertNY.jpg';
+import concertLA from '../assets/images/concertLA.jpg';
+import concertMI from '../assets/images/miami.jpg';
+import concertIL from '../assets/images/concertIL.jpg';
+import concertCA from '../assets/images/concertCA.jpg';
 
 const artists = [
     {
         id: 1,
-        name: "Artist One",
-        profileImage: imagenPFP,
+        name: "The Soundscapers",
+        profileImage: imagenPFP1,
         genre: "Rock",
-        bio: "An up-and-coming rock artist known for their energetic performances.",
+        bio: "Una banda de rock emergente conocida por sus actuaciones enérgicas.",
         albums: [
             {
                 id: 5,
-                title: "Debut Album",
+                title: "Álbum Debut",
                 releaseYear: 2023,
                 coverImage: "/assets/images/album1.jpg",
                 price: 9.99,
             },
             {
                 id: 6,
-                title: "Second Album",
+                title: "Segundo Álbum",
                 releaseYear: 2024,
                 coverImage: "/assets/images/album2.jpg",
                 price: 11.99,
@@ -31,31 +39,31 @@ const artists = [
         concerts: [
             {
                 id: 1,
-                location: "New York City, NY",
+                location: "Nueva York, NY",
                 date: "2025-05-15",
-                concertImage: "/assets/images/concert1.jpg",
+                concertImage: concertNY,
             },
             {
                 id: 2,
-                location: "Los Angeles, CA",
+                location: "Los Ángeles, CA",
                 date: "2025-06-10",
-                concertImage: "/assets/images/concert2.jpg",
+                concertImage: concertLA,
             },
         ],
         merchandising: [
             {
                 id: 1,
-                name: "Artist One T-Shirt",
+                name: "Camiseta de The Soundscapers",
                 price: 19.99,
-                merchImage: merch1, // utilizando la imagen importada
-                description: "A high-quality cotton t-shirt with the Artist One logo.",
+                merchImage: merch1,
+                description: "Una camiseta de algodón de alta calidad con el logo de The Soundscapers.",
             },
             {
                 id: 2,
-                name: "Artist One Mug",
+                name: "Taza de The Soundscapers",
                 price: 9.99,
                 merchImage: merch2,
-                description: "A ceramic mug with a cool Artist One design.",
+                description: "Una taza de cerámica con un diseño genial de The Soundscapers.",
             },
         ],
         socialLinks: {
@@ -66,14 +74,35 @@ const artists = [
     },
     {
         id: 2,
-        name: "Artist Two",
-        profileImage: imagenPFP,
+        name: "DJ Beats",
+        profileImage: imagenPFP2,
         genre: "Pop",
-        bio: "A pop sensation with catchy tunes and a vibrant style.",
+        bio: "Una sensación del pop con melodías pegajosas y un estilo vibrante.",
         albums: [
             {
                 id: 7,
-                title: "First Hit",
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
                 releaseYear: 2022,
                 coverImage: "/assets/images/album3.jpg",
                 price: 8.99,
@@ -84,16 +113,16 @@ const artists = [
                 id: 1,
                 location: "Miami, FL",
                 date: "2025-07-20",
-                concertImage: "/assets/images/concert3.jpg",
+                concertImage: concertMI,
             },
         ],
         merchandising: [
             {
                 id: 3,
-                name: "Artist Two Cap",
+                name: "Gorra de DJ Beats",
                 price: 15.99,
                 merchImage: merch3,
-                description: "A stylish cap with the Artist Two logo embroidered.",
+                description: "Una gorra con estilo y el logo de DJ Beats bordado.",
             },
         ],
         socialLinks: {
@@ -104,14 +133,14 @@ const artists = [
     },
     {
         id: 3,
-        name: "Artist Three",
-        profileImage: imagenPFP, 
+        name: "Soulful Voices",
+        profileImage: imagenPFP3, 
         genre: "Jazz",
-        bio: "A talented jazz musician with a unique sound.",
+        bio: "Un talentoso músico de jazz con un sonido único.",
         albums: [
             {
                 id: 8,
-                title: "Smooth Jazz",
+                title: "Jazz Suave",
                 releaseYear: 2021,
                 coverImage: "/assets/images/album4.jpg",
                 price: 10.99,
@@ -122,29 +151,29 @@ const artists = [
                 id: 1,
                 location: "Chicago, IL",
                 date: "2025-08-05",
-                concertImage: "/assets/images/concert4.jpg",
+                concertImage: concertIL,
             },
             {
                 id: 2,
                 location: "San Francisco, CA",
                 date: "2025-09-12",
-                concertImage: "/assets/images/concert5.jpg",
+                concertImage: concertCA,
             },
         ],
         merchandising: [
             {
                 id: 4,
-                name: "Artist Three Vinyl Record",
+                name: "Vinilo de Soulful Voices",
                 price: 25.99,
                 merchImage: merch4,
-                description: "Limited edition vinyl record of the Artist Three's smooth jazz album.",
+                description: "Edición limitada en vinilo del álbum de jazz suave de Soulful Voices.",
             },
             {
                 id: 5,
-                name: "Artist Three Tote Bag",
+                name: "Bolsa Tote de Soulful Voices",
                 price: 12.99,
                 merchImage: merch5,
-                description: "Eco-friendly tote bag with Artist Three's unique design.",
+                description: "Bolsa ecológica con un diseño único de Soulful Voices.",
             },
         ],
         socialLinks: {
