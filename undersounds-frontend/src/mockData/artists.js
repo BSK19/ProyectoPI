@@ -12,6 +12,9 @@ import concertLA from '../assets/images/concertLA.jpg';
 import concertMI from '../assets/images/miami.jpg';
 import concertIL from '../assets/images/concertIL.jpg';
 import concertCA from '../assets/images/concertCA.jpg';
+import banner1 from '../assets/images/banner1.webp';
+import banner2 from '../assets/images/banner2.jpeg';
+import banner3 from '../assets/images/banner1.jpg';
 
 const artists = [
     {
@@ -20,6 +23,9 @@ const artists = [
         profileImage: imagenPFP1,
         genre: "Rock",
         bio: "Una banda de rock emergente conocida por sus actuaciones enérgicas.",
+        banner: banner1,
+        seguidores: "2.5M",
+        ubicacion: "Londres, RU",
         albums: [
             {
                 id: 5,
@@ -78,6 +84,9 @@ const artists = [
         profileImage: imagenPFP2,
         genre: "Pop",
         bio: "Una sensación del pop con melodías pegajosas y un estilo vibrante.",
+        banner: banner2,
+        seguidores: "963K",
+        ubicacion: "Madrid, ES",
         albums: [
             {
                 id: 7,
@@ -137,6 +146,9 @@ const artists = [
         profileImage: imagenPFP3, 
         genre: "Jazz",
         bio: "Un talentoso músico de jazz con un sonido único.",
+        seguidores: "1.5M",
+        ubicacion: "Nueva York, EE. UU.",
+        banner: banner3,
         albums: [
             {
                 id: 8,

@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-  padding: 20px;
+  padding: 0px;
 }
 
 .image-container {
@@ -52,7 +52,6 @@ body {
 
 .tab-panel {
   padding: 0px;
-  background-color: #ffffff;
   border-radius: 0px;
 }
 

@@ -172,11 +172,11 @@ const ArtistProfile = () => {
   return (
 <Box
   sx={{
-    backgroundImage: 'url("https://static.nationalgeographicla.com/files/styles/image_3200/public/f0013316-supernovaexplosionartwork.jpg?w=1600")',
+    backgroundImage: `url(${artist.banner})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     width: '100%',
-    minHeight: '100vh', // Asegura que cubra toda la pantalla
+    maxHeight: '100vh', // Asegura que cubra toda la pantalla
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -188,12 +188,12 @@ const ArtistProfile = () => {
     spacing={2}
     justifyContent="center"
     alignItems="center"
-    sx={{ paddingRight: '300px', paddingLeft: '300px', }}
+    sx={{ paddingRight: '300px', paddingLeft: '300px', paddingTop: '150px', }}
     className="container"
   >
     {/* Panel principal con tabs */}
     <Grid item xs={12} container sx={{ height: '80%', border: '1px solid black', backgroundColor: 'rgba(255, 255, 255, 0.8)', }}>
-      <Grid item xs={10} sx={{ borderRight: '2px solid black', marginTop: '-15px', }}>
+      <Grid item xs={10} sx={{ borderRight: '2px solid black', marginTop: '-15px', paddingBottom: '30px', }}>
         {/* Tabs */}
         <Box sx={{ borderBottom: 2, borderColor: 'divider' }}>
           <Tabs
@@ -224,6 +224,10 @@ const ArtistProfile = () => {
         <CustomTabPanel value={value} index={2}>
           {renderConcerts(artist.concerts)}
         </CustomTabPanel>
+
+        <Typography sx={{ fontSize: '12px', textAlign: 'left', marginLeft:'10px', marginTop:'10px'  }} className="artist-name">
+            © 2025 {artist.name}. Todos los derechos reservados.
+        </Typography>
       </Grid>
 
       {/* Segunda columna: Perfil del artista */}
@@ -236,6 +240,10 @@ const ArtistProfile = () => {
           {artist.name}
         </Typography>
 
+        <Typography sx={{ fontSize: '12px', textAlign: 'left', marginLeft:'10px' }} className="artist-name">
+          {artist.ubicacion}
+        </Typography>
+
         <button
           id="btn-seguir"
           className={`btn-seguir ${isFollowing ? 'siguiendo' : ''}`}
@@ -243,10 +251,85 @@ const ArtistProfile = () => {
         >
           {isFollowing ? 'Siguiendo' : 'Seguir'}
         </button>
+        <Typography
+          variant="h6"
+          sx={{
+            fontSize: '14px',  // Aumenté el tamaño para mayor legibilidad
+            fontWeight: 'bold',  // Resaltar el texto
+            color: '#4A90E2',  // Color atractivo, puedes elegir otro que se ajuste a tu diseño
+            textAlign: 'left',  // Alineación más natural para este tipo de texto
+            padding: '8px',  // Agregar un poco de relleno para darle más espacio alrededor
+            borderRadius: '5px',  // Borde redondeado para una apariencia más suave
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',  // Sombra ligera para darle profundidad
+            alignItems: 'center',  // Alineación centrada para que el texto esté balanceado
+          }}
+          className="artist-bio"
+        >
+          Seguidores: {artist.seguidores}
+        </Typography>
 
-        <Typography variant="h6" sx={{ marginTop: '15px', fontSize: '15px', textAlign: 'justify' }} className="artist-bio">
+        <Typography variant="h6" sx={{ marginTop: '15px', fontSize: '15px', textAlign: 'justify', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',}} className="artist-bio">
           {artist.bio}
         </Typography>
+
+        <Typography variant="h6" sx={{ marginTop: '15px', fontSize: '15px', textAlign: 'justify', }} className="artist-bio">
+          <a
+            href={artist.socialLinks.instagram}
+            style={{
+              textDecoration: 'none', // Eliminar el subrayado por defecto
+              color: '#333', // Color del texto normal (gris oscuro, por ejemplo)
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.textDecoration = 'underline'; // Subraya el texto al pasar el ratón
+              e.target.style.color = '#333'; // Cambia el color al pasar el ratón (color azul)
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.textDecoration = 'none'; // Elimina el subrayado cuando el ratón deja el enlace
+              e.target.style.color = '#333'; // Restaura el color original del texto
+            }}
+          >
+            Instragram.
+          </a>
+        </Typography>
+        <Typography variant="h6" sx={{ marginTop: '0px', fontSize: '15px', textAlign: 'justify',}} className="artist-bio">
+          <a
+            href={artist.socialLinks.twitter}
+            style={{
+              textDecoration: 'none', // Eliminar el subrayado por defecto
+              color: '#333', // Color del texto normal (gris oscuro, por ejemplo)
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.textDecoration = 'underline'; // Subraya el texto al pasar el ratón
+              e.target.style.color = '#333'; // Cambia el color al pasar el ratón (color azul)
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.textDecoration = 'none'; // Elimina el subrayado cuando el ratón deja el enlace
+              e.target.style.color = '#333'; // Restaura el color original del texto
+            }}
+          >
+            Twitter.
+          </a>
+        </Typography>
+        <Typography variant="h6" sx={{ marginBottom: '10px', fontSize: '15px', textAlign: 'justify',}} className="artist-bio">
+          <a
+            href={artist.socialLinks.facebook}
+            style={{
+              textDecoration: 'none', // Eliminar el subrayado por defecto
+              color: '#333', // Color del texto normal (gris oscuro, por ejemplo)
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.textDecoration = 'underline'; // Subraya el texto al pasar el ratón
+              e.target.style.color = '#333'; // Cambia el color al pasar el ratón (color azul)
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.textDecoration = 'none'; // Elimina el subrayado cuando el ratón deja el enlace
+              e.target.style.color = '#333'; // Restaura el color original del texto
+            }}
+          >
+            Facebook.
+          </a>
+        </Typography>
+
       </Grid>
     </Grid>
   </Grid>
