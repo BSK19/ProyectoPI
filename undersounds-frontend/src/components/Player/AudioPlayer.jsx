@@ -8,10 +8,13 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { PlayerContext } from '../../context/PlayerContext';
 import tracksData from '../../mockData/tracks';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 const AudioPlayer = () => {
   const { currentTrack, isPlaying, playTrack, pauseTrack, stopTrack, volume, changeVolume } = useContext(PlayerContext);
   const [progress, setProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(true); // Nuevo estado para controlar la visibilidad
   const audioRef = useRef(new Audio());
   const location = useLocation();
 
@@ -101,9 +104,14 @@ const AudioPlayer = () => {
     }
   };
 
-  // Mostramos el reproductor solo si estamos en la ruta "/album" y hay una pista
+  const handleCancel = () => {
+    pauseTrack(); // Pausa la reproducción
+    setIsVisible(false); // Oculta el reproductor
+  };
+
+  // Mostramos el reproductor solo si estamos en la ruta "/album", hay una pista y es visible
   const inReproduction = location.pathname.startsWith('/album');
-  const shouldShow = inReproduction && currentTrack;
+  const shouldShow = inReproduction && currentTrack && isVisible;
 
   return (
     <Box
@@ -164,7 +172,7 @@ const AudioPlayer = () => {
         </Box>
       </Box>
 
-      {/* Derecha: Control de volumen */}
+      {/* Derecha: Control de volumen y botón de cancelar */}
       <Box sx={{ display: 'flex', alignItems: 'center', width: '30%', justifyContent: 'flex-end' }}>
         <VolumeUpIcon />
         <Slider
@@ -173,8 +181,11 @@ const AudioPlayer = () => {
           step={0.01}
           value={volume}
           onChange={(e, newValue) => changeVolume(newValue)}
-          sx={{ width: '100px', color: 'white', ml: 1 }}
+          sx={{ width: '80px', color: 'white', ml: 1, mr: 2 }}
         />
+        <IconButton sx={{ color: 'white' }} onClick={handleCancel}>
+          <CancelIcon />
+        </IconButton>
       </Box>
     </Box>
   );
