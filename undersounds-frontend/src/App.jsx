@@ -24,6 +24,7 @@ import SignUpDialog from './components/Auth/SignUpDx';
 import { PlayerProvider } from './context/PlayerContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import AudioPlayer from './components/Player/AudioPlayer';
 
 const theme = createTheme({
     palette: {
@@ -62,6 +63,7 @@ const AppContent = () => {
             </Routes>
             <Footer />
             <SignUpDialog />
+            <AudioPlayer />
         </>
     );
 };

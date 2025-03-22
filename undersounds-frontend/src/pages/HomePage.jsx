@@ -252,6 +252,9 @@ const HomePage = () => {
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             Genre: {album.genre}
                                         </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            ${album.price.toFixed(2)}
+                                        </Typography>
                                     </CardContent>
                                 </CardActionArea>
                             </Card>

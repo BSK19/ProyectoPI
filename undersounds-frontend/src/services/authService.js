@@ -8,8 +8,6 @@ export const login = async (email, password) => {
   // Lee las cuentas almacenadas o usa las cuentas por defecto
   const storedAccounts = JSON.parse(localStorage.getItem('accounts')) || defaultAccounts;
   
-  // Busca una cuenta que tenga el email y password correctos
-  console.log(storedAccounts);
   const account = storedAccounts.find(
     (acc) => acc.email === email && acc.password === password
   );

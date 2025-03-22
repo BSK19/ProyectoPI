@@ -176,7 +176,7 @@ const UserProfile = () => {
           </>
         )}
         <button type="submit" className="update-button">
-          Update Profile
+          Actualizar Perfil
         </button>
       </form>
     </div>

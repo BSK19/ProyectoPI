@@ -1,31 +1,182 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
+import { Box, Slider, IconButton, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { PlayerContext } from '../../context/PlayerContext';
+import tracksData from '../../mockData/tracks';
 
 const AudioPlayer = () => {
-  const { currentTrack, isPlaying, volume, pauseTrack } = useContext(PlayerContext);
-  const audioRef = useRef(null);
+  const { currentTrack, isPlaying, playTrack, pauseTrack, stopTrack, volume, changeVolume } = useContext(PlayerContext);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef(new Audio());
+  const location = useLocation();
 
-  // Actualiza el volumen y controla la reproducción cuando cambian el estado o la pista actual
+  // Cuando no estemos en la ruta de reproducción, se detiene el audio y se limpia el track.
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-      if (isPlaying && currentTrack) {
-        audioRef.current.play().catch(error => console.error("Error al reproducir:", error));
+    if (!location.pathname.startsWith('/album')) {
+      stopTrack();
+      audioRef.current.pause();
+      setProgress(0);
+    }
+  }, [location.pathname, stopTrack]);
+
+  // Actualiza el src cuando cambia la pista
+  useEffect(() => {
+    if (currentTrack && currentTrack.url) {
+      audioRef.current.src = currentTrack.url;
+      setProgress(0);
+    }
+  }, [currentTrack]);
+
+  // Actualiza el volumen sin reiniciar la reproducción
+  useEffect(() => {
+    audioRef.current.volume = volume;
+  }, [volume]);
+
+  // Reproduce o pausa según isPlaying
+  useEffect(() => {
+    if (currentTrack) {
+      if (isPlaying) {
+        audioRef.current.play().catch(err => console.error(err));
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying, currentTrack, volume]);
+  }, [isPlaying, currentTrack]);
 
-  if (!currentTrack) {
-    return <p>No hay pista seleccionada</p>;
-  }
+  // Actualiza el progreso cada 500ms
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (audioRef.current && isPlaying) {
+        setProgress(audioRef.current.currentTime);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  const handleSliderChange = (e, newValue) => {
+    audioRef.current.currentTime = newValue;
+    setProgress(newValue);
+  };
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      pauseTrack();
+    } else {
+      playTrack(currentTrack);
+    }
+  };
+
+  const handleSkipNext = () => {
+    if (!currentTrack) return;
+    const currentIndex = tracksData.findIndex(t => t.id === currentTrack.id);
+    if (currentIndex !== -1 && currentIndex < tracksData.length - 1) {
+      const nextTrack = tracksData[currentIndex + 1];
+      playTrack(nextTrack);
+    } else {
+      audioRef.current.currentTime = 0;
+      setProgress(0);
+    }
+  };
+
+  const handleSkipPrevious = () => {
+    if (!currentTrack) return;
+    const currentIndex = tracksData.findIndex(t => t.id === currentTrack.id);
+    if (currentIndex > 0) {
+      const prevTrack = tracksData[currentIndex - 1];
+      playTrack(prevTrack);
+    } else {
+      audioRef.current.currentTime = 0;
+      setProgress(0);
+    }
+  };
+
+  // Mostramos el reproductor solo si estamos en la ruta "/album" y hay una pista
+  const inReproduction = location.pathname.startsWith('/album');
+  const shouldShow = inReproduction && currentTrack;
 
   return (
-    <div className="audio-player">
-      <audio ref={audioRef} src={currentTrack.url} controls />
-      <button onClick={pauseTrack}>Pausar</button>
-    </div>
+    <Box
+      sx={{
+        display: shouldShow ? 'flex' : 'none',
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '90px',
+        backgroundColor: '#282828',
+        color: 'white',
+        alignItems: 'center',
+        padding: '0 20px',
+        zIndex: 1000,
+      }}
+    >
+      {/* Izquierda: Información de la pista */}
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '30%' }}>
+        <img
+          src={currentTrack?.coverImage || '/assets/images/default-cover.jpg'}
+          alt={currentTrack?.title}
+          style={{ height: '60px', width: '60px', marginRight: '15px' }}
+        />
+        <Box>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+            {currentTrack?.title}
+          </Typography>
+          <Typography variant="caption">
+            {currentTrack?.artist}
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Centro: Controles y slider de progreso */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '40%' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton sx={{ color: 'white' }} onClick={handleSkipPrevious}>
+            <SkipPreviousIcon />
+          </IconButton>
+          <IconButton sx={{ color: 'white' }} onClick={handlePlayPause}>
+            {isPlaying ? <PauseIcon fontSize="large" /> : <PlayArrowIcon fontSize="large" />}
+          </IconButton>
+          <IconButton sx={{ color: 'white' }} onClick={handleSkipNext}>
+            <SkipNextIcon />
+          </IconButton>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <Typography variant="caption">{formatTime(progress)}</Typography>
+          <Slider
+            min={0}
+            max={audioRef.current.duration || 0}
+            value={progress}
+            onChange={handleSliderChange}
+            sx={{ color: 'white', mx: 2 }}
+          />
+          <Typography variant="caption">{formatTime(audioRef.current.duration || 0)}</Typography>
+        </Box>
+      </Box>
+
+      {/* Derecha: Control de volumen */}
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '30%', justifyContent: 'flex-end' }}>
+        <VolumeUpIcon />
+        <Slider
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={(e, newValue) => changeVolume(newValue)}
+          sx={{ width: '100px', color: 'white', ml: 1 }}
+        />
+      </Box>
+    </Box>
   );
 };
 

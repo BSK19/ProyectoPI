@@ -39,9 +39,23 @@
     font-size: 1rem;
     margin-bottom: 5px;
 }
-
-.buy-button.small {
-    font-size: 0.8rem;   /* Tamaño de fuente reducido */
-    padding: 6px 10px;   /* Menor padding */
-    border-radius: 4px;  /* Opcional: radio de borde más pequeño */
+.track-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .track-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .buy-button.small {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 4px;
   }

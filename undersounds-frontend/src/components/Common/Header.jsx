@@ -17,7 +17,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Divider
+  Badge
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -27,6 +27,7 @@ import albums from '../../mockData/albums';
 import artists from '../../mockData/artists';
 import tracks from '../../mockData/tracks';
 import { AuthContext } from '../../context/AuthContext';
+import { CartContext } from '../../context/CartContext';
 
 const Header = () => {
   const [query, setQuery] = useState('');
@@ -39,6 +40,8 @@ const Header = () => {
   const location = useLocation();
   const containerRef = useRef(null);
   const { user, logout, setUser } = useContext(AuthContext);
+  // Se usa la propiedad correcta "cartItems" del CartContext
+  const { cartItems } = useContext(CartContext);
 
   const handleSearch = () => {
     let filteredResults = [];
@@ -72,7 +75,7 @@ const Header = () => {
     setResults(filteredResults);
   };
 
-  // Debounce para la búsqueda
+  // Debounce para búsquedas
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.trim()) {
@@ -264,7 +267,22 @@ const Header = () => {
         {/* Zona Derecha: Botones de Carrito y autenticación */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Button color="inherit" onClick={() => navigate('/cart')}>
-            <ShoppingCartIcon />
+            <Badge
+              badgeContent={cartItems?.length || 0}
+              color="error"
+              overlap="circular"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              sx={{
+                '& .MuiBadge-badge': {
+                  right: -3,
+                  top: 13,
+                  border: '2px solid white',
+                  padding: '0 4px',
+                },
+              }}
+            >
+              <ShoppingCartIcon />
+            </Badge>
           </Button>
           {user ? (
             <>
@@ -289,10 +307,10 @@ const Header = () => {
           ) : (
             <>
               <Button color="inherit" onClick={handleOpenSignUp}>
-                Sign Up
+                Registrate
               </Button>
               <Button color="inherit" component={Link} to="/login">
-                Log In
+                Inicia Sesión
               </Button>
             </>
           )}

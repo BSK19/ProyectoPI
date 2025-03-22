@@ -77,12 +77,12 @@ const ExplorePage = () => {
               Album
             </Typography>
             <Typography variant="h6" className="album-title">
-              <Link to={`/albums/${album.id}`}>{album.title}</Link>
+              <Link to={`/album/${album.id}`}>{album.title}</Link>
             </Typography>
             <Typography variant="body1" className="album-artist">
-              <Link to={`/artists/${album.artist}`}>{album.artist}</Link>
+              {album.artist}
             </Typography>
-            <br /> {/* Línea en blanco */}
+            <br />
             <Typography variant="body2" className="album-details">
               {album.tracks ? album.tracks.length : 0} tracks, {getFormattedAlbumDuration(album)} <br />
               Publicado en {album.releaseYear}
@@ -121,7 +121,7 @@ const ExplorePage = () => {
               Artista
             </Typography>
             <Typography variant="h6" className="artist-name">
-              <Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+              <Link to={`/artistProfile/${artist.id}`}>{artist.name}</Link>
             </Typography>
             <Typography variant="body2" className="artist-genre">
               Género: {artist.genre}
@@ -161,12 +161,12 @@ const ExplorePage = () => {
               Canción
             </Typography>
             <Typography variant="h6" className="track-title">
-              <Link to={`/tracks/${track.id}`}>{track.title}</Link>
+              {track.title}
             </Typography>
             <Typography variant="body1" className="track-artist">
-              <Link to={`/artists/${track.artist}`}>{track.artist}</Link>
+              {track.artist}
             </Typography>
-            <br /> {/* Línea en blanco */}
+            <br />
             <Typography variant="body2" className="track-info">
               Publicado el {formatTrackReleaseDate(track.releaseDate)}
             </Typography>
