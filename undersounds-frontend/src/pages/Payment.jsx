@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/payment.css'; // Archivo CSS para estilos
 
 const Payment = () => {
-  const { cartItems } = useContext(CartContext); // Obtener datos del carrito desde el contexto
+  const { cartItems, clearCart } = useContext(CartContext); // Ahora también obtenemos clearCart
   const navigate = useNavigate();
 
   // Calcular el precio total del carrito
@@ -59,6 +59,7 @@ const Payment = () => {
     setError('');
     // Simulación de procesamiento de pago
     alert('Pago procesado con éxito');
+    clearCart();  // Eliminar todos los artículos del carrito
     navigate('/'); // Redirigir a la página principal
   };
 
@@ -225,4 +226,4 @@ const Payment = () => {
   );
 };
 
-export default Payment; 
+export default Payment;
