@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom'; // Importar Link
-import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Grid, Typography, Avatar } from '@mui/material';
+import { Star } from '@mui/icons-material'; // Importa el icono de estrella
 import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
 import { CartContext } from '../context/CartContext';
@@ -8,6 +9,8 @@ import { AuthContext } from '../context/AuthContext';
 import albumsData from '../mockData/albums';
 import tracksData from '../mockData/tracks';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import defaultImage from '../assets/images/botonPlay.png';  // Imagen por defecto
+const ProfileImage = ''; // Ruta de la imagen de perfil estática
 
 const AlbumPage = () => {
   const { id } = useParams();
@@ -43,6 +46,34 @@ const AlbumPage = () => {
     setFeedback(true);
     setTimeout(() => setFeedback(false), 1000);
   };
+
+  
+  // Estados para la imagen
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  // Imágenes
+
+  const hoverImage = "/images/play-button-dark.png"; // Imagen al pasar el mouse
+  const clickedImage = "/images/pause-button.png";  // Imagen cuando se hace clic
+
+  const handleClick = () => {
+    if (!user) {
+      alert("Debe iniciar sesión para reproducir la música");
+      navigate("/login");
+      return;
+    }
+
+    const trackDetail = tracksData.find((t) => t.id === track.id);
+    if (trackDetail) {
+      playTrack(trackDetail);
+      setActiveTrackId(track.id);
+      setIsClicked(!isClicked); // Alternar entre play y pausa
+    } else {
+      console.error("Track not found in tracks.js");
+    }
+  };
+
 
   return (
     <Box
@@ -87,7 +118,7 @@ const AlbumPage = () => {
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
               {album.title}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
+            <Typography variant="subtitle1" color="black">
               by{' '}
               <Link
                 to={`/artistProfile/${album.artistId}`} // Asegúrate de que artistId contiene el ID del artista
@@ -96,15 +127,33 @@ const AlbumPage = () => {
                 {album.artist} {/* Este sigue mostrando el nombre del artista */}
               </Link>
             </Typography>
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography style={{ color: "gray", margin: "0px", display: "flex", alignItems: "center" }}>
+                  Lanzado en: {album.releaseYear}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end', // Asegura que el contenido se empuje a la derecha
+                  alignItems: 'center', // Alinea verticalmente los elementos
+                  width: '100%',
+                }}>
+                  <Typography style={{ marginRight: '10px' }}>Géneros:</Typography>
+                  <Typography className="tag">
+                    #{album.genre}
+                  </Typography>
+                </div>
+              </Grid>
+            </Grid>
             <Grid container spacing={1} sx={{ mt: 2 }}>
-              <Grid item xs={6}>
-                <Typography variant="body1">Released: {album.releaseYear}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body1">Genre: {album.genre}</Typography>
-              </Grid>
+
               <Grid item xs={12}>
-                <Typography variant="body1">Price: ${album.price.toFixed(2)}</Typography>
+              <h4 className="precio">
+                {album.price.toFixed(2)}€
+              </h4>
               </Grid>
             </Grid>
             <Box sx={{ my: 2, display: 'flex', justifyContent: 'space-between' }}>
@@ -122,46 +171,55 @@ const AlbumPage = () => {
 
         <Box sx={{ mt: 4 }}>
           <Typography variant="h5" gutterBottom>
-            Track List:
+            Lista de canciones:
           </Typography>
-          <Grid container spacing={2}>
+          
+          <div className='lista_espaciada'>
+          <Typography className="ind_cancion" style={{ margin: '0% 0% 0% 4%' }}>
+            #
+          </Typography>
+
+          <Typography className="ind_cancion" style={{ margin: '0% 0% 0% 9%' }}>
+            Nombre
+          </Typography>
+
+          <Typography className="ind_cancion" style={{ margin: '0% 0% 0% 19%' }}>
+            Autores
+          </Typography>
+
+          <Typography className="ind_cancion" style={{ margin: '0% 0% 0% 39%' }}>
+            Reproducciones
+          </Typography>
+
+          </div>
+
+          <Grid container spacing={0}>
             {tracks.map((track) => (
               <Grid item xs={12} key={track.id}>
                 <Box
                   className="track-item"
-                  sx={{ p: 2, borderRadius: '8px', boxShadow: 1, backgroundColor: '#fff' }}
+                  sx={{ p: 1, borderRadius: '8px', boxShadow: 3, backgroundColor: '#fff', }}
                 >
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 'medium', marginRight: 'auto' }}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center', // Alinea verticalmente
+                      width: '100%', // Asegura que ocupe todo el ancho disponible
+                    }}
                   >
-                    {track.title} - {track.duration}
+                  <Typography style={{ fontSize: "1.1rem", color: "black", margin:"0px 20px"}}>
+                      {track.id}
                   </Typography>
 
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      mt: 1,
-                      backgroundColor: '#1DA0C3',
-                      borderColor: '#1DA0C3',
-                      color: 'white',
-                      textTransform: 'none',
-                      px: 2,
-                      py: 2,
-                      borderRadius: '50%',
-                      '&:hover': {
-                        backgroundColor: '#1976d2',
-                        borderColor: '#1976d2',
-                      },
-                      marginLeft: 'auto',
-                      minWidth: '60px',
-                    }}
-                    startIcon={<PlayArrowIcon sx={{ size: '60px', color: 'white' }} />}
+                  <img
+                    src={defaultImage}
+                    alt="Play Button"
+                    onMouseEnter={(e) => (e.currentTarget.style.filter = "brightness(0.7)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.filter = "brightness(1)")}
                     onClick={() => {
                       if (!user) {
-                        alert('Debe iniciar sesión para reproducir la música');
-                        navigate('/login');
+                        alert("Debe iniciar sesión para reproducir la música");
+                        navigate("/login");
                         return;
                       }
                       const trackDetail = tracksData.find((t) => t.id === track.id);
@@ -169,12 +227,35 @@ const AlbumPage = () => {
                         playTrack(trackDetail);
                         setActiveTrackId(track.id);
                       } else {
-                        console.error('Track not found in tracks.js');
+                        console.error("Track not found in tracks.js");
                       }
                     }}
-                  >
-                    {/* No es necesario texto aquí, ya que el ícono lo sustituye */}
-                  </Button>
+                    style={{
+                      margin: "0px 5px",
+                      width: "30px",
+                      height: "30px",
+                      cursor: "pointer",
+                      transition: "filter 0.3s ease-in-out",
+                    }}
+                  />
+                  <div style={{ marginLeft: '10px', marginTop: '0px', width: '200px', height: '40px' }}>
+                    <Typography style={{ fontSize: "1.1rem", color: "black", margin:"0px"}}>
+                      {track.title}
+                    </Typography>
+
+                    <Typography style={{ fontSize: "0.8rem", color: "gray", margin:"0px" }}>
+                      {track.duration}
+                    </Typography>
+                  </div>
+                  
+                  <Typography style={{ fontSize: "0.8rem", color: "gray", margin:"0px" }}>
+                      {track.autor}
+                  </Typography>
+
+                  <Typography style={{ fontSize: "0.8rem", color: "gray", margin: "0px", marginLeft: "auto" }}>
+                    {track.n_reproducciones.toLocaleString("es-ES")}
+                  </Typography>
+                </div>
                 </Box>
               </Grid>
             ))}
@@ -183,14 +264,33 @@ const AlbumPage = () => {
 
         <Box sx={{ mt: 4 }}>
           <Typography variant="h5" gutterBottom>
-            Ratings:
+            Valoraciones:
           </Typography>
           <Box component="ul" sx={{ pl: 2 }}>
             {ratings.map((rating, index) => (
-              <li key={index}>
-                <Typography variant="body2">
-                  {rating.comment} - {rating.rating} stars
-                </Typography>
+              <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                {/* Imagen de perfil */}
+                <Avatar src={ProfileImage} alt="Perfil Usuario" sx={{ width: 40, height: 40, marginRight: 2 }} />
+                
+                <Box sx={{ flex: 1 }}>
+                  {/* Comentario */}
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {rating.comment}
+                  </Typography>
+                  
+                  {/* Estrellas */}
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {[...Array(5)].map((_, starIndex) => (
+                      <Star
+                        key={starIndex}
+                        sx={{
+                          color: starIndex < rating.rating ? 'gold' : 'gray',
+                          fontSize: 18,
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
               </li>
             ))}
           </Box>

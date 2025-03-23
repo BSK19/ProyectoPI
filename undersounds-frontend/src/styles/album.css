@@ -51,11 +51,45 @@
   
   .track-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   }
   
   .buy-button.small {
     font-size: 0.8rem;
     padding: 6px 10px;
     border-radius: 4px;
+  }
+
+
+  .lista_espaciada {
+    display: flex;
+    align-items: center; /* Alinea verticalmente */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  }
+
+  .ind_cancion {
+    font-size: 0.9rem;
+    color: black;
+  }
+
+  .tag {
+    background-color: #1DA0C3; /* Fondo azul */
+    color: white;           /* Texto blanco */
+    padding: 2px 6px;      /* Espaciado dentro de la cajita */
+    border-radius: 10px;    /* Bordes redondeados */
+    display: inline-block;  /* Para que se ajuste al contenido */
+    font-size: 0.9rem;      /* Ajusta el tamaño de la fuente si es necesario */
+  }
+
+  .precio {
+    font-size: 2rem; /* Tamaño de fuente más grande */
+    font-weight: bold; /* Negrita para destacar el precio */
+    color: #000000; /* Un color azul, o puedes elegir uno que resalte */
+    margin: 5px 0; /* Espaciado alrededor del precio */
+    display: inline-block; /* Para asegurarse de que se quede en la misma línea */
+  }
+
+  .precio .decimales {
+    font-size: 1rem; /* Tamaño más pequeño para los decimales */
+    vertical-align: baseline; /* Para alinearlos un poco más abajo */
   }
