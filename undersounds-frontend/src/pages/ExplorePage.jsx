@@ -46,7 +46,9 @@ const ExplorePage = () => {
     );
   const getFilteredTracks = () =>
     tracks.filter(track =>
-      track.title?.toLowerCase().includes(searchTerm.toLowerCase())
+      track.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.artist?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.album?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   // Renderiza un álbum con la imagen a la izquierda y la información a la derecha.
