@@ -88,29 +88,37 @@ const DiscoverPage = () => {
                 <div
                     style={{
                         display: "flex",
-                        justifyContent: "space-evenly",
+                        justifyContent: "center", // Cambio a center para mejor alineación
                         flexWrap: "wrap",
+                        gap: "10px", // Espacio uniforme entre botones
                         marginBottom: "20px",
                         width: "100%",
-                        backgroundColor: "#afafaf",
-                        padding: "20px 5px",
-                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.8)", // Sombra en la parte inferior
+                        backgroundColor: "#4F6872", // Nuevo color de fondo
+                        padding: "20px",
+                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" // Sombra más sutil
                     }}>
                     {genres.map((genre) => (
                         <Button
                             key={genre}
                             variant="contained"
                             onClick={() => handleGenreFilterChange(genre)}
-                            style={{
-                                backgroundColor: selectedGenre === genre ? '#555' : '#1DA0C3',
-                                color: 'white',
+                            sx={{
+                                backgroundColor: selectedGenre === genre ? '#1DA0C3' : '#ffffff',
+                                color: selectedGenre === genre ? 'white' : '#333333',
                                 margin: '5px',
+                                minWidth: '120px', // Ancho mínimo uniforme
+                                height: '36px', // Altura fija para todos los botones
+                                textTransform: 'capitalize', // Primera letra en mayúscula
+                                fontWeight: selectedGenre === genre ? 'bold' : 'normal',
+                                '&:hover': {
+                                    backgroundColor: selectedGenre === genre ? '#1788a3' : '#e0e0e0',
+                                }
                             }}
                         >
                             {genre.charAt(0).toUpperCase() + genre.slice(1)}
                         </Button>
                     ))}
-            </div>
+                </div>
             )}
             <Grid container spacing={2}>
                 {filteredAlbums.map((album) => (

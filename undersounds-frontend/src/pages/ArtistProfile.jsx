@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import artists from '../mockData/artists';
 import { Typography, Box, Grid, Tab, Tabs } from '@mui/material';
 import '../styles/artistProfile.css';
-import artistaIMG from '../assets/images/artista.jpg';
+import { AuthContext } from '../context/AuthContext'; // Importar el contexto de autenticación
 import albumIMG from '../assets/images/albumPortada.jpg';
 import albums from '../mockData/albums';
 
 const ArtistProfile = () => {
-  const { id } = useParams(); // Capturamos el parámetro de la URL
-  const artist = artists.find((artista) => artista.id === parseInt(id));
+  const { id } = useParams();
+  // Asegúrate de que el ID sea un número
+  const numericId = parseInt(id);
+  const artist = artists.find((artista) => artista.id === numericId);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   if (!artist) {
-    return <Typography variant="h5">Artista con ID no encontrado</Typography>;
+    return <Typography variant="h5">Artista no encontrado</Typography>;
   }
 
   // Estado para los tabs
@@ -35,6 +38,12 @@ const ArtistProfile = () => {
 
   // Función para seguir al artista
   const handleFollow = () => {
+    if (!user) {
+      // Si no hay usuario registrado, redirigir a la página de registro
+      navigate('/register');
+      return;
+    }
+    // Si el usuario está registrado, alternar el estado de seguir
     setIsFollowing(!isFollowing);
   };
     

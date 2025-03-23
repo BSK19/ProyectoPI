@@ -75,9 +75,9 @@ const CarritoPage = () => {
                     color="primary"
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     sx={{
-                      backgroundColor: '#1da0c3',
+                      backgroundColor: '#d5d5d5',
                       p: 0.25, // Padding reducido
-                      '&:hover': { backgroundColor: '#d5d5d5' },
+                      '&:hover': { backgroundColor: '#51CBCE' },
                     }}
                   >
                     <RemoveIcon fontSize="small" />
@@ -88,9 +88,9 @@ const CarritoPage = () => {
                     color="primary"
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     sx={{
-                      backgroundColor: '#1da0c3',
+                      backgroundColor: '#d5d5d5',
                       p: 0.25, // Padding reducido
-                      '&:hover': { backgroundColor: '#d5d5d5' },
+                      '&:hover': { backgroundColor: '#51CBCE' },
                     }}
                   >
                     <AddIcon fontSize="small" />

@@ -24,8 +24,22 @@ export const fetchArtists = async () => {
 
 export const fetchTracks = async () => {
     try {
-        // Usar datos de mockData/tracks.js
-        return tracksData;
+        // Obtener todos los álbumes
+        const allAlbums = await fetchAlbums();
+        
+        // Extraer todas las canciones de todos los álbumes y añadir información adicional
+        const allTracks = allAlbums.flatMap(album => 
+            album.tracks.map(track => ({
+                ...track,
+                artist: album.artist,
+                album: album.title,
+                coverImage: album.coverImage,
+                releaseDate: album.releaseYear,
+                albumId: album.id
+            }))
+        );
+        
+        return allTracks;
     } catch (error) {
         console.error('Error fetching tracks:', error);
         throw error;

@@ -161,14 +161,16 @@ const ExplorePage = () => {
               Canción
             </Typography>
             <Typography variant="h6" className="track-title">
-              {track.title}
+              <Link to={`/album/${track.albumId}`}>{track.title}</Link>
             </Typography>
             <Typography variant="body1" className="track-artist">
-              {track.artist}
+              {track.artist} {/* Eliminado el Link al artista */}
             </Typography>
-            <br />
+            <Typography variant="body2" className="track-album">
+              Álbum: <Link to={`/album/${track.albumId}`}>{track.album}</Link>
+            </Typography>
             <Typography variant="body2" className="track-info">
-              Publicado el {formatTrackReleaseDate(track.releaseDate)}
+              Duración: {track.duration}
             </Typography>
           </div>
         </Grid>
