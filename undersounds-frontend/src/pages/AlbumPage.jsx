@@ -9,7 +9,7 @@ import { AuthContext } from '../context/AuthContext';
 import albumsData from '../mockData/albums';
 import tracksData from '../mockData/tracks';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import defaultImage from '../assets/images/botonPlay.png';  // Imagen por defecto
+import defaultImage from '../assets/images/botonPlay.jpg';  // Imagen por defecto
 const ProfileImage = ''; // Ruta de la imagen de perfil estática
 
 const AlbumPage = () => {
