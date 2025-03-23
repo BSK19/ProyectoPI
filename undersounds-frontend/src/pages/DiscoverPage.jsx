@@ -92,6 +92,21 @@ const DiscoverPage = () => {
         "trap", "bluesrock", "housemusic", "dub", "newwave", "hardrock", "chillwave"
     ];
 
+    // Estilo en línea para el carrusel de géneros (sin archivo CSS externo)
+    const genreCarouselStyle = {
+        display: "flex",
+        overflowX: "auto",
+        scrollBehavior: "smooth",
+        gap: "10px",
+        padding: "10px 0",
+        backgroundColor: "#4F6872",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        flex: 1,
+        // Propiedades para ocultar scrollbar en IE/Edge y Firefox
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+    };
+
     return (
         <div>
             {(!specialFilters.includes(selectedFilter) || selectedFilter === "all") && (
@@ -111,25 +126,14 @@ const DiscoverPage = () => {
                     >
                         {"<"}
                     </button>
-                    <div
-                        ref={genreCarouselRef}
-                        style={{
-                            display: "flex",
-                            overflowX: "auto",
-                            scrollBehavior: "smooth",
-                            gap: "10px",
-                            padding: "10px 0",
-                            backgroundColor: "#4F6872",
-                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                            flex: 1, // Ensures the carousel takes up the remaining space
-                        }}
-                    >
+                    <div ref={genreCarouselRef} style={genreCarouselStyle}>
                         {genres.map((genre) => (
                             <Button
                                 key={genre}
                                 variant="contained"
                                 onClick={() => handleGenreFilterChange(genre)}
                                 sx={{
+                                    mx: 1, // Separación horizontal reducida
                                     backgroundColor: selectedGenre === genre ? '#1DA0C3' : '#ffffff',
                                     color: selectedGenre === genre ? 'white' : '#333333',
                                     minWidth: '120px',
@@ -298,7 +302,7 @@ const DiscoverPage = () => {
                                         variant="h6" 
                                         sx={{ color: "#1976d2", fontWeight: "bold", marginTop: "8px" }}
                                     >
-                                        €{tshirt.price.toFixed(2)}
+                                        ${tshirt.price.toFixed(2)}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>

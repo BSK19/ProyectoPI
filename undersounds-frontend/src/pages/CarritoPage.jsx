@@ -34,7 +34,7 @@ const CarritoPage = () => {
     <div className="carrito-page">
       <div className="cart-summary">
         <h2>Resumen</h2>
-        <p>Total: €{total.toFixed(2)}</p>
+        <p>Total: ${total.toFixed(2)}</p>
         <button className="proceed-button" onClick={handleCheckout}>
           Proceder al pago
         </button>
@@ -66,7 +66,7 @@ const CarritoPage = () => {
                 <Box sx={{ flex: 1, ml: 2 }}>
                   <Typography variant="subtitle1">{item.name}</Typography>
                   <Typography variant="body2">
-                    €{item.price.toFixed(2)}
+                    ${item.price.toFixed(2)}
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

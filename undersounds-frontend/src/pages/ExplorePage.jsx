@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
+import { Box, Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchAlbums, fetchArtists, fetchTracks } from '../services/musicService';
-import { getFormattedAlbumDuration, formatTrackReleaseDate } from '../utils/formatters';
+import { getFormattedAlbumDuration } from '../utils/formatters';
 import '../styles/explorepage.css';
 
 const ExplorePage = () => {
@@ -13,20 +13,20 @@ const ExplorePage = () => {
 
   // Estado para la búsqueda y filtro
   const [searchTerm, setSearchTerm] = useState('all');
-  const [filter, setFilter] = useState('all'); // <- Aquí forzamos que el filtro por defecto sea "all"
+  const [filter, setFilter] = useState('all');
   const location = useLocation();
 
-  // Obtener el parámetro de búsqueda (q) desde la URL al cargar
+  // Obtener los parámetros de la URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const q = params.get('q') || '';
-    const f = params.get('filter') || 'all'; // Si no hay filtro en la URL, usa 'all'
-
+    const f = params.get('filter') || 'all';
     setSearchTerm(q);
     setFilter(f);
   }, [location.search]);
+
   useEffect(() => {
-    if (!filter) setFilter('all');  // Si el filtro está vacío, se asigna "all"
+    if (!filter) setFilter('all');
   }, [filter]);
 
   useEffect(() => {
@@ -57,18 +57,10 @@ const ExplorePage = () => {
       track.album?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  // Renderiza un álbum con la imagen a la izquierda y la información a la derecha.
-  // El título del álbum y el nombre del artista son enlaces a sus páginas.
+  // Renderiza un álbum
   const renderAlbumItem = (album) => (
     <Grid item key={album.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="album-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="album-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="album-image-container">
             <img
@@ -101,18 +93,10 @@ const ExplorePage = () => {
     </Grid>
   );
 
-  // Renderiza un artista con la imagen a la izquierda y la información a la derecha.
-  // El nombre del artista es un enlace a su página.
+  // Renderiza un artista
   const renderArtistItem = (artist) => (
     <Grid item key={artist.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="artist-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="artist-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="artist-image-container">
             <img
@@ -140,19 +124,10 @@ const ExplorePage = () => {
     </Grid>
   );
 
-  // Renderiza una track con la imagen a la izquierda y la información a la derecha.
-  // El título de la track es un enlace a su página, y se muestra la palabra "Canción", su artista
-  // y la fecha de salida formateada.
+  // Renderiza una canción
   const renderTrackItem = (track) => (
     <Grid item key={track.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="track-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="track-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="track-image-container">
             <img
@@ -172,7 +147,7 @@ const ExplorePage = () => {
               <Link to={`/album/${track.albumId}`}>{track.title}</Link>
             </Typography>
             <Typography variant="body1" className="track-artist">
-              {track.artist} {/* Eliminado el Link al artista */}
+              {track.artist}
             </Typography>
             <Typography variant="body2" className="track-album">
               Álbum: <Link to={`/album/${track.albumId}`}>{track.album}</Link>
@@ -254,65 +229,73 @@ const ExplorePage = () => {
     );
   }
 
-
   return (
     <div className="explore-page">
-      <Typography variant="h3" className="main-title">Explore Music</Typography>
-      <div className="search-bar-container">
+      <Box
+        sx={{
+          background: 'linear-gradient(to right, #f8f9fa, #e9ecef)',
+          borderRadius: '12px',
+          p: 3,
+          mb: 3,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        }}
+      >
+        <Typography
+          variant="h3"
+          className="main-title"
+          sx={{
+            fontFamily: '"Montserrat", sans-serif',
+            letterSpacing: '0.1em',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            mb: 2,
+          }}
+        >
+          Explore Music
+        </Typography>
         <TextField
           variant="outlined"
           fullWidth
           placeholder="Search music, artists, albums, tracks..."
           value={searchTerm}
           onChange={(e) => {
-            setFilter('all'); // <- Asegura que el filtro se mantenga en "all" al buscar
+            setFilter('all');
             setSearchTerm(e.target.value);
-            
+          }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           }}
         />
-      </div>
-      <div className="tabs-container">
-        <Tabs
-          value={filter}
-          onChange={(event, newValue) => setFilter(newValue)}
-          textColor="primary"
-          indicatorColor="primary"
-          variant="fullWidth"
+        {/* Filtros debajo de la barra de búsqueda con menor altura vertical */}
+        <Box
+          sx={{
+            mt: 2,
+            backgroundColor: '#1da0c3',
+            borderRadius: '8px',
+            py: 0, 
+            px: 1,
+          }}
         >
-          <Tab
-            label="All"
-            value="all"
+          <Tabs
+            value={filter}
+            onChange={(event, newValue) => setFilter(newValue)}
+            textColor="inherit"
+            indicatorColor="secondary"
+            variant="fullWidth"
             sx={{
-              backgroundColor: filter === 'all' ? '#eee' : 'transparent',
-              borderBottom: filter === 'all' ? '2px solid #000' : 'none'
+              minHeight: 'auto',
             }}
-          />
-          <Tab
-            label="Albums"
-            value="albums"
-            sx={{
-              backgroundColor: filter === 'albums' ? '#eee' : 'transparent',
-              borderBottom: filter === 'albums' ? '2px solid #000' : 'none'
-            }}
-          />
-          <Tab
-            label="Artists"
-            value="artists"
-            sx={{
-              backgroundColor: filter === 'artists' ? '#eee' : 'transparent',
-              borderBottom: filter === 'artists' ? '2px solid #000' : 'none'
-            }}
-          />
-          <Tab
-            label="Tracks"
-            value="tracks"
-            sx={{
-              backgroundColor: filter === 'tracks' ? '#eee' : 'transparent',
-              borderBottom: filter === 'tracks' ? '2px solid #000' : 'none'
-            }}
-          />
-        </Tabs>
-      </div>
+          >
+            <Tab label="All" value="all" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Albums" value="albums" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Artists" value="artists" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Tracks" value="tracks" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+          </Tabs>
+        </Box>
+      </Box>
       <div className="results">{filteredContent}</div>
     </div>
   );

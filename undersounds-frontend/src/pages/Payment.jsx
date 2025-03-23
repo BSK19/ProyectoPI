@@ -206,18 +206,18 @@ const Payment = () => {
                 <div>
                   <p>{item.name}</p>
                   <p>
-                    Cant.: {item.quantity || 1} a €{item.price.toFixed(2)}
+                    Cant.: {item.quantity || 1} a ${item.price.toFixed(2)}
                   </p>
-                  <p>€{(item.price * (item.quantity || 1)).toFixed(2)}</p>
+                  <p>${(item.price * (item.quantity || 1)).toFixed(2)}</p>
                 </div>
               </li>
             ))}
           </ul>
           <div className="summary-totals">
-            <p>Subtotal: €{totalPrice.toFixed(2)}</p>
-            <p>Gastos de envío estimados: €5.00</p>
+            <p>Subtotal: ${totalPrice.toFixed(2)}</p>
+            <p>Gastos de envío estimados: $5.00</p>
             <p>
-              <strong>Total: €{(totalPrice + 5).toFixed(2)}</strong>
+              <strong>Total: ${(totalPrice + 5).toFixed(2)}</strong>
             </p>
           </div>
         </div>

@@ -234,7 +234,7 @@ const HomePage = () => {
             {/* Sección de Álbumes Destacados */}
             <div className="featured-section">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                    <h2>Selección Recomendada</h2>
+                    <h2>Recommended Selection</h2>
                     <div style={{ display: 'flex', gap: '10px' }}>
                     <button className="boton-carrusel"
                         onClick={() => setStartIndex(Math.max(0, startIndex - 3))}>
@@ -304,7 +304,7 @@ const HomePage = () => {
             {/* Sección de Álbumes Destacados */}
             <div className="featured-section">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                    <h2>Nuevos Álbumes</h2>
+                    <h2>New Albums</h2>
                     <div style={{ display: 'flex', gap: '10px' }}>
                     <button className="boton-carrusel"
                         onClick={() => setStartIndexNew(Math.max(0, startIndexNew - 3))}>
@@ -372,7 +372,7 @@ const HomePage = () => {
             {/* Sección de Artistas Destacados */}
             <div className="featured-section">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                    <h2>Descubre a Nuestros Mejores Artistas</h2>
+                    <h2>Discover Our Best Artists</h2>
                     <div style={{ display: 'flex', gap: '10px' }}>
                     <button className="boton-carrusel"
                         onClick={() => setStartIndexArt(Math.max(0, startIndexNew - 3))}>

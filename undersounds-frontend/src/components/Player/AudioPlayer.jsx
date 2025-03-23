@@ -6,19 +6,18 @@ import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { PlayerContext } from '../../context/PlayerContext';
 import tracksData from '../../mockData/tracks';
-import CancelIcon from '@mui/icons-material/Cancel';
-
 
 const AudioPlayer = () => {
   const { currentTrack, isPlaying, playTrack, pauseTrack, stopTrack, volume, changeVolume } = useContext(PlayerContext);
   const [progress, setProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(true); // Nuevo estado para controlar la visibilidad
+  const [isVisible, setIsVisible] = useState(true); // Estado para controlar la visibilidad
   const audioRef = useRef(new Audio());
   const location = useLocation();
 
-  // Cuando no estemos en la ruta de reproducción, se detiene el audio y se limpia el track.
+  // Detener la reproducción y limpiar el track si no estamos en la ruta /album
   useEffect(() => {
     if (!location.pathname.startsWith('/album')) {
       stopTrack();
@@ -27,7 +26,7 @@ const AudioPlayer = () => {
     }
   }, [location.pathname, stopTrack]);
 
-  // Actualiza el src cuando cambia la pista
+  // Actualizar la fuente del audio al cambiar la pista
   useEffect(() => {
     if (currentTrack && currentTrack.url) {
       audioRef.current.src = currentTrack.url;
@@ -35,12 +34,12 @@ const AudioPlayer = () => {
     }
   }, [currentTrack]);
 
-  // Actualiza el volumen sin reiniciar la reproducción
+  // Actualizar el volumen sin reiniciar la reproducción
   useEffect(() => {
     audioRef.current.volume = volume;
   }, [volume]);
 
-  // Reproduce o pausa según isPlaying
+  // Reproducir o pausar según isPlaying
   useEffect(() => {
     if (currentTrack) {
       if (isPlaying) {
@@ -51,7 +50,7 @@ const AudioPlayer = () => {
     }
   }, [isPlaying, currentTrack]);
 
-  // Actualiza el progreso cada 500ms
+  // Actualizar el progreso del audio cada 500ms
   useEffect(() => {
     const interval = setInterval(() => {
       if (audioRef.current && isPlaying) {
@@ -105,11 +104,26 @@ const AudioPlayer = () => {
   };
 
   const handleCancel = () => {
-    pauseTrack(); // Pausa la reproducción
-    setIsVisible(false); // Oculta el reproductor
+    pauseTrack();
+    setIsVisible(false);
   };
 
-  // Mostramos el reproductor solo si estamos en la ruta "/album", hay una pista y es visible
+  const handlePlaySong = (track) => {
+    const trackDetail = tracksData.find(t => t.id === track.id);
+    if (trackDetail) {
+      playTrack({
+        ...trackDetail,
+        coverImage: trackDetail.coverImage || '/assets/images/default-cover.jpg',
+        title: trackDetail.title,
+        artist: trackDetail.artist,
+      });
+      setActiveTrackId(track.id);
+    } else {
+      console.error('Track not found');
+    }
+  };
+
+  // Mostrar el reproductor solo si se está en la ruta /album, hay una pista y es visible
   const inReproduction = location.pathname.startsWith('/album');
   const shouldShow = inReproduction && currentTrack && isVisible;
 

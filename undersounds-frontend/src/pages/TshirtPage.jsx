@@ -52,7 +52,7 @@ const TshirtPage = () => {
         <p>{item.description}</p>
         <p>Tiempo de envío: {item.shippingTime}</p>
         <p>
-          Precio: €
+          Precio: $
           {typeof item.price === 'number' ? item.price.toFixed(2) : 'Precio no disponible'}
         </p>
         <button
