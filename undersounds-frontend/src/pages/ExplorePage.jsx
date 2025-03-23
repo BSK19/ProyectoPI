@@ -251,6 +251,7 @@ const ExplorePage = () => {
     );
   }
 
+  
   return (
     <div className="explore-page">
       <Typography variant="h3" className="main-title">Explore Music</Typography>

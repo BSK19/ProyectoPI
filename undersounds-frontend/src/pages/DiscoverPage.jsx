@@ -14,6 +14,7 @@ import artists from "../mockData/artists";
 import tshirts from "../mockData/tshirts";
 import { AlbumContext } from "../context/AlbumContext";
 
+
 const DiscoverPage = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
