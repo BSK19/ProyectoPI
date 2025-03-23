@@ -223,9 +223,12 @@ const Header = () => {
             <IconButton
               type="button"
               color="inherit"
-              onClick={() =>
-                navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`)
-              }
+              onClick={() => {
+                if (query.trim()) {
+                  handleSearch(); // Asegúrate de que los resultados se actualicen antes de redirigir
+                }
+                navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`);
+              }}
             >
               <SearchIcon />
             </IconButton>

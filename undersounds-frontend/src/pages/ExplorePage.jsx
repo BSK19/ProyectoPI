@@ -12,16 +12,22 @@ const ExplorePage = () => {
   const [tracks, setTracks] = useState([]);
 
   // Estado para la búsqueda y filtro
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('all');
+  const [filter, setFilter] = useState('all'); // <- Aquí forzamos que el filtro por defecto sea "all"
   const location = useLocation();
 
   // Obtener el parámetro de búsqueda (q) desde la URL al cargar
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const q = params.get('q') || '';
+    const f = params.get('filter') || 'all'; // Si no hay filtro en la URL, usa 'all'
+
     setSearchTerm(q);
+    setFilter(f);
   }, [location.search]);
+  useEffect(() => {
+    if (!filter) setFilter('all');  // Si el filtro está vacío, se asigna "all"
+  }, [filter]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -184,7 +190,6 @@ const ExplorePage = () => {
   if (filter === 'all') {
     filteredContent = (
       <>
-        {/* Sección de álbumes (solo se muestra si hay resultados) */}
         {getFilteredAlbums().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -192,7 +197,6 @@ const ExplorePage = () => {
             </Grid>
           </div>
         )}
-        {/* Sección de artistas */}
         {getFilteredArtists().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -200,7 +204,6 @@ const ExplorePage = () => {
             </Grid>
           </div>
         )}
-        {/* Sección de tracks */}
         {getFilteredTracks().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -251,7 +254,7 @@ const ExplorePage = () => {
     );
   }
 
-  
+
   return (
     <div className="explore-page">
       <Typography variant="h3" className="main-title">Explore Music</Typography>
@@ -261,7 +264,11 @@ const ExplorePage = () => {
           fullWidth
           placeholder="Search music, artists, albums, tracks..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setFilter('all'); // <- Asegura que el filtro se mantenga en "all" al buscar
+            setSearchTerm(e.target.value);
+            
+          }}
         />
       </div>
       <div className="tabs-container">
