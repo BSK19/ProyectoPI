@@ -144,34 +144,41 @@ const ArtistProfile = () => {
           <Grid
             item
             key={concert.id}
-            xs={6} sm={2} md={3} lg={3} sx={{ display: 'flex', flexDirection: 'column',  }} className="grid-item">
+            xs={6} sm={2} md={3} lg={3}
+            sx={{ display: 'flex', flexDirection: 'column' }}
+            className="grid-item"
+            onClick={() => navigate(`/concert/${artist.id}/${concert.id}`, { 
+              state: { concert } 
+            })}
+            style={{ cursor: 'pointer' }}
+          >
             <div style={{
               width: '100%',
-              paddingTop: '100%',  // Esto asegura que la imagen sea cuadrada (proporción 1:1)
+              paddingTop: '100%',
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: '0px', // Redondea las esquinas
-              boxShadow: '0 4px 8px rgba(0,0,0,0.2)', // Sombra para la imagen
+              borderRadius: '0px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
             }}>
               <img
-                src={concert.concertImage} // Usamos la imagen del concierto
-                alt={`Concert at ${concert.location}`} 
+                src={concert.concertImage}
+                alt={`Concert at ${concert.location}`}
                 style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',  // Hace que la imagen llene el área sin deformarse
+                  objectFit: 'cover',
                 }}
               />
             </div>
-
-            {/* Datos del concierto */}
             <Typography variant="h8" sx={{ textAlign: 'left' }} className="item-title">
               Concierto en {concert.location}
             </Typography>
-            <Typography variant="body2" sx={{ textAlign: 'left' }} className="item-details">Fecha: {concert.date}</Typography>
+            <Typography variant="body2" sx={{ textAlign: 'left' }} className="item-details">
+              Fecha: {concert.date}
+            </Typography>
           </Grid>
         ))}
       </Grid>

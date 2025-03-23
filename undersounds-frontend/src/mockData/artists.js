@@ -47,14 +47,20 @@ const artists = [
                 id: 1,
                 location: "Nueva York, NY",
                 date: "2025-05-15",
+                time: "20:30",
+                venue: "Madison Square Garden",
                 concertImage: concertNY,
+                description: "Únete a The Soundscapers en una noche épica de rock alternativo en el corazón de Nueva York. Este concierto marca el inicio de su gira mundial 2025, donde presentarán su nuevo álbum junto con sus mayores éxitos. La banda promete una experiencia inmersiva con una producción visual espectacular, efectos especiales de última generación y algunas sorpresas especiales para los fans. Además, contaremos con artistas invitados que se unirán a la banda en el escenario para crear momentos únicos e irrepetibles."
             },
             {
                 id: 2,
                 location: "Los Ángeles, CA",
                 date: "2025-06-10",
+                time: "21:00",
+                venue: "Hollywood Bowl",
                 concertImage: concertLA,
-            },
+                description: "The Soundscapers llega a Los Ángeles para ofrecer un espectáculo inolvidable bajo las estrellas. Esta presentación especial incluirá una orquesta en vivo que acompañará a la banda en nuevas versiones de sus canciones más emblemáticas. El concierto también celebrará el 5º aniversario de su álbum debut con una interpretación completa del mismo. La producción incluirá un impresionante show de luces, proyecciones mapped sobre el anfiteatro y una sección acústica íntima que mostrará el lado más personal de la banda."
+            }
         ],
         merchandising: [
             {
@@ -122,8 +128,11 @@ const artists = [
                 id: 1,
                 location: "Miami, FL",
                 date: "2025-07-20",
+                time: "22:00",
+                venue: "Space Miami",
                 concertImage: concertMI,
-            },
+                description: "DJ Beats presenta su nuevo show 'Electronic Dreams' en una noche que promete revolucionar la escena electrónica de Miami. Este evento único combinará música electrónica de vanguardia con elementos visuales innovadores y tecnología interactiva. Los asistentes podrán experimentar un viaje musical a través de diferentes géneros electrónicos, desde house progresivo hasta techno melódico. El show incluirá bailarines, artistas visuales en vivo y una instalación de luz inmersiva que transformará completamente el espacio. Además, DJ Beats estrenará exclusivamente nuevos tracks de su próximo álbum."
+            }
         ],
         merchandising: [
             {
@@ -163,14 +172,20 @@ const artists = [
                 id: 1,
                 location: "Chicago, IL",
                 date: "2025-08-05",
+                time: "19:30",
+                venue: "Chicago Symphony Center",
                 concertImage: concertIL,
+                description: "Soulful Voices presenta una velada única de jazz contemporáneo en el prestigioso Chicago Symphony Center. Esta actuación especial fusionará el jazz tradicional con elementos de música clásica y world music. El grupo estará acompañado por una sección de cuerdas de la Orquesta Sinfónica de Chicago, creando texturas sonoras nunca antes exploradas. El programa incluirá nuevas composiciones originales, así como interpretaciones innovadoras de clásicos del jazz. La acústica excepcional del venue permitirá apreciar cada matiz y detalle de las complejas armonías y improvisaciones que caracterizan el estilo único de Soulful Voices."
             },
             {
                 id: 2,
                 location: "San Francisco, CA",
                 date: "2025-09-12",
+                time: "20:00",
+                venue: "SFJAZZ Center",
                 concertImage: concertCA,
-            },
+                description: "En esta noche especial, Soulful Voices transformará el SFJAZZ Center en un viaje musical a través de la historia del jazz. El concierto explorará la evolución del género desde sus raíces hasta las fronteras más contemporáneas. La banda presentará material de su próximo álbum, mezclando elementos de jazz modal, fusion y música experimental. La actuación incluirá colaboraciones sorpresa con leyendas locales del jazz de San Francisco, creando un diálogo musical único entre generaciones. El espectáculo también contará con una exposición fotográfica en el lobby que documenta el proceso creativo detrás de su último trabajo."
+            }
         ],
         merchandising: [
             {

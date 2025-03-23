@@ -25,6 +25,7 @@ import { PlayerProvider } from './context/PlayerContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import AudioPlayer from './components/Player/AudioPlayer';
+import ConcertPage from './pages/ConcertPage';
 
 const theme = createTheme({
     palette: {
@@ -60,6 +61,7 @@ const AppContent = () => {
                 <Route path="/tshirt/:id" element={<TshirtPage />} />
                 <Route path="/cart" element={<CarritoPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/concert/:artistId/:concertId" element={<ConcertPage />} />
             </Routes>
             <Footer />
             <SignUpDialog />
