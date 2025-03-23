@@ -28,7 +28,7 @@ import AudioPlayer from './components/Player/AudioPlayer';
 
 const theme = createTheme({
     palette: {
-        primary: { main: '#ffffff' },
+        primary: { main: '#1DA0C3' },
         secondary: { main: '#1da0c3' },
         background: { default: '#ffffff', paper: '#ffffff' },
         text: { primary: '#1a1a1a', secondary: '#555555' },

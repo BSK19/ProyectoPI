@@ -190,7 +190,7 @@ const Header = () => {
         {/* Zona Izquierda: Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <img src={logo} alt="UnderSounds Logo" style={{ height: '100px' }} />
+            <img src={logo} alt="UnderSounds Logo" style={{ width: '150px' }} />
           </Link>
         </Box>
         {/* Zona central: Área de búsqueda */}
