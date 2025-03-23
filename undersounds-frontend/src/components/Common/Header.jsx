@@ -220,7 +220,13 @@ const Header = () => {
                 width: { xs: '200px', md: '250px' }
               }}
             />
-            <IconButton type="button" color="inherit" onClick={handleSearch}>
+            <IconButton
+              type="button"
+              color="inherit"
+              onClick={() =>
+                navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`)
+              }
+            >
               <SearchIcon />
             </IconButton>
           </Box>

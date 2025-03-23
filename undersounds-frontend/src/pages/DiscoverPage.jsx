@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Button } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -14,21 +14,30 @@ import artists from "../mockData/artists";
 import tshirts from "../mockData/tshirts";
 import { AlbumContext } from "../context/AlbumContext";
 
-
 const DiscoverPage = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const initialFilter = query.get("filter") || "all";
     const [selectedFilter, setSelectedFilter] = useState(initialFilter);
-    const [selectedGenre, setSelectedGenre] = useState(initialFilter);  // Track the selected genre
+    const [selectedGenre, setSelectedGenre] = useState(initialFilter); // Track the selected genre
     const navigate = useNavigate();
     const { setSelectedAlbumId } = useContext(AlbumContext);
+
+    const genreCarouselRef = useRef(null);
+
+    const scrollLeft = () => {
+        genreCarouselRef.current.scrollBy({ left: -200, behavior: "smooth" });
+    };
+
+    const scrollRight = () => {
+        genreCarouselRef.current.scrollBy({ left: 200, behavior: "smooth" });
+    };
 
     // Synchronize the query parameter with the internal state when the location changes
     useEffect(() => {
         const filterParam = query.get("filter") || "all";
         setSelectedFilter(filterParam);
-        setSelectedGenre(filterParam);  // Ensure the genre is also updated
+        setSelectedGenre(filterParam); // Ensure the genre is also updated
     }, [location.search, query]);
 
     const handleAlbumClick = (album) => {
@@ -42,7 +51,7 @@ const DiscoverPage = () => {
     // Change filter when a genre button is clicked
     const handleGenreFilterChange = (newFilter) => {
         setSelectedFilter(newFilter);
-        setSelectedGenre(newFilter);  // Update the selected genre when the button is clicked
+        setSelectedGenre(newFilter); // Update the selected genre when the button is clicked
         navigate(`/discover?filter=${newFilter}`);
     };
 
@@ -86,39 +95,71 @@ const DiscoverPage = () => {
     return (
         <div>
             {(!specialFilters.includes(selectedFilter) || selectedFilter === "all") && (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center", // Cambio a center para mejor alineación
-                        flexWrap: "wrap",
-                        gap: "10px", // Espacio uniforme entre botones
-                        marginBottom: "20px",
-                        width: "100%",
-                        backgroundColor: "#4F6872", // Nuevo color de fondo
-                        padding: "20px",
-                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" // Sombra más sutil
-                    }}>
-                    {genres.map((genre) => (
-                        <Button
-                            key={genre}
-                            variant="contained"
-                            onClick={() => handleGenreFilterChange(genre)}
-                            sx={{
-                                backgroundColor: selectedGenre === genre ? '#1DA0C3' : '#ffffff',
-                                color: selectedGenre === genre ? 'white' : '#333333',
-                                margin: '5px',
-                                minWidth: '120px', // Ancho mínimo uniforme
-                                height: '36px', // Altura fija para todos los botones
-                                textTransform: 'capitalize', // Primera letra en mayúscula
-                                fontWeight: selectedGenre === genre ? 'bold' : 'normal',
-                                '&:hover': {
-                                    backgroundColor: selectedGenre === genre ? '#1788a3' : '#e0e0e0',
-                                }
-                            }}
-                        >
-                            {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                        </Button>
-                    ))}
+                <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                    <button
+                        onClick={scrollLeft}
+                        style={{
+                            backgroundColor: "#1DA0C3",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: "30px",
+                            height: "30px",
+                            cursor: "pointer",
+                            marginRight: "10px",
+                        }}
+                    >
+                        {"<"}
+                    </button>
+                    <div
+                        ref={genreCarouselRef}
+                        style={{
+                            display: "flex",
+                            overflowX: "auto",
+                            scrollBehavior: "smooth",
+                            gap: "10px",
+                            padding: "10px 0",
+                            backgroundColor: "#4F6872",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            flex: 1, // Ensures the carousel takes up the remaining space
+                        }}
+                    >
+                        {genres.map((genre) => (
+                            <Button
+                                key={genre}
+                                variant="contained"
+                                onClick={() => handleGenreFilterChange(genre)}
+                                sx={{
+                                    backgroundColor: selectedGenre === genre ? '#1DA0C3' : '#ffffff',
+                                    color: selectedGenre === genre ? 'white' : '#333333',
+                                    minWidth: '120px',
+                                    height: '36px',
+                                    textTransform: 'capitalize',
+                                    fontWeight: selectedGenre === genre ? 'bold' : 'normal',
+                                    '&:hover': {
+                                        backgroundColor: selectedGenre === genre ? '#1788a3' : '#e0e0e0',
+                                    },
+                                }}
+                            >
+                                {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                            </Button>
+                        ))}
+                    </div>
+                    <button
+                        onClick={scrollRight}
+                        style={{
+                            backgroundColor: "#1DA0C3",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: "30px",
+                            height: "30px",
+                            cursor: "pointer",
+                            marginLeft: "10px",
+                        }}
+                    >
+                        {">"}
+                    </button>
                 </div>
             )}
             <Grid container spacing={2}>
@@ -145,7 +186,6 @@ const DiscoverPage = () => {
                                         aspectRatio: "1 / 1", 
                                         padding: "20px",
                                         borderRadius: "12px 12px 0 0"
-                                         
                                     }}
                                 />
                                 <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
@@ -182,89 +222,89 @@ const DiscoverPage = () => {
                     </Grid>
                 ))}
 
-            {filteredArtists.map((artist) => (
-                <Grid item xs={12} sm={6} md={4} key={artist.id}>
-                    <Card 
-                        sx={{ 
-                            borderRadius: "12px", 
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
-                            transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
-                            transform: "scale(0.95)",
-                            marginBottom: "30px", 
-                            "&:hover": { 
-                                transform: "scale(1.02)", 
-                                filter: "brightness(0.8)"  
-                            } 
-                        }}
-                    >
-                        <CardActionArea onClick={() => navigate(`/artistProfile/${artist.id}`)}>
-                            <CardMedia
-                                component="img"
-                                alt={`${artist.name} profile`}
-                                image={artist.profileImage}
-                                sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
-                            />
-                            <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
-                                <Typography 
-                                    gutterBottom 
-                                    variant="h6" 
-                                    sx={{ fontWeight: "bold", color: "#333" }}
-                                >
-                                    {artist.name}
-                                </Typography>
-                                <Typography 
-                                    variant="body2" 
-                                    sx={{ color: "#777", fontWeight: "500" }}
-                                >
-                                    Genre: {artist.genre}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
-            ))}
+                {filteredArtists.map((artist) => (
+                    <Grid item xs={12} sm={6} md={4} key={artist.id}>
+                        <Card 
+                            sx={{ 
+                                borderRadius: "12px", 
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
+                                transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
+                                transform: "scale(0.95)",
+                                marginBottom: "30px", 
+                                "&:hover": { 
+                                    transform: "scale(1.02)", 
+                                    filter: "brightness(0.8)"  
+                                } 
+                            }}
+                        >
+                            <CardActionArea onClick={() => navigate(`/artistProfile/${artist.id}`)}>
+                                <CardMedia
+                                    component="img"
+                                    alt={`${artist.name} profile`}
+                                    image={artist.profileImage}
+                                    sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
+                                />
+                                <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
+                                    <Typography 
+                                        gutterBottom 
+                                        variant="h6" 
+                                        sx={{ fontWeight: "bold", color: "#333" }}
+                                    >
+                                        {artist.name}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body2" 
+                                        sx={{ color: "#777", fontWeight: "500" }}
+                                    >
+                                        Genre: {artist.genre}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    </Grid>
+                ))}
 
-            {filteredTshirts.map((tshirt) => (
-                <Grid item xs={12} sm={6} md={4} key={tshirt.id}>
-                    <Card 
-                        sx={{ 
-                            borderRadius: "12px", 
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
-                            transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
-                            transform: "scale(0.95)",
-                            marginBottom: "30px", 
-                            "&:hover": { 
-                                transform: "scale(1.02)", 
-                                filter: "brightness(0.8)" 
-                            } 
-                        }}
-                    >
-                        <CardActionArea onClick={() => handleTshirtClick(tshirt.id)}>
-                            <CardMedia
-                                component="img"
-                                alt={`${tshirt.name} shirt`}
-                                image={tshirt.tshirtImage}
-                                sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
-                            />
-                            <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
-                                <Typography 
-                                    gutterBottom 
-                                    variant="h6" 
-                                    sx={{ fontWeight: "bold", color: "#333" }}
-                                >
-                                    {tshirt.name}
-                                </Typography>
-                                <Typography 
-                                    variant="h6" 
-                                    sx={{ color: "#1976d2", fontWeight: "bold", marginTop: "8px" }}
-                                >
-                                    €{tshirt.price.toFixed(2)}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
-            ))}
+                {filteredTshirts.map((tshirt) => (
+                    <Grid item xs={12} sm={6} md={4} key={tshirt.id}>
+                        <Card 
+                            sx={{ 
+                                borderRadius: "12px", 
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
+                                transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
+                                transform: "scale(0.95)",
+                                marginBottom: "30px", 
+                                "&:hover": { 
+                                    transform: "scale(1.02)", 
+                                    filter: "brightness(0.8)" 
+                                } 
+                            }}
+                        >
+                            <CardActionArea onClick={() => handleTshirtClick(tshirt.id)}>
+                                <CardMedia
+                                    component="img"
+                                    alt={`${tshirt.name} shirt`}
+                                    image={tshirt.tshirtImage}
+                                    sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
+                                />
+                                <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
+                                    <Typography 
+                                        gutterBottom 
+                                        variant="h6" 
+                                        sx={{ fontWeight: "bold", color: "#333" }}
+                                    >
+                                        {tshirt.name}
+                                    </Typography>
+                                    <Typography 
+                                        variant="h6" 
+                                        sx={{ color: "#1976d2", fontWeight: "bold", marginTop: "8px" }}
+                                    >
+                                        €{tshirt.price.toFixed(2)}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
         </div>
     );
