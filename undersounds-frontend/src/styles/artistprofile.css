@@ -1,0 +1,190 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 0px;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Mantiene la relación 1:1 (cuadrado) */
+  overflow: hidden;
+  border-radius: 0px !important; /* Asegura que no haya bordes redondeados */
+}
+
+
+.profile-image-container {
+  margin-left: 5%;
+  width: 90%;
+  padding-top: 90%; /* Hace que el contenedor sea cuadrado */
+  position: relative;
+  overflow: hidden; /* Evita que la imagen sobresalga */
+}
+
+.profile-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Mantiene la imagen ajustada sin deformarse */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.artist-name {
+  color: #000000;
+  font-size: 24px;
+}
+
+.artist-bio {
+  color: #666;
+  padding: 0 10px;
+}
+
+.tab-label {
+  font-size: 1.2rem;
+}
+
+.tab-panel {
+  padding: 0px;
+  border-radius: 0px;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.tab-content .grid-container {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  justify-items: center;
+}
+
+.tab-content .grid-item {
+cursor: pointer;
+background-color: #ffffff;
+padding: 15px;
+box-shadow: 0 4px 8px rgba(117, 105, 105, 0.815);
+text-align: center;
+margin-left: 35px;
+margin-right: 35px;
+margin-bottom: 40px;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;  /* Asegura que el contenido esté alineado a la izquierda */
+align-items: flex-start;      /* Asegura que el contenido esté alineado a la izquierda */
+transition: all 0.3s ease;  /* Suaviza la transición de los cambios */
+}
+
+.tab-content .grid-item:hover {
+background-color: #c7c4c4;  /* Cambia el color de fondo a uno más oscuro o más gris */
+box-shadow: 0 6px 16px rgba(117, 105, 105, 0.9); /* Aumenta la sombra para un efecto más pronunciado */
+}
+
+
+.tab-content img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Asegura que la imagen cubra todo el contenedor */
+  object-position: center;  /* Centra la imagen dentro de su contenedor */
+}
+
+
+.tab-content .item-title {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: #000000;
+}
+
+.tab-content .item-details {
+  font-size: 0.65rem;
+  color: #000000;
+}
+
+/* Tabs y navegación */
+.MuiTab-root {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.MuiTabs-indicator {
+  background-color: #333;
+}
+
+.Mui-selected {
+  color: #333 !important;
+  font-weight: bold;
+}
+
+.MuiTabs-root {
+  margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-image {
+    width: 120px;
+    height: 120px;
+  }
+
+
+  .artist-bio {
+    font-size: 0.9rem;
+  }
+
+  .tab-content .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+.tab-content .grid-item div {
+  width: 100%;
+  padding-top: 100%;  /* Mantiene la relación 1:1 */
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;  /* Centra el contenido horizontalmente */
+  align-items: center;      /* Centra el contenido verticalmente */
+}
+
+
+.btn-seguir {
+  width: 90%;
+  padding: 10px 10px;
+  font-size: 16px;
+  background-color: #4a91e255; /* Color inicial */
+  color: white;
+  border: 2px solid #4A90E2; /* Borde azul */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+  text-shadow: 1px 1px 4px black; /* Contorno negro en las letras */
+}
+
+.btn-seguir:hover {
+  background-color: #4A90E2; /* Ligero cambio en el color de fondo al pasar el mouse */
+}
+
+.siguiendo {
+  background-color: #4A90E2; /* Azul al estar en "siguiendo" */
+  color: white; /* Letras blancas */
+  border: 2px solid #4A90E2; /* Mismo color azul para el borde */
+}
+
+.siguiendo:hover {
+  background-color: #357ABD; /* Azul más oscuro cuando está en estado "siguiendo" */
+}
+

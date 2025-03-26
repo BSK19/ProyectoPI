@@ -1,0 +1,39 @@
+.concert-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.concert-image-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.concert-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.concert-details {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.concert-details h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.concert-details h5, .concert-details h6 {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.concert-details p {
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}

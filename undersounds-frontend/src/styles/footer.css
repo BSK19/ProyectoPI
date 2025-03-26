@@ -1,0 +1,38 @@
+/* Estilo para el footer */
+.footer {
+    background-color: #333;  /* Fondo oscuro para contrastar con el contenido */
+    color: #fff;  /* Texto blanco para mayor visibilidad */
+    padding: 40px 0;  /* Espaciado arriba y abajo */
+    text-align: center;  /* Centra el texto */
+    font-size: 0.9rem;  /* Tamaño de fuente pequeño para el footer */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer-content {
+    max-width: 1200px;  /* Ancho máximo para que el contenido no se extienda demasiado */
+    margin: 0 auto;  /* Centra el contenido */
+    padding: 0 20px;
+  }
+  
+  .footer p {
+    margin: 10px 0;
+  }
+  
+  .social-links {
+    margin-top: 20px;
+  }
+  
+  .social-links a {
+    color: #fff;  /* Color blanco para los enlaces */
+    text-decoration: none;  /* Quitar subrayado de los enlaces */
+    margin: 0 15px;  /* Espaciado entre los enlaces */
+    font-size: 1.2rem;  /* Un poco más grande que el texto normal */
+    transition: color 0.3s ease;  /* Efecto de transición suave */
+  }
+  
+  .social-links a:hover {
+    color: #00aced;  /* Cambiar el color a un azul cuando el ratón pasa por encima (como el de Twitter) */
+  }
+  

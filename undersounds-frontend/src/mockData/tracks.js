@@ -1,3 +1,8 @@
+import coverImage1 from "../assets/images/EOT.jpeg";
+import Track1 from "../music/21 Questions.mp3";
+import Track2 from "../music/Back In Black.mp3";
+import Track3 from "../music/Believer.mp3";
+
 const tracks = [
   {
     id: 1,
@@ -9,6 +14,8 @@ const tracks = [
     format: ["MP3", "FLAC", "WAV"],
     releaseDate: "2023-01-15",
     genre: "Rock",
+    coverImage: coverImage1,
+    url: Track1,
     comments: [
       {
         user: "User1",
@@ -32,6 +39,8 @@ const tracks = [
     format: ["MP3", "WAV"],
     releaseDate: "2023-02-20",
     genre: "Pop",
+    coverImage: coverImage1,
+    url: Track2,
     comments: [
       {
         user: "User3",
@@ -50,6 +59,8 @@ const tracks = [
     format: ["MP3", "FLAC"],
     releaseDate: "2023-03-10",
     genre: "Jazz",
+    coverImage: coverImage1,
+    url: Track3,
     comments: [],
   },
 ];

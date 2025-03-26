@@ -1,0 +1,180 @@
+.user-profile {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilos del header */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;  /* Ensure there's spacing between banner and header */
+  }
+  
+  
+  .profile-header img.profile-image {
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    margin-right: 20px;
+    /* Removed the top offset to prevent overlapping with the banner */
+    position: relative;
+    top: -70px;
+    border: 4px solid #ffffff;
+  }
+  
+  .profile-header .profile-info h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .profile-header .profile-info p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Banner que se extiende de extremo a extremo */
+  .profile-banner {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    /* Removed negative margin-top so it doesn't get pulled upward */
+    height: 200px;
+    background-color: #007bff;  /* Or your preferred color */
+    position: relative;
+    margin-bottom: 20px;  /* Adjust spacing as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Botón para cambiar el banner */
+  .profile-banner button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #0056b3; /* Puedes ajustar según prefieras */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .profile-banner button:hover {
+    background-color: #004494;
+  }
+  
+  /* Resto de estilos para update-button y colecciones */
+  .update-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  
+  .update-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-content .collections {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .profile-content .collections .collection-item {
+    width: 200px;
+    height: 200px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-content .collections .collection-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .profile-info .followers {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.followers-counter {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.followers-label {
+    font-size: 1rem;
+    color: #666;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1da0c3;
+    box-shadow: 0 0 5px rgba(29, 160, 195, 0.5);
+}
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    resize: none; /* Evita que se pueda modificar el tamaño */
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1da0c3;
+    box-shadow: 0 0 5px rgba(29, 160, 195, 0.5);
+}
+.profile-banner {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-top: -20px;  /* Ajusta este valor para subir el banner */
+    height: 200px;
+    background-color: #f1e7db;  /* Color natural para el banner */
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-banner img {
+    width: 100%;
+    height: 200px; /* ajusta según sea necesario */
+    object-fit: cover;
+  }
