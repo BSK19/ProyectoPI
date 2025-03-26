@@ -12,11 +12,7 @@ body {
 }
 
 /* Contenedor principal */
-.homepage {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-}
+
 
 /* Banner principal */
 .homepage-banner {
@@ -42,15 +38,9 @@ body {
 
 /* Sección de novedades */
 .featured-section {
-    margin: 40px 0;
-}
-
-.featured-section {
     display: grid;
     justify-content: center;  /* Centra el contenido horizontalmente */
     align-items: center;      /* Centra el contenido verticalmente (si deseas) */
-    margin-top: 100px;
-    margin-bottom: 40px;
 }
 
 /* Album grid */
@@ -59,36 +49,17 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 5%; /* Puedes ajustar este valor según tus necesidades */
     max-width: 1540px;  /* Asegura un ancho máximo */
-    width: 100%;        /* Asegura que el grid ocupe el 100% del contenedor */
 }
 
 .item {
-    transition: all 0.3s ease; 
+    transition: all 0.3s ease;
 }
 
 .item:hover {
-    filter: brightness(0.85);  /* Aumenta el brillo en un 20% cuando el ratón está sobre la imagen */
+    filter: brightness(0.80);  /* Aumenta el brillo en un 20% cuando el ratón está sobre la imagen */
 }
 
 
-/* Estilo de cada álbum */
-.album-item {
-    /* background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    /* aspect-ratio: 25 / 30;  /* Esto asegura que los elementos tengan una relación de aspecto cuadrada */
-    display: flex;
-    flex-direction: column;  /* Esto mantiene el contenido dentro de cada item en una columna */
-    
-}
-
-.album-item:hover {
-
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
 
 .album-cover {
     width: 100%;
@@ -259,3 +230,39 @@ a:focus {
 .img-hover:hover {
     filter: brightness(0.25);  /* Aumenta el brillo en un 20% cuando el ratón está sobre la imagen */
   }
+
+.envoltorio {
+    background-color: rgba(63, 61, 61, 0.091);
+    padding-top: 2%;
+    padding-bottom: 2%;
+    min-width: 100vh;
+    margin-top: 60px;
+    margin-bottom: 80px;
+    
+    /* Sombra en la parte superior e inferior */
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.3), /* Sombra arriba */
+                0px 5px 10px rgba(0, 0, 0, 0.5);  /* Sombra abajo */
+}
+
+.boton-carrusel {
+    background: none;
+    cursor: pointer;
+    font-size: 20px; /* Asegúrate de usar guion en lugar de mayúsculas */
+    border: 1px solid #1DA0C3; /* Borde de 2px de grosor y color */
+    padding: 2px 25px; /* Asegúrate de que el padding esté bien formateado */
+}
+
+.boton-registro {
+    padding: 8px 20px;
+    background-color: #1DA0C3;  /* Color azul */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+}
+
+.boton-registro:hover {
+    background-color: #178a99;  /* Cambio de color al pasar el ratón */
+}

@@ -1,29 +1,50 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Button, InputBase, Box, Tabs, Tab, Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Button,
+  InputBase,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Badge
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
 import albums from '../../mockData/albums';
 import artists from '../../mockData/artists';
 import tracks from '../../mockData/tracks';
+import { AuthContext } from '../../context/AuthContext';
+import { CartContext } from '../../context/CartContext';
 
 const Header = () => {
   const [query, setQuery] = useState('');
   const [openSignUp, setOpenSignUp] = useState(false);
-  // Estado para el filtro: 'all', 'artists', 'albums' o 'tracks'
   const [filter, setFilter] = useState('all');
-  // Array de resultados filtrados
   const [results, setResults] = useState([]);
-  // Estado para controlar la visibilidad del dropdown
   const [showDropdown, setShowDropdown] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); // Para el menú del avatar
   const navigate = useNavigate();
   const location = useLocation();
   const containerRef = useRef(null);
+  const { user, logout, setUser } = useContext(AuthContext);
+  // Se usa la propiedad correcta "cartItems" del CartContext
+  const { cartItems } = useContext(CartContext);
 
   const handleSearch = () => {
     let filteredResults = [];
-
     if (filter === 'all' || filter === 'artists') {
       const artistMatches = artists.filter(artist =>
         artist.name.toLowerCase().includes(query.toLowerCase())
@@ -54,7 +75,7 @@ const Header = () => {
     setResults(filteredResults);
   };
 
-  // Debounce para ejecutar la búsqueda (500ms)
+  // Debounce para búsquedas
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.trim()) {
@@ -65,11 +86,10 @@ const Header = () => {
         setShowDropdown(false);
       }
     }, 500);
-
     return () => clearTimeout(timeoutId);
   }, [query, filter]);
 
-  // Escucha los cambios en la ubicación y reinicia la búsqueda
+  // Reinicia la búsqueda al cambiar de ruta
   useEffect(() => {
     setQuery('');
     setResults([]);
@@ -88,7 +108,6 @@ const Header = () => {
     setOpenSignUp(false);
   };
 
-  // Manejador para ocultar el dropdown cuando el mouse sale del área
   const handleDropdownMouseLeave = () => {
     setShowDropdown(false);
   };
@@ -140,16 +159,41 @@ const Header = () => {
     return null;
   };
 
+  // Funciones para el menú del avatar
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    navigate('/user/profile');
+    handleCloseMenu();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      navigate('/');
+      handleCloseMenu();
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
   return (
     <AppBar position="sticky" color="primary" elevation={2}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        {/* Logo */}
+        {/* Zona Izquierda: Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <img src={logo} alt="UnderSounds Logo" style={{ height: '100px' }} />
+            <img src={logo} alt="UnderSounds Logo" style={{ width: '150px' }} />
           </Link>
         </Box>
-        {/* Contenedor de Search con filtros */}
+        {/* Zona central: Área de búsqueda */}
         <Box
           ref={containerRef}
           sx={{ display: 'flex', flexDirection: 'column', mx: 2, flexGrow: 1, position: 'relative' }}
@@ -162,7 +206,6 @@ const Header = () => {
               onFocus={() => {
                 if (query.trim()) setShowDropdown(true);
               }}
-              // Agregamos onClick para reactivar el dropdown si ya hay texto
               onClick={() => {
                 if (query.trim()) setShowDropdown(true);
               }}
@@ -177,7 +220,16 @@ const Header = () => {
                 width: { xs: '200px', md: '250px' }
               }}
             />
-            <IconButton type="button" color="inherit" onClick={handleSearch}>
+            <IconButton
+              type="button"
+              color="inherit"
+              onClick={() => {
+                if (query.trim()) {
+                  handleSearch(); // Asegúrate de que los resultados se actualicen antes de redirigir
+                }
+                navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`);
+              }}
+            >
               <SearchIcon />
             </IconButton>
           </Box>
@@ -221,19 +273,63 @@ const Header = () => {
             </Paper>
           )}
         </Box>
-        {/* Botones de Sign Up / Log In */}
-        <Box>
-          <Button color="inherit" onClick={handleOpenSignUp}>
-            Sign Up
+        {/* Zona Derecha: Botones de Carrito y autenticación */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Button color="inherit" onClick={() => navigate('/cart')}>
+            <Badge
+              badgeContent={cartItems?.length || 0}
+              color="error"
+              overlap="circular"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              sx={{
+                '& .MuiBadge-badge': {
+                  right: -3,
+                  top: 13,
+                  border: '2px solid white',
+                  padding: '0 4px',
+                },
+              }}
+            >
+              <ShoppingCartIcon />
+            </Badge>
           </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Log In
-          </Button>
+          {user ? (
+            <>
+              <IconButton onClick={handleAvatarClick}>
+                <Avatar
+                  src={user.profileImage}
+                  alt={user.username || user.bandName || 'Usuario'}
+                  sx={{ width: 40, height: 40 }}
+                />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <MenuItem onClick={handleProfile}>Mi perfil</MenuItem>
+                <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Button color="inherit" onClick={handleOpenSignUp}>
+                Registrate
+              </Button>
+              <Button color="inherit" component={Link} to="/login">
+                Inicia Sesión
+              </Button>
+            </>
+          )}
         </Box>
       </Toolbar>
       <SignUpDialog open={openSignUp} handleClose={handleCloseSignUp} />
     </AppBar>
   );
 };
+
+
 
 export default Header;

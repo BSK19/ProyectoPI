@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
+import { Box, Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchAlbums, fetchArtists, fetchTracks } from '../services/musicService';
-import { getFormattedAlbumDuration, formatTrackReleaseDate } from '../utils/formatters';
+import { getFormattedAlbumDuration } from '../utils/formatters';
 import '../styles/explorepage.css';
 
 const ExplorePage = () => {
@@ -12,16 +12,22 @@ const ExplorePage = () => {
   const [tracks, setTracks] = useState([]);
 
   // Estado para la búsqueda y filtro
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('all');
   const [filter, setFilter] = useState('all');
   const location = useLocation();
 
-  // Obtener el parámetro de búsqueda (q) desde la URL al cargar
+  // Obtener los parámetros de la URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const q = params.get('q') || '';
+    const f = params.get('filter') || 'all';
     setSearchTerm(q);
+    setFilter(f);
   }, [location.search]);
+
+  useEffect(() => {
+    if (!filter) setFilter('all');
+  }, [filter]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -46,21 +52,15 @@ const ExplorePage = () => {
     );
   const getFilteredTracks = () =>
     tracks.filter(track =>
-      track.title?.toLowerCase().includes(searchTerm.toLowerCase())
+      track.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.artist?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.album?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  // Renderiza un álbum con la imagen a la izquierda y la información a la derecha.
-  // El título del álbum y el nombre del artista son enlaces a sus páginas.
+  // Renderiza un álbum
   const renderAlbumItem = (album) => (
     <Grid item key={album.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="album-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="album-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="album-image-container">
             <img
@@ -77,12 +77,12 @@ const ExplorePage = () => {
               Album
             </Typography>
             <Typography variant="h6" className="album-title">
-              <Link to={`/albums/${album.id}`}>{album.title}</Link>
+              <Link to={`/album/${album.id}`}>{album.title}</Link>
             </Typography>
             <Typography variant="body1" className="album-artist">
-              <Link to={`/artists/${album.artist}`}>{album.artist}</Link>
+              {album.artist}
             </Typography>
-            <br /> {/* Línea en blanco */}
+            <br />
             <Typography variant="body2" className="album-details">
               {album.tracks ? album.tracks.length : 0} tracks, {getFormattedAlbumDuration(album)} <br />
               Publicado en {album.releaseYear}
@@ -93,18 +93,10 @@ const ExplorePage = () => {
     </Grid>
   );
 
-  // Renderiza un artista con la imagen a la izquierda y la información a la derecha.
-  // El nombre del artista es un enlace a su página.
+  // Renderiza un artista
   const renderArtistItem = (artist) => (
     <Grid item key={artist.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="artist-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="artist-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="artist-image-container">
             <img
@@ -121,7 +113,7 @@ const ExplorePage = () => {
               Artista
             </Typography>
             <Typography variant="h6" className="artist-name">
-              <Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+              <Link to={`/artistProfile/${artist.id}`}>{artist.name}</Link>
             </Typography>
             <Typography variant="body2" className="artist-genre">
               Género: {artist.genre}
@@ -132,19 +124,10 @@ const ExplorePage = () => {
     </Grid>
   );
 
-  // Renderiza una track con la imagen a la izquierda y la información a la derecha.
-  // El título de la track es un enlace a su página, y se muestra la palabra "Canción", su artista
-  // y la fecha de salida formateada.
+  // Renderiza una canción
   const renderTrackItem = (track) => (
     <Grid item key={track.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="track-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
+      <Grid container spacing={2} alignItems="center" className="track-item" wrap="nowrap" style={{ gap: '10px' }}>
         <Grid item xs="auto" sm="auto">
           <div className="track-image-container">
             <img
@@ -161,14 +144,16 @@ const ExplorePage = () => {
               Canción
             </Typography>
             <Typography variant="h6" className="track-title">
-              <Link to={`/tracks/${track.id}`}>{track.title}</Link>
+              <Link to={`/album/${track.albumId}`}>{track.title}</Link>
             </Typography>
             <Typography variant="body1" className="track-artist">
-              <Link to={`/artists/${track.artist}`}>{track.artist}</Link>
+              {track.artist}
             </Typography>
-            <br /> {/* Línea en blanco */}
+            <Typography variant="body2" className="track-album">
+              Álbum: <Link to={`/album/${track.albumId}`}>{track.album}</Link>
+            </Typography>
             <Typography variant="body2" className="track-info">
-              Publicado el {formatTrackReleaseDate(track.releaseDate)}
+              Duración: {track.duration}
             </Typography>
           </div>
         </Grid>
@@ -180,7 +165,6 @@ const ExplorePage = () => {
   if (filter === 'all') {
     filteredContent = (
       <>
-        {/* Sección de álbumes (solo se muestra si hay resultados) */}
         {getFilteredAlbums().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -188,7 +172,6 @@ const ExplorePage = () => {
             </Grid>
           </div>
         )}
-        {/* Sección de artistas */}
         {getFilteredArtists().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -196,7 +179,6 @@ const ExplorePage = () => {
             </Grid>
           </div>
         )}
-        {/* Sección de tracks */}
         {getFilteredTracks().length > 0 && (
           <div className="filtered-section">
             <Grid container direction="column" spacing={2}>
@@ -249,58 +231,71 @@ const ExplorePage = () => {
 
   return (
     <div className="explore-page">
-      <Typography variant="h3" className="main-title">Explore Music</Typography>
-      <div className="search-bar-container">
+      <Box
+        sx={{
+          background: 'linear-gradient(to right, #f8f9fa, #e9ecef)',
+          borderRadius: '12px',
+          p: 3,
+          mb: 3,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        }}
+      >
+        <Typography
+          variant="h3"
+          className="main-title"
+          sx={{
+            fontFamily: '"Montserrat", sans-serif',
+            letterSpacing: '0.1em',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            mb: 2,
+          }}
+        >
+          Explore Music
+        </Typography>
         <TextField
           variant="outlined"
           fullWidth
           placeholder="Search music, artists, albums, tracks..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setFilter('all');
+            setSearchTerm(e.target.value);
+          }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          }}
         />
-      </div>
-      <div className="tabs-container">
-        <Tabs
-          value={filter}
-          onChange={(event, newValue) => setFilter(newValue)}
-          textColor="primary"
-          indicatorColor="primary"
-          variant="fullWidth"
+        {/* Filtros debajo de la barra de búsqueda con menor altura vertical */}
+        <Box
+          sx={{
+            mt: 2,
+            backgroundColor: '#1da0c3',
+            borderRadius: '8px',
+            py: 0, 
+            px: 1,
+          }}
         >
-          <Tab
-            label="All"
-            value="all"
+          <Tabs
+            value={filter}
+            onChange={(event, newValue) => setFilter(newValue)}
+            textColor="inherit"
+            indicatorColor="secondary"
+            variant="fullWidth"
             sx={{
-              backgroundColor: filter === 'all' ? '#eee' : 'transparent',
-              borderBottom: filter === 'all' ? '2px solid #000' : 'none'
+              minHeight: 'auto',
             }}
-          />
-          <Tab
-            label="Albums"
-            value="albums"
-            sx={{
-              backgroundColor: filter === 'albums' ? '#eee' : 'transparent',
-              borderBottom: filter === 'albums' ? '2px solid #000' : 'none'
-            }}
-          />
-          <Tab
-            label="Artists"
-            value="artists"
-            sx={{
-              backgroundColor: filter === 'artists' ? '#eee' : 'transparent',
-              borderBottom: filter === 'artists' ? '2px solid #000' : 'none'
-            }}
-          />
-          <Tab
-            label="Tracks"
-            value="tracks"
-            sx={{
-              backgroundColor: filter === 'tracks' ? '#eee' : 'transparent',
-              borderBottom: filter === 'tracks' ? '2px solid #000' : 'none'
-            }}
-          />
-        </Tabs>
-      </div>
+          >
+            <Tab label="All" value="all" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Albums" value="albums" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Artists" value="artists" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+            <Tab label="Tracks" value="tracks" sx={{ flex: 1, color: 'white', fontSize: '0.9rem', py: 0.2 }} />
+          </Tabs>
+        </Box>
+      </Box>
       <div className="results">{filteredContent}</div>
     </div>
   );

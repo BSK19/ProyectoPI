@@ -14,16 +14,22 @@ import UserProfile from './pages/UserProfile';
 import DiscoverPage from './pages/DiscoverPage';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import TshirtPage from './pages/TshirtPage'; // Importa la página de camiseta
+import TshirtPage from './pages/TshirtPage';
+import CarritoPage from './pages/CarritoPage';
+import PaymentPage from './pages/Payment';
 import Footer from './components/Common/Footer';
 import RegisterProvider from './context/RegisterContext';
 import AlbumProvider from './context/AlbumContext';
 import SignUpDialog from './components/Auth/SignUpDx';
 import { PlayerProvider } from './context/PlayerContext';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import AudioPlayer from './components/Player/AudioPlayer';
+import ConcertPage from './pages/ConcertPage';
 
 const theme = createTheme({
     palette: {
-        primary: { main: '#ffffff' },
+        primary: { main: '#1DA0C3' },
         secondary: { main: '#1da0c3' },
         background: { default: '#ffffff', paper: '#ffffff' },
         text: { primary: '#1a1a1a', secondary: '#555555' },
@@ -37,7 +43,6 @@ const AppContent = () => {
     const location = useLocation();
     const hideNavRoutes = ['/login', '/register', '/explore'];
     const hideNav = hideNavRoutes.includes(location.pathname);
-
     return (
         <>
             <Header />
@@ -53,10 +58,14 @@ const AppContent = () => {
                 <Route path="/artistProfile/:id" element={<ArtistProfile />} />
                 <Route path="/news/:noticiaId" element={<News />} />
                 <Route path="/discover" element={<DiscoverPage />} />
-                <Route path="/tshirt/:id" element={<TshirtPage />} /> {/* Nueva ruta */}
+                <Route path="/tshirt/:id" element={<TshirtPage />} />
+                <Route path="/cart" element={<CarritoPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/concert/:artistId/:concertId" element={<ConcertPage />} />
             </Routes>
             <Footer />
             <SignUpDialog />
+            <AudioPlayer />
         </>
     );
 };
@@ -67,10 +76,14 @@ const App = () => {
             <PlayerProvider>
                 <RegisterProvider>
                     <AlbumProvider>
-                        <Router>
-                            <ScrollToTop />
-                            <AppContent />
-                        </Router>
+                        <AuthProvider>
+                            <CartProvider>
+                                <Router>
+                                    <ScrollToTop />
+                                    <AppContent />
+                                </Router>
+                            </CartProvider>
+                        </AuthProvider>
                     </AlbumProvider>
                 </RegisterProvider>
             </PlayerProvider>

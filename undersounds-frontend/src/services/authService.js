@@ -2,14 +2,12 @@
 import axios from 'axios';
 import defaultAccounts from '../mockData/accounts.js';
 
-
 const API_URL = 'http://localhost:5000/api/auth';
 
 export const login = async (email, password) => {
   // Lee las cuentas almacenadas o usa las cuentas por defecto
   const storedAccounts = JSON.parse(localStorage.getItem('accounts')) || defaultAccounts;
   
-  // Busca una cuenta que tenga el email y password correctos
   const account = storedAccounts.find(
     (acc) => acc.email === email && acc.password === password
   );
@@ -31,6 +29,7 @@ export const logout = async () => {
         // return response.data;
 
         // Simulando logout:
+        localStorage.removeItem('currentAccount');
         return { success: true };
     } catch (error) {
         console.error('Error during logout:', error);
@@ -41,18 +40,23 @@ export const logout = async () => {
 export const register = async (formData) => {
   // Simula la lectura de cuentas existentes del localStorage.
   const storedAccounts = JSON.parse(localStorage.getItem('accounts')) || defaultAccounts;
-
+  
   // Asigna un nuevo ID (aumentando el último ID existente).
   const newId = storedAccounts.length ? storedAccounts[storedAccounts.length - 1].id + 1 : 1;
-
-  // Construye el objeto cuenta.
-  // Se asume que formData incluye los campos ingresados por el usuario (e.g., username, email, password, y según registerType: bandName/genre o labelName/website)
+  
+  // Determina el rol según los campos enviados:
+  // Si se proporciona 'bandName', el rol es 'band'
+  // Si se proporciona 'labelName', el rol es 'label'
+  // En caso contrario, se asigna 'fan'
+  const role = formData.bandName ? 'band' : formData.labelName ? 'label' : 'fan';
+  
+  // Construye el objeto account con todos los atributos necesarios
   const newAccount = {
     id: newId,
     username: formData.username,
     email: formData.email,
     password: formData.password,
-    role: formData.role || 'fan', // Puedes definir el rol según tu lógica
+    role: role,
     profileImage: formData.profileImage || '/assets/images/default-user.jpg',
     bio: formData.bio || '',
     socialLinks: formData.socialLinks || {
@@ -60,18 +64,17 @@ export const register = async (formData) => {
       instagram: '',
       twitter: ''
     },
-    // Campos opcionales por rol:
-    ...(formData.bandName && { bandName: formData.bandName, genre: formData.genre }),
-    ...(formData.labelName && { labelName: formData.labelName, website: formData.website }),
+    ...(role === 'band' && { bandName: formData.bandName, genre: formData.genre }),
+    ...(role === 'label' && { labelName: formData.labelName, website: formData.website }),
     purchaseHistory: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
 
-  // Agrega la nueva cuenta al array
+  // Actualiza el array con la nueva cuenta
   const updatedAccounts = [...storedAccounts, newAccount];
 
-  // Almacena en Local Storage simulando que se ha escrito en el "archivo"
+  // Guarda el array actualizado en localStorage
   localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
 
   // Devuelve la nueva cuenta para efectos de confirmación
@@ -79,13 +82,46 @@ export const register = async (formData) => {
 };
 
 export const updateUserProfile = async (data) => {
-    try {
-        // Simulación de actualización exitosa del perfil:
-        return { userId: data.userId, name: data.name, email: data.email, token: 'fake-jwt-token' };
-    } catch (error) {
-        console.error('Error updating user profile:', error);
-        throw error;
+  try {
+    // Lee las cuentas almacenadas desde localStorage
+    let storedAccounts = JSON.parse(localStorage.getItem('accounts'));
+    // Si no hay cuentas o el array está vacío, usamos las cuentas por defecto
+    if (!storedAccounts || storedAccounts.length === 0) {
+      storedAccounts = defaultAccounts;
     }
+    
+    // Filtra los campos enviados para no sobreescribir con undefined o cadena vacía ("")
+    const validData = Object.keys(data).reduce((acc, key) => {
+      if (data[key] !== undefined && data[key] !== '') {
+        acc[key] = data[key];
+      }
+      return acc;
+    }, {});
+    
+    // Actualiza la cuenta que concuerde con el ID del usuario en los datos enviados
+    const updatedAccounts = storedAccounts.map((account) => {
+      if (account.id === validData.id) {
+        return {
+          ...account,
+          ...validData,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      return account;
+    });
+    
+    // Guarda las cuentas actualizadas en localStorage
+    localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
+    // Actualiza la cuenta actual en sesión
+    const updatedUser = updatedAccounts.find(account => account.id === validData.id);
+    localStorage.setItem('currentAccount', JSON.stringify(updatedUser));
+    
+    // Devuelve el estado exitoso de la actualización
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
 };
 
 export const authService = { login, logout, register, updateUserProfile };

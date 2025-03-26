@@ -68,6 +68,7 @@
   .album-artist {
     font-size: 1rem;
     margin-bottom: 4px;
+    color: black; 
   }
   
   .album-genre {

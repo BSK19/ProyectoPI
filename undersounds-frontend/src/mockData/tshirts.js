@@ -2,6 +2,7 @@ import camiseta1 from '../assets/images/camiseta1.png'; // Cambiado la extensió
 import camiseta2 from '../assets/images/camiseta2.png';
 import camiseta3 from '../assets/images/camiseta3.jpg';
 import camiseta4 from '../assets/images/camiseta4.jpg';
+import camiseta5 from '../assets/images/camiseta5.jpg';
 
 const tshirts = [
     {
@@ -35,6 +36,14 @@ const tshirts = [
         shippingTime: "5-7 días",
         price: 26.99,
         tshirtImage: camiseta4,
+    },
+    {
+        id: 5,
+        name: "Kanye West Tee",
+        description: "Camiseta con un toque retro, que rinde homenaje al artista Kanye West.",
+        shippingTime: "5-7 días",
+        price: 36.99,
+        tshirtImage: camiseta5,
     },
 ];
 

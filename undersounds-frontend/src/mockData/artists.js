@@ -1,28 +1,42 @@
 import imagenPFP from '../assets/images/artista.jpg';
+import imagenPFP1 from '../assets/images/soundscapers.jpg';
+import imagenPFP2 from '../assets/images/DJBeats.jpg';
+import imagenPFP3 from '../assets/images/soulfoulvoices.jpeg';
 import merch1 from '../assets/images/merch1.jpg';
 import merch2 from '../assets/images/merch2.jpg';
 import merch3 from '../assets/images/merch3.jpg';
 import merch4 from '../assets/images/merch4.jpg';
 import merch5 from '../assets/images/merch5.jpg';
+import concertNY from '../assets/images/concertNY.jpg';
+import concertLA from '../assets/images/concertLA.jpg';
+import concertMI from '../assets/images/miami.jpg';
+import concertIL from '../assets/images/concertIL.jpg';
+import concertCA from '../assets/images/concertCA.jpg';
+import banner1 from '../assets/images/banner1.webp';
+import banner2 from '../assets/images/banner2.jpeg';
+import banner3 from '../assets/images/banner1.jpg';
 
 const artists = [
     {
         id: 1,
-        name: "Artist One",
-        profileImage: imagenPFP,
+        name: "The Soundscapers",
+        profileImage: imagenPFP1,
         genre: "Rock",
-        bio: "An up-and-coming rock artist known for their energetic performances.",
+        bio: "Una banda de rock emergente conocida por sus actuaciones enérgicas.",
+        banner: banner1,
+        seguidores: "2.5M",
+        ubicacion: "Londres, RU",
         albums: [
             {
                 id: 5,
-                title: "Debut Album",
+                title: "Álbum Debut",
                 releaseYear: 2023,
                 coverImage: "/assets/images/album1.jpg",
                 price: 9.99,
             },
             {
                 id: 6,
-                title: "Second Album",
+                title: "Segundo Álbum",
                 releaseYear: 2024,
                 coverImage: "/assets/images/album2.jpg",
                 price: 11.99,
@@ -31,31 +45,37 @@ const artists = [
         concerts: [
             {
                 id: 1,
-                location: "New York City, NY",
+                location: "Nueva York, NY",
                 date: "2025-05-15",
-                concertImage: "/assets/images/concert1.jpg",
+                time: "20:30",
+                venue: "Madison Square Garden",
+                concertImage: concertNY,
+                description: "Únete a The Soundscapers en una noche épica de rock alternativo en el corazón de Nueva York. Este concierto marca el inicio de su gira mundial 2025, donde presentarán su nuevo álbum junto con sus mayores éxitos. La banda promete una experiencia inmersiva con una producción visual espectacular, efectos especiales de última generación y algunas sorpresas especiales para los fans. Además, contaremos con artistas invitados que se unirán a la banda en el escenario para crear momentos únicos e irrepetibles."
             },
             {
                 id: 2,
-                location: "Los Angeles, CA",
+                location: "Los Ángeles, CA",
                 date: "2025-06-10",
-                concertImage: "/assets/images/concert2.jpg",
-            },
+                time: "21:00",
+                venue: "Hollywood Bowl",
+                concertImage: concertLA,
+                description: "The Soundscapers llega a Los Ángeles para ofrecer un espectáculo inolvidable bajo las estrellas. Esta presentación especial incluirá una orquesta en vivo que acompañará a la banda en nuevas versiones de sus canciones más emblemáticas. El concierto también celebrará el 5º aniversario de su álbum debut con una interpretación completa del mismo. La producción incluirá un impresionante show de luces, proyecciones mapped sobre el anfiteatro y una sección acústica íntima que mostrará el lado más personal de la banda."
+            }
         ],
         merchandising: [
             {
                 id: 1,
-                name: "Artist One T-Shirt",
+                name: "Camiseta de The Soundscapers",
                 price: 19.99,
-                merchImage: merch1, // utilizando la imagen importada
-                description: "A high-quality cotton t-shirt with the Artist One logo.",
+                merchImage: merch1,
+                description: "Una camiseta de algodón de alta calidad con el logo de The Soundscapers.",
             },
             {
                 id: 2,
-                name: "Artist One Mug",
+                name: "Taza de The Soundscapers",
                 price: 9.99,
                 merchImage: merch2,
-                description: "A ceramic mug with a cool Artist One design.",
+                description: "Una taza de cerámica con un diseño genial de The Soundscapers.",
             },
         ],
         socialLinks: {
@@ -66,14 +86,38 @@ const artists = [
     },
     {
         id: 2,
-        name: "Artist Two",
-        profileImage: imagenPFP,
+        name: "DJ Beats",
+        profileImage: imagenPFP2,
         genre: "Pop",
-        bio: "A pop sensation with catchy tunes and a vibrant style.",
+        bio: "Una sensación del pop con melodías pegajosas y un estilo vibrante.",
+        banner: banner2,
+        seguidores: "963K",
+        ubicacion: "Madrid, ES",
         albums: [
             {
                 id: 7,
-                title: "First Hit",
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
+                releaseYear: 2022,
+                coverImage: "/assets/images/album3.jpg",
+                price: 8.99,
+            },
+            {
+                id: 7,
+                title: "Primer Éxito",
                 releaseYear: 2022,
                 coverImage: "/assets/images/album3.jpg",
                 price: 8.99,
@@ -84,16 +128,19 @@ const artists = [
                 id: 1,
                 location: "Miami, FL",
                 date: "2025-07-20",
-                concertImage: "/assets/images/concert3.jpg",
-            },
+                time: "22:00",
+                venue: "Space Miami",
+                concertImage: concertMI,
+                description: "DJ Beats presenta su nuevo show 'Electronic Dreams' en una noche que promete revolucionar la escena electrónica de Miami. Este evento único combinará música electrónica de vanguardia con elementos visuales innovadores y tecnología interactiva. Los asistentes podrán experimentar un viaje musical a través de diferentes géneros electrónicos, desde house progresivo hasta techno melódico. El show incluirá bailarines, artistas visuales en vivo y una instalación de luz inmersiva que transformará completamente el espacio. Además, DJ Beats estrenará exclusivamente nuevos tracks de su próximo álbum."
+            }
         ],
         merchandising: [
             {
                 id: 3,
-                name: "Artist Two Cap",
+                name: "Gorra de DJ Beats",
                 price: 15.99,
                 merchImage: merch3,
-                description: "A stylish cap with the Artist Two logo embroidered.",
+                description: "Una gorra con estilo y el logo de DJ Beats bordado.",
             },
         ],
         socialLinks: {
@@ -104,14 +151,17 @@ const artists = [
     },
     {
         id: 3,
-        name: "Artist Three",
-        profileImage: imagenPFP, 
+        name: "Soulful Voices",
+        profileImage: imagenPFP3, 
         genre: "Jazz",
-        bio: "A talented jazz musician with a unique sound.",
+        bio: "Un talentoso músico de jazz con un sonido único.",
+        seguidores: "1.5M",
+        ubicacion: "Nueva York, EE. UU.",
+        banner: banner3,
         albums: [
             {
                 id: 8,
-                title: "Smooth Jazz",
+                title: "Jazz Suave",
                 releaseYear: 2021,
                 coverImage: "/assets/images/album4.jpg",
                 price: 10.99,
@@ -122,29 +172,35 @@ const artists = [
                 id: 1,
                 location: "Chicago, IL",
                 date: "2025-08-05",
-                concertImage: "/assets/images/concert4.jpg",
+                time: "19:30",
+                venue: "Chicago Symphony Center",
+                concertImage: concertIL,
+                description: "Soulful Voices presenta una velada única de jazz contemporáneo en el prestigioso Chicago Symphony Center. Esta actuación especial fusionará el jazz tradicional con elementos de música clásica y world music. El grupo estará acompañado por una sección de cuerdas de la Orquesta Sinfónica de Chicago, creando texturas sonoras nunca antes exploradas. El programa incluirá nuevas composiciones originales, así como interpretaciones innovadoras de clásicos del jazz. La acústica excepcional del venue permitirá apreciar cada matiz y detalle de las complejas armonías y improvisaciones que caracterizan el estilo único de Soulful Voices."
             },
             {
                 id: 2,
                 location: "San Francisco, CA",
                 date: "2025-09-12",
-                concertImage: "/assets/images/concert5.jpg",
-            },
+                time: "20:00",
+                venue: "SFJAZZ Center",
+                concertImage: concertCA,
+                description: "En esta noche especial, Soulful Voices transformará el SFJAZZ Center en un viaje musical a través de la historia del jazz. El concierto explorará la evolución del género desde sus raíces hasta las fronteras más contemporáneas. La banda presentará material de su próximo álbum, mezclando elementos de jazz modal, fusion y música experimental. La actuación incluirá colaboraciones sorpresa con leyendas locales del jazz de San Francisco, creando un diálogo musical único entre generaciones. El espectáculo también contará con una exposición fotográfica en el lobby que documenta el proceso creativo detrás de su último trabajo."
+            }
         ],
         merchandising: [
             {
                 id: 4,
-                name: "Artist Three Vinyl Record",
+                name: "Vinilo de Soulful Voices",
                 price: 25.99,
                 merchImage: merch4,
-                description: "Limited edition vinyl record of the Artist Three's smooth jazz album.",
+                description: "Edición limitada en vinilo del álbum de jazz suave de Soulful Voices.",
             },
             {
                 id: 5,
-                name: "Artist Three Tote Bag",
+                name: "Bolsa Tote de Soulful Voices",
                 price: 12.99,
                 merchImage: merch5,
-                description: "Eco-friendly tote bag with Artist Three's unique design.",
+                description: "Bolsa ecológica con un diseño único de Soulful Voices.",
             },
         ],
         socialLinks: {
