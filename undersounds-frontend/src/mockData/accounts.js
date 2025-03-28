@@ -1,5 +1,3 @@
-import defaultProfileImage from '../assets/images/default.jpg';
-
 const accounts = [
     {
         "id": 1,
@@ -7,7 +5,7 @@ const accounts = [
         "email": "fan1@example.com",
         "password": "password123",
         "role": "fan",
-        "profileImage": defaultProfileImage,
+        "profileImage": "../assets/images/default.jpg",
         "bio": "Soy un fanático de la música y sigo a mis artistas favoritos.",
         "socialLinks": {
             "facebook": "",
@@ -26,7 +24,7 @@ const accounts = [
         "role": "band",
         "bandName": "The Rockers",
         "genre": "Rock",
-        "profileImage": defaultProfileImage,
+        "profileImage": "../assets/images/default.jpg",
         "bio": "Somos The Rockers, ¡listos para sacudir el escenario!",
         "socialLinks": {
             "facebook": "https://facebook.com/therockers",
@@ -45,7 +43,7 @@ const accounts = [
         "role": "label",
         "labelName": "Super Records",
         "website": "https://superrecords.com",
-        "profileImage": defaultProfileImage,
+        "profileImage": "../assets/images/default.jpg",
         "bio": "En Super Records, traemos lo mejor de la música.",
         "socialLinks": {
             "facebook": "https://facebook.com/superrecords",
@@ -58,4 +56,4 @@ const accounts = [
     }
 ]
 
-export default accounts;
+module.exports = accounts;
