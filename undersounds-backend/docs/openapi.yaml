@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: UnderSounds API Authentication
+  version: "1.0.0"
+  description: "API para manejo de usuarios: registro, login, actualización y logout, incluyendo OAuth2.0 con Google y refresh token mediante cookies."
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /auth/register:
+    post:
+      summary: Registra una nueva cuenta.
+      requestBody:
+        description: Datos del usuario a crear.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: fanUser1
+                email:
+                  type: string
+                  example: fan1@example.com
+                password:
+                  type: string
+                  example: password123
+              required:
+                - username
+                - email
+                - password
+      responses:
+        "201":
+          description: Cuenta creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        "500":
+          description: Error interno.
+  /auth/login:
+    post:
+      summary: Inicia sesión.
+      requestBody:
+        description: Credenciales para acceder.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: fan1@example.com
+                password:
+                  type: string
+                  example: password123
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Login exitoso. Devuelve el access token en el body y setea el refresh token en cookie HttpOnly.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        "401":
+          description: Credenciales inválidas.
+  /auth/refresh-token:
+    post:
+      summary: Refresca el access token usando el refresh token almacenado en cookie.
+      responses:
+        "200":
+          description: Nuevo access token generado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: newAccessToken123
+        "401":
+          description: Refresh token inválido o caducado.
+  /auth/{id}:
+    put:
+      summary: Actualiza el perfil de un usuario.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Campos a actualizar.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: nuevoNombre
+                bio:
+                  type: string
+                  example: Nueva bio
+                # Campos opcionales para roles específicos:
+                bandName:
+                  type: string
+                  example: Nombre de banda
+                genre:
+                  type: string
+                  example: Rock
+                labelName:
+                  type: string
+                  example: Nombre del sello
+                website:
+                  type: string
+                  example: https://ejemplo.com
+      responses:
+        "200":
+          description: Cuenta actualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        "500":
+          description: Error interno.
+  /auth/logout:
+    post:
+      summary: Cierra la sesión del usuario.
+      responses:
+        "200":
+          description: Logout exitoso. Se borra el access token en memoria y se elimina la cookie del refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+  /auth/google:
+    get:
+      summary: Inicia autenticación con Google.
+      responses:
+        "302":
+          description: Redirige a Google para autenticación.
+  /auth/google/callback:
+    get:
+      summary: Callback de autenticación con Google.
+      responses:
+        "302":
+          description: Redirige al frontend tras autenticación exitosa.
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 60d0fe4f5311236168a109ca
+        username:
+          type: string
+          example: fanUser1
+        email:
+          type: string
+          example: fan1@example.com
+        role:
+          type: string
+          example: fan
+        profileImage:
+          type: string
+          example: /assets/images/default-user.jpg
+        bio:
+          type: string
+          example: Soy un fanático de la música.
+        # Campos opcionales dependiendo del rol:
+        bandName:
+          type: string
+          example: The Rockers
+        genre:
+          type: string
+          example: Rock
+        labelName:
+          type: string
+          example: Super Records
+        website:
+          type: string
+          example: https://superrecords.com
