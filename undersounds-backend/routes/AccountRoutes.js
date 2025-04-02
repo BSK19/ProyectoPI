@@ -9,6 +9,10 @@ router.put('/:id', AccountController.updateProfile);
 router.post('/logout', AccountController.logout);
 router.post('/refresh-token', AccountController.refreshToken);
 
+// Nuevas rutas de recuperación de contraseña
+router.post('/forgot-password', AccountController.forgotPassword);
+router.post('/reset-password', AccountController.resetPassword);
+
 // Rutas para OAuth con Google
 router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })

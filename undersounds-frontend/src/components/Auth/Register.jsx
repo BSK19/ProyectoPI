@@ -89,7 +89,7 @@ const Register = (props) => {
       await register(formData);
       navigate('/login');
     } catch (err) {
-      setError('Error registering user. Please try again.');
+      setError('Ya existe una cuenta asociada a este correo.');
     }
   };
 
@@ -103,7 +103,7 @@ const Register = (props) => {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Registrate como {registerType.charAt(0).toUpperCase() + registerType.slice(1)}
+            Regístrate como {registerType.charAt(0).toUpperCase() + registerType.slice(1)}
           </Typography>
           {error && <Alert severity="error">{error}</Alert>}
           <Box

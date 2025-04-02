@@ -9,6 +9,7 @@ import { AlbumContext } from '../context/AlbumContext';
 import imagen from '../assets/images/images2.webp';
 import imagen2 from '../assets/images/imagen2.jpeg';
 import imagen3 from '../assets/images/images3.webp'; //arreglar esto, provisional. No consigo que cargue las imgs desde imagen.urlimagen
+import { AuthContext } from '../context/AuthContext';
 
 
 const HomePage = () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
     const noticia3 = noticiasMusica[2];
 
     const { setSelectedAlbumId } = useContext(AlbumContext);
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleAlbumClick = (album) => {
@@ -419,26 +421,26 @@ const HomePage = () => {
             </div>
             </Box>
 
-            <div style={{ textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>
-                <h5 style={{ fontSize: '1rem', color: '#333', marginBottom: '10px' }}>
-                    ¿Te gusta Bandcamp? Registrate y disfruta de la experiencia completa
-                </h5>
-                <Link to="/register">
-                    <button className='boton-registro'>
-                        Registrarse
-                    </button>
-                </Link>
-            </div>
+            {!user && (
+                <div style={{ textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>
+                    <h5 style={{ fontSize: '1rem', color: '#333', marginBottom: '10px' }}>
+                        ¿Te gusta Bandcamp? Registrate y disfruta de la experiencia completa
+                    </h5>
+                    <Link to="/register">
+                        <button className='boton-registro'>
+                            Registrarse
+                        </button>
+                    </Link>
+                </div>
+            )}
 
-            <div style={{ textAlign: 'start-flex', marginTop: '40px', marginLeft:'30px' ,marginBottom: '20px' }}>
+            <div style={{ textAlign: 'start-flex', marginTop: '40px', marginLeft:'30px', marginBottom: '20px' }}>
                 <Link to="/explore">
                     <h5 style={{ fontSize: '1rem', color: '#1DA1C3', marginBottom: '5px' }}>
                         CONTINÚA EXPLORANDO
                     </h5>
                 </Link>
             </div>
-
-
         </div>
     );
 };
