@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: UnderSounds API Authentication
   version: "1.0.0"
-  description: "API para manejo de usuarios: registro, login, actualización y logout, incluyendo OAuth2.0 con Google y refresh token mediante cookies."
+  description: "API para manejo de usuarios: registro, login, actualización, logout, OAuth2.0 con Google, recuperación de contraseña y refresh token mediante cookies."
 servers:
   - url: http://localhost:5000/api
 paths:
@@ -107,16 +107,15 @@ paths:
                 bio:
                   type: string
                   example: Nueva bio
-                # Campos opcionales para roles específicos:
                 bandName:
                   type: string
-                  example: Nombre de banda
+                  example: The Rockers
                 genre:
                   type: string
                   example: Rock
                 labelName:
                   type: string
-                  example: Nombre del sello
+                  example: Super Records
                 website:
                   type: string
                   example: https://ejemplo.com
@@ -143,6 +142,68 @@ paths:
                   success:
                     type: boolean
                     example: true
+  /auth/forgot-password:
+    post:
+      summary: Solicita recuperación de contraseña.
+      requestBody:
+        description: Email del usuario para enviar el código OTP.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: fan1@example.com
+      responses:
+        "200":
+          description: Mensaje de confirmación (el código se envía si la cuenta existe).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Si el correo existe, se enviará un código de recuperación."
+        "500":
+          description: Error interno.
+  /auth/reset-password:
+    post:
+      summary: Restablece la contraseña utilizando el código OTP.
+      requestBody:
+        description: Email, código OTP y la nueva contraseña.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: fan1@example.com
+                otp:
+                  type: string
+                  example: "AbC123"
+                newPassword:
+                  type: string
+                  example: newPassword123
+      responses:
+        "200":
+          description: Contraseña actualizada exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "400":
+          description: Código OTP inválido o caducado.
+        "500":
+          description: Error interno.
   /auth/google:
     get:
       summary: Inicia autenticación con Google.
@@ -178,7 +239,6 @@ components:
         bio:
           type: string
           example: Soy un fanático de la música.
-        # Campos opcionales dependiendo del rol:
         bandName:
           type: string
           example: The Rockers

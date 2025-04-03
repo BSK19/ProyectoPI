@@ -41,9 +41,9 @@ const UserProfile = () => {
     const response = await updateUserProfile(updatedUser);
     if (response.success) {
       setUser(updatedUser);
-      alert('Profile updated successfully!');
+      alert('Perfil actualizado correctamente');
     } else {
-      alert('Failed to update profile. Please try again.');
+      alert('Error al actualizar el perfil');
     }
   };
 

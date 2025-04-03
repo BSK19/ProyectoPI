@@ -70,9 +70,15 @@ export const logout = async () => {
   return response.data;
 };
 
-export const updateUserProfile = async (data) => {
-  const response = await axios.put(`${API_URL}/${data.id}`, data);
-  return response.data;
+export const updateUserProfile = async (updatedUser) => {
+  try {
+    // Usar updatedUser._id y concatenar con una barra '/' entre API_URL y el _id
+    const response = await axios.put(`${API_URL}/${updatedUser.id}`, updatedUser);
+    return response.data;
+  } catch (error) {
+    console.error("Error in updateUserProfile:", error.response?.data || error);
+    return { success: false };
+  }
 };
 
 export const refreshToken = async () => {

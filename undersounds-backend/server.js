@@ -47,8 +47,14 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rutas
+// Rutas de la API
 app.use('/api/auth', accountRoutes);
+
+// --- Configuración de la vista (MVC tradicional) ---
+app.use(express.static(path.join(__dirname, 'view')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'view', 'index.html'));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -46,6 +46,8 @@ class AccountController {
       if (existingAccount) {
         return res.status(400).json({ error: 'El correo electrónico ya está en uso' });
       }
+   
+      inputData.profileImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(inputData.username)}&size=128&background=random&color=fff`;
       const accountData = AccountFactory.createAccount(inputData);
       accountData.password = await bcrypt.hash(accountData.password, 10);
       const newAccount = await AccountDao.create(accountData);
@@ -124,9 +126,10 @@ class AccountController {
     try {
       const { id } = req.params;
       const updatedAccount = await AccountDao.update(id, req.body);
-      res.json(new AccountDTO(updatedAccount));
+      // Retorna un objeto que incluya success y el dto actualizado
+      res.json({ success: true, account: new AccountDTO(updatedAccount) });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, error: error.message });
     }
   }
   

@@ -102,7 +102,13 @@ export default function Login(props) {
   const [openForgot, setOpenForgot] = useState(false);
   const navigate = useNavigate();
   const { setRegisterType } = useContext(RegisterContext);
-  const { setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   // Limpia errorMessage al montarse el componente
   useEffect(() => {
