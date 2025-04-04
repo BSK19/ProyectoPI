@@ -148,7 +148,7 @@ const AlbumPage = () => {
             <Grid container spacing={1} sx={{ mt: 2 }}>
               <Grid item xs={12}>
                 <h4 className="precio">
-                  {album.price.toFixed(2)}$
+                 /{album.price.toFixed(2)}$
                 </h4>
               </Grid>
             </Grid>

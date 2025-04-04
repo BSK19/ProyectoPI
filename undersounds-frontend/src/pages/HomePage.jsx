@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import albums from '../mockData/albums';
 import artists from '../mockData/artists';
 import '../styles/homePage.css';
@@ -10,6 +10,7 @@ import imagen from '../assets/images/images2.webp';
 import imagen2 from '../assets/images/imagen2.jpeg';
 import imagen3 from '../assets/images/images3.webp'; //arreglar esto, provisional. No consigo que cargue las imgs desde imagen.urlimagen
 import { AuthContext } from '../context/AuthContext';
+import {fetchAlbums} from '../services/jamendoService.js'
 
 
 const HomePage = () => {
@@ -26,6 +27,20 @@ const HomePage = () => {
         setSelectedAlbumId(album.id);
         navigate(`/album/${album.id}`, { state: { album } });
     };
+
+    const [albums, setAlbums] = useState([]);
+
+    useEffect(() => {
+        const loadAlbums = async () => {
+            try {
+                const fetchedAlbums = await fetchAlbums();
+                setAlbums(fetchedAlbums); // Actualiza el estado con los datos de Jamendo
+            } catch (error) {
+                console.error('Error fetching albums:', error);
+            }
+        };
+        loadAlbums();
+    }, []);
 
     const [startIndex, setStartIndex] = useState(0); // Índice del primer álbum visible
     const [startIndexNew, setStartIndexNew] = useState(0); // Índice del primer álbum visible
@@ -261,29 +276,27 @@ const HomePage = () => {
                         }}
                     >
                         
-                        {albums.filter(album => album.destacado === true).map((album) => (
+                        {albums.map((album) => (
                             <div key={album.id} onClick={() => handleAlbumClick(album)} style={{ flex: '0 0 calc(25%)' }}> {/* Asegura que cada tarjeta ocupe un 25% */}
                                 <Card className="item" sx={{ maxWidth: 310 }}>
                                     <CardMedia
                                         component="img"
-                                        alt={`${album.title} cover`}
-                                        image={album.coverImage}
+                                        alt={`${album.name} cover`}
+                                        image={album.image}
                                         sx={{ aspectRatio: '1 / 1', padding: '15px' }}
                                     />
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="div">
-                                                {album.title}
+                                                {album.name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                by {album.artist}
+                                                by {album.artist_name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                                 Genre: {album.genre}
                                             </Typography>
-                                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                ${album.price.toFixed(2)}
-                                            </Typography>
+                                            
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
@@ -336,23 +349,21 @@ const HomePage = () => {
                                     <CardMedia
                                         component="img"
                                         alt={`${album.title} cover`}
-                                        image={album.coverImage}
+                                        image={album.image}
                                         sx={{ aspectRatio: '1 / 1', padding: '15px' }}
                                     />
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="div">
-                                                {album.title}
+                                                {album.name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                by {album.artist}
+                                                by {album.artist_name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                                 Genre: {album.genre}
                                             </Typography>
-                                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                ${album.price.toFixed(2)}
-                                            </Typography>
+                                            
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
