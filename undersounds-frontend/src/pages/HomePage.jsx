@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import artists from '../mockData/artists';
 import '../styles/homePage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Grid, Typography, Box, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 import noticiasMusica from '../mockData/noticiasMusica';
 import { AlbumContext } from '../context/AlbumContext';
+import { AuthContext } from '../context/AuthContext';
 import imagen from '../assets/images/images2.webp';
 import imagen2 from '../assets/images/imagen2.jpeg';
 import imagen3 from '../assets/images/images3.webp';
-import { AuthContext } from '../context/AuthContext';
-import {fetchAlbums} from '../services/jamendoService.js';
+import { fetchAlbums, fetchTracklist } from '../services/jamendoService.js';
 
 const HomePage = () => {
     const noticia = noticiasMusica[0];
@@ -31,7 +31,30 @@ const HomePage = () => {
             try {
                 setLoading(true);
                 const fetchedAlbums = await fetchAlbums();
-                setAlbums(fetchedAlbums);
+                // Para cada álbum, se obtiene el tracklist real y se recalcula el precio
+                const updatedAlbums = await Promise.all(
+                    fetchedAlbums.map(async (album) => {
+                        const trackList = await fetchTracklist(album.id);
+                        const trackCount = trackList.length;
+                        const basePrice = 9.99;
+                        const pricePerTrack = 0.99;
+                        const calculatedPrice = parseFloat((basePrice + (trackCount * pricePerTrack)).toFixed(2));
+                        
+                        // Si deseas revalidar el género en HomePage (por ejemplo, si album.tags se actualiza en la API):
+                        let genre = album.genre; // valor calculado en fetchAlbums
+                        if ((!genre || genre === 'Unknown') && album.tags && album.tags.length > 0) {
+                            genre = Array.isArray(album.tags)
+                            ? album.tags[0]
+                            : album.tags.split(',')[0].trim();
+                        }
+                        return {
+                            ...album,
+                            tracks: trackList,
+                            price: calculatedPrice
+                        };
+                    })
+                );
+                setAlbums(updatedAlbums);
             } catch (error) {
                 console.error('Error fetching albums:', error);
             } finally {
@@ -48,24 +71,15 @@ const HomePage = () => {
 
     const handleSlide = (direction, section) => {
         const increment = direction === 'next' ? 3 : -3;
-        switch(section) {
+        switch (section) {
             case 'recommended':
-                setStartIndex(prev => {
-                    const newIndex = Math.max(0, Math.min(albums.length - 4, prev + increment));
-                    return newIndex;
-                });
+                setStartIndex(prev => Math.max(0, Math.min(albums.length - 4, prev + increment)));
                 break;
             case 'new':
-                setStartIndexNew(prev => {
-                    const newIndex = Math.max(0, Math.min(albums.length - 4, prev + increment));
-                    return newIndex;
-                });
+                setStartIndexNew(prev => Math.max(0, Math.min(albums.length - 4, prev + increment)));
                 break;
             case 'artists':
-                setStartIndexArt(prev => {
-                    const newIndex = Math.max(0, Math.min(artists.length - 4, prev + increment));
-                    return newIndex;
-                });
+                setStartIndexArt(prev => Math.max(0, Math.min(artists.length - 4, prev + increment)));
                 break;
             default:
                 break;
@@ -103,7 +117,7 @@ const HomePage = () => {
                             }}
                         >
                             <span style={{ fontSize: '16px', marginRight: '2px' }}>$</span>
-                            {album.price?.toFixed(2)}
+                            {album.price ? album.price.toFixed(2) : 'N/A'}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

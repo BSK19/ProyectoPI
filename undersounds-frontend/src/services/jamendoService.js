@@ -68,8 +68,15 @@ export const fetchAlbums = async () => {
 
         const albums = data.results.map(album => {
             let genre = 'Unknown';
-            if (album.tags && album.tags.length > 0) {
-                genre = Array.isArray(album.tags) ? album.tags[0] : album.tags.split(',')[0].trim();
+            if (album.tags) {
+                if (typeof album.tags === 'string') {
+                    // If the tags string contains a comma, split and take the first tag, else use the trimmed string.
+                    genre = album.tags.includes(',') 
+                        ? album.tags.split(',')[0].trim() 
+                        : album.tags.trim();
+                } else if (Array.isArray(album.tags) && album.tags.length > 0) {
+                    genre = album.tags[0];
+                }
             }
 
             // Calculate price based on number of tracks
