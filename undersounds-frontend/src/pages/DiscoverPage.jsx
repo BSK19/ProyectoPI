@@ -9,10 +9,10 @@ import {
     Grid,
     CardActionArea,
 } from "@mui/material";
-import albums from "../mockData/albums";
-import artists from "../mockData/artists";
+import {fetchAlbums, fetchArtists} from '../services/jamendoService';
 import tshirts from "../mockData/tshirts";
 import { AlbumContext } from "../context/AlbumContext";
+
 
 const DiscoverPage = () => {
     const location = useLocation();
@@ -22,6 +22,10 @@ const DiscoverPage = () => {
     const [selectedGenre, setSelectedGenre] = useState(initialFilter); // Track the selected genre
     const navigate = useNavigate();
     const { setSelectedAlbumId } = useContext(AlbumContext);
+
+    const [albums, setAlbums] = useState([]);
+    const [artists, setArtists] = useState([]);
+
 
     const genreCarouselRef = useRef(null);
 
@@ -33,11 +37,26 @@ const DiscoverPage = () => {
         genreCarouselRef.current.scrollBy({ left: 200, behavior: "smooth" });
     };
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const albumsData = await fetchAlbums();
+                const artistsData = await fetchArtists();
+                setAlbums(albumsData);
+                setArtists(artistsData);
+            } catch (error) {
+                console.error("Error fetching data from Jamendo:", error);
+            }
+        };
+        loadData();
+    }, []);
+
     // Synchronize the query parameter with the internal state when the location changes
     useEffect(() => {
         const filterParam = query.get("filter") || "all";
         setSelectedFilter(filterParam);
         setSelectedGenre(filterParam); // Ensure the genre is also updated
+        
     }, [location.search, query]);
 
     const handleAlbumClick = (album) => {
@@ -78,9 +97,6 @@ const DiscoverPage = () => {
     } else {
         filteredAlbums = albums.filter(
             (album) => album.genre.toLowerCase() === selectedFilter.toLowerCase()
-        );
-        filteredArtists = artists.filter(
-            (artist) => artist.genre.toLowerCase() === selectedFilter.toLowerCase()
         );
     }
 
@@ -184,8 +200,8 @@ const DiscoverPage = () => {
                             <CardActionArea onClick={() => handleAlbumClick(album)}>
                                 <CardMedia
                                     component="img"
-                                    alt={`${album.title} cover`}
-                                    image={album.coverImage}
+                                    alt={`${album.name} cover`}
+                                    image={album.image}
                                     sx={{ 
                                         aspectRatio: "1 / 1", 
                                         padding: "20px",
@@ -204,7 +220,7 @@ const DiscoverPage = () => {
                                         variant="body2" 
                                         sx={{ color: "#555", fontStyle: "italic", marginBottom: "5px" }}
                                     >
-                                        by {album.artist}
+                                        by {album.artist_name}
                                     </Typography>
                                     <Typography 
                                         variant="body2" 
@@ -245,7 +261,7 @@ const DiscoverPage = () => {
                                 <CardMedia
                                     component="img"
                                     alt={`${artist.name} profile`}
-                                    image={artist.profileImage}
+                                    image={artist.image}
                                     sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
                                 />
                                 <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
@@ -256,12 +272,7 @@ const DiscoverPage = () => {
                                     >
                                         {artist.name}
                                     </Typography>
-                                    <Typography 
-                                        variant="body2" 
-                                        sx={{ color: "#777", fontWeight: "500" }}
-                                    >
-                                        Genre: {artist.genre}
-                                    </Typography>
+
                                 </CardContent>
                             </CardActionArea>
                         </Card>

@@ -117,3 +117,27 @@ export const fetchAlbumById = async (albumId) => {
     throw error;
   }
 };
+
+export const fetchArtists = async () => {
+    try {
+        const response = await axios.get(`${PROXY_BASE_URL}/artists`, {
+            params: {
+                client_id: "37a3b74b",
+                format: 'json',
+                limit: 20,
+            },
+            withCredentials: false,
+        });
+        console.log("Respuesta de artists:", response.data); // Verifica la estructura de la respuesta
+        // Mapea el resultado teniendo en cuenta la estructura real de la respuesta
+        const artists = response.data.results.map(artist => ({
+            id: artist.id,
+            name: artist.name,
+            image: artist.image, // Asegúrate de que la API realmente envía esta propiedad; si no, actualiza el campo
+        }));
+        return artists;
+    } catch (error) {
+        console.error('Error fetching artists from Jamendo (proxy):', error);
+        throw error;
+    }
+};
