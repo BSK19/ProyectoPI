@@ -12,6 +12,7 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const readline = require('readline');
+const jamendoRoutes = require('./routes/JamendoRoutes');
 
 mongoose.set('strictQuery', false);
 
@@ -50,6 +51,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Rutas de la API
 app.use('/api/auth', accountRoutes);
+app.use('/api/jamendo', jamendoRoutes);
+
 
 // --- Configuración de la vista (MVC tradicional) ---
 app.use(express.static(path.join(__dirname, 'view')));

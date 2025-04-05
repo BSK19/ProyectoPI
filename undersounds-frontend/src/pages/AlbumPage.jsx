@@ -1,288 +1,277 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
-import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Grid, Typography, Avatar } from '@mui/material';
+import { Star } from '@mui/icons-material';
 import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
+import tracksData from '../mockData/tracks';
 import defaultImage from '../assets/images/botonPlay.jpg';
-import { fetchAlbums, fetchTracklist } from '../services/jamendoService';
+import { fetchAlbumById, fetchTracklist } from '../services/jamendoService';
+import { formatTrackDuration } from '../utils/formatters';
+
+const ProfileImage = ''; 
+const PRICE_PER_TRACK = 0.99;
 
 const AlbumPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { playTrack, stopTrack } = useContext(PlayerContext);
+  const { playTrack } = useContext(PlayerContext);
   const { addToCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
+  
+  const [album, setAlbum] = useState(location.state?.album || null);
+  const [albumTracks, setAlbumTracks] = useState([]);
   const [activeTrackId, setActiveTrackId] = useState(null);
   const [feedback, setFeedback] = useState(false);
-  const [album, setAlbum] = useState(null);
-  const [tracks, setTracks] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
-    const loadAlbumAndTracks = async () => {
-      try {
-        setLoading(true);
-        const albums = await fetchAlbums();
-        const foundAlbum = albums.find(a => String(a.id) === String(id));
-        
-        if (foundAlbum) {
-          const trackList = await fetchTracklist(foundAlbum.id);
-          // Calculate price based on actual tracks fetched
-          const basePrice = 9.99;
-          const pricePerTrack = 0.99;
-          const calculatedPrice = trackList.length > 0 ? 
-            (basePrice + (trackList.length * pricePerTrack)).toFixed(2) : 
-            basePrice.toFixed(2);
-
-          setAlbum({
-            ...foundAlbum,
-            price: parseFloat(calculatedPrice)
-          });
-          setTracks(trackList);
+    if (!album) {
+      const loadAlbum = async () => {
+        try {
+          const fetchedAlbum = await fetchAlbumById(id);
+          setAlbum(fetchedAlbum);
+        } catch (error) {
+          console.error('Error fetching album:', error);
         }
-      } catch (error) {
-        console.error('Error loading album:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      loadAlbumAndTracks();
+      };
+      loadAlbum();
     }
-  }, [id]);
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Typography variant="h5">Cargando...</Typography>
-      </Box>
-    );
-  }
-
+  }, [album, id]);
+  
+  useEffect(() => {
+    if (album && album.id) {
+      const loadTracks = async () => {
+        try {
+          const fetchedTracks = await fetchTracklist(album.id);
+          const mappedTracks = fetchedTracks.map(track => ({
+            ...track,
+            url: track.audio,
+          }));
+          setAlbumTracks(mappedTracks);
+        } catch (error) {
+          console.error('Error fetching album tracks:', error);
+        }
+      };
+      loadTracks();
+    }
+  }, [album]);
+  
   if (!album) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Typography variant="h5">Álbum no encontrado</Typography>
-      </Box>
-    );
+    return <Typography variant="h5">Cargando álbum...</Typography>;
   }
-
+  
+  const tracks = albumTracks;
+  const ratings = album.ratings || [];
+  
+  const calculatedPrice = (tracks.length * PRICE_PER_TRACK).toFixed(2);
+  
   const handleAddToCart = () => {
     addToCart({
       id: album.id,
-      name: album.name,
-      price: album.price,
-      image: album.image || '/assets/images/default-cover.jpg',
+      name: album.title || album.name,
+      price: parseFloat(calculatedPrice),
+      image: album.coverImage || album.image || '/assets/images/default-cover.jpg',
       type: 'album',
     });
     setFeedback(true);
     setTimeout(() => setFeedback(false), 1000);
   };
 
-  const handleTrackPlay = (track) => {
+  const handleTrackClick = (track) => {
     if (!user) {
       alert("Debe iniciar sesión para reproducir la música");
       navigate("/login");
       return;
     }
-
-    if (activeTrackId === track.id) {
-      stopTrack();
-      setActiveTrackId(null);
-    } else {
-      playTrack(track);
+    const trackDetail = tracks.find((t) => t.id === track.id) || tracksData.find((t) => t.id === track.id);
+    if (trackDetail) {
+      playTrack({
+        ...trackDetail,
+        title: trackDetail.title || trackDetail.name,
+        coverImage: trackDetail.coverImage || album.coverImage || album.image || '/assets/images/default-cover.jpg',
+        tracklist: tracks
+      });
       setActiveTrackId(track.id);
+    } else {
+      console.error("Track not found");
     }
   };
 
   return (
-    <Box sx={{
-      minHeight: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      position: 'relative',
-      p: 3,
-    }}>
-      <Box sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundImage: `url(${album.image})`,
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        filter: 'blur(8px)',
-        opacity: 0.3,
-        zIndex: -1,
-      }} />
+        backgroundRepeat: 'no-repeat',
+        p: 3,
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `url(${album.coverImage || album.image || '/assets/images/default-cover.jpg'})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'blur(8px)',
+          zIndex: -1,
+        }}
+      />
 
       <Box className="album-page" sx={{ maxWidth: 800, width: '100%', p: 3 }}>
         <Card elevation={4} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
           <CardMedia
             component="img"
-            image={album.image}
-            alt={album.name}
-            sx={{ height: 300, objectFit: 'cover' }}
+            image={album.coverImage || album.image || '/assets/images/default-cover.jpg'}
+            alt={`${album.title || album.name} cover`}
+            sx={{ maxHeight: 450, objectFit: 'cover' }}
           />
           <CardContent sx={{ backgroundColor: '#f7f7f7' }}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-              {album.name}
+              {album.title || album.name}
             </Typography>
-            <Typography variant="subtitle1" color="text.primary">
+            <Typography variant="subtitle1" color="black">
               by{' '}
               <Link
-                to={`/artistProfile/${album.artist_id}`}
+                to={`/artistProfile/${album.artistId || album.artist_id}`}
                 style={{ textDecoration: 'none', color: '#1DA0C3', fontWeight: 'bold' }}
               >
-                {album.artist_name}
+                {album.artist || album.artist_name}
               </Link>
             </Typography>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container>
               <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Release date: {new Date(album.releasedate).getFullYear()}
+                <Typography sx={{ color: "gray", m: 0, display: "flex", alignItems: "center" }}>
+                  Lanzado en: {album.releaseYear || album.releasedate}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
-                    Genre:
-                  </Typography>
-                  <Typography className="tag" variant="body2">
-                    #{album.genre}
-                  </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
+                  <Typography sx={{ mr: '10px' }}>Genres:</Typography>
+                  <Typography className="tag">#{album.genre}</Typography>
                 </Box>
               </Grid>
             </Grid>
-
-            {/* Price Display */}
-            <Box sx={{ 
-              mt: 3, 
-              mb: 2, 
-              display: 'flex', 
-              justifyContent: 'flex-start', // Changed to align left
-              alignItems: 'center',
-              pl: 2 // Added left padding
-            }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  fontWeight: 'bold',
-                  color: '#1DA0C3',
-                  display: 'flex',
-                  alignItems: 'baseline'
-                }}
-              >
-                <span style={{ fontSize: '24px', marginRight: '2px' }}>$</span>
-                {album.price?.toFixed(2)}
-              </Typography>
-            </Box>
-
-            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddToCart}
-                sx={{ 
-                  borderRadius: '20px',
-                  backgroundColor: '#1DA0C3',
-                  '&:hover': {
-                    backgroundColor: '#1789A7'
-                  },
-                  width: 'auto', // Changed from 100% to auto
-                  minWidth: '120px' // Added minimum width
-                }}
-              >
-                Add to cart
+            <Grid container spacing={1} sx={{ mt: 2 }}>
+              <Grid item xs={12}>
+                <h4 className="precio">
+                  ${calculatedPrice}
+                </h4>
+              </Grid>
+            </Grid>
+            <Box sx={{ my: 2, display: 'flex', justifyContent: 'space-between' }}>
+              <Button variant="contained" color="primary" onClick={handleAddToCart}>
+                Añadir al carrito
               </Button>
               {feedback && (
-                <Typography variant="body2" color="success.main" sx={{ ml: 2 }}>
-                  Added to cart!
+                <Typography variant="body2" color="success.main">
+                  ¡Añadido al carrito!
                 </Typography>
               )}
             </Box>
           </CardContent>
         </Card>
-
+        
+        {/* Lista de canciones */}
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" gutterBottom sx={{ color: 'text.primary' }}>
-            Tracks
+          <Typography variant="h5" gutterBottom>
+            Lista de canciones:
           </Typography>
           
-          {tracks.length > 0 ? (
-            <Grid container spacing={2}>
-              {tracks.map((track, index) => (
-                <Grid item xs={12} key={track.id || index}>
-                  <Box
-                    className="track-item"
-                    sx={{
-                      p: 2,
-                      borderRadius: '8px',
-                      boxShadow: 1,
-                      backgroundColor: '#fff',
-                      '&:hover': {
-                        backgroundColor: '#f5f5f5',
-                        transition: 'background-color 0.2s'
-                      }
-                    }}
-                  >
-                    <Box className="track-container">
-                      <Box className="track-number">
-                        <Typography sx={{ 
-                          color: 'text.secondary',
-                          textAlign: 'right',
-                          minWidth: '20px',
-                          fontVariantNumeric: 'tabular-nums'
-                        }}>
-                          {index + 1}
-                        </Typography>
-                      </Box>
-                      <Box sx={{
-                        width: '30px',
-                        height: '30px',
-                        flexShrink: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <img
-                          src={defaultImage}
-                          alt="Play Button"
-                          onClick={() => handleTrackPlay(track)}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            cursor: 'pointer',
-                          }}
-                        />
-                      </Box>
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography variant="subtitle1" noWrap>
-                          {track.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {track.duration}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ flexShrink: 0 }}>
-                        {track.n_reproducciones?.toLocaleString() || 0} plays
+          <div className='lista_espaciada'>
+            <Typography className="ind_cancion" sx={{ m: "0 0 0 4%" }}>
+              #
+            </Typography>
+            <Typography className="ind_cancion" sx={{ m: "0 0 0 9%" }}>
+              Nombre
+            </Typography>
+            <Typography className="ind_cancion" sx={{ m: "0 0 0 19%" }}>
+              Autores
+            </Typography>
+            <Typography className="ind_cancion" sx={{ m: "0 0 0 39%" }}>
+              Duración
+            </Typography>
+          </div>
+          
+          <Grid container spacing={0}>
+            {tracks.map((track, index) => (
+              <Grid item xs={12} key={track.id || index}>
+                <Box className="track-item" sx={{ p: 1, borderRadius: '8px', boxShadow: 3, backgroundColor: '#fff' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ fontSize: "1.1rem", color: "black", m: "0 20px 0 0" }}>
+                      {track.position || index + 1}
+                    </Typography>
+                    <img
+                      src={defaultImage}
+                      alt="Play Button"
+                      onMouseEnter={(e) => (e.currentTarget.style.filter = "brightness(0.7)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.filter = "brightness(1)")}
+                      onClick={() => handleTrackClick(track)}
+                      style={{
+                        margin: "0 5px",
+                        width: "30px",
+                        height: "30px",
+                        cursor: "pointer",
+                        transition: "filter 0.3s ease-in-out",
+                      }}
+                    />
+                    <Box sx={{ ml: 1, mt: 0, width: '200px', height: '40px' }}>
+                      <Typography sx={{ fontSize: "1rem", color: "black", m: 0 }}>
+                        {track.title || track.name}
                       </Typography>
                     </Box>
+                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0 }}>
+                      {track.artist || track.artistName}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0, ml: "auto" }}>
+                    {track.duration ? formatTrackDuration(Number(track.duration)) : ''}                      
+                    </Typography>
                   </Box>
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', mt: 2 }}>
-              No tracks available for this album
-            </Typography>
-          )}
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        
+        {/* Valoraciones */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Valoraciones:
+          </Typography>
+          <Box component="ul" sx={{ pl: 2 }}>
+            {ratings.map((rating, index) => (
+              <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                <Avatar src={ProfileImage} alt="Perfil Usuario" sx={{ width: 40, height: 40, mr: 2 }} />
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {rating.comment}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {[...Array(5)].map((_, starIndex) => (
+                      <Star
+                        key={starIndex}
+                        sx={{
+                          color: starIndex < rating.rating ? 'gold' : 'gray',
+                          fontSize: 18,
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              </li>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>
