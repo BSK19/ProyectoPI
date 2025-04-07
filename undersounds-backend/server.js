@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const accountRoutes = require('./routes/AccountRoutes');
+const albumRoutes = require('./routes/AlbumRoutes');
+
 const passport = require('./config/passport');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -51,6 +53,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Rutas de la API
 app.use('/api/auth', accountRoutes);
+app.use('/api/albums', albumRoutes);
 app.use('/api/jamendo', jamendoRoutes);
 
 

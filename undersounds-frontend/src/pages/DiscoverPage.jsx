@@ -41,9 +41,9 @@ const DiscoverPage = () => {
         const loadData = async () => {
             try {
                 const albumsData = await fetchAlbums();
-                const artistsData = await fetchArtists();
+                //const artistsData = await fetchArtists();
                 setAlbums(albumsData);
-                setArtists(artistsData);
+                //setArtists(artistsData);
             } catch (error) {
                 console.error("Error fetching data from Jamendo:", error);
             }

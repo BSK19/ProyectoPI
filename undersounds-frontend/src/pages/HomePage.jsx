@@ -348,7 +348,7 @@ const HomePage = () => {
                                 <Card className="item" sx={{ maxWidth: 310 }}>
                                     <CardMedia
                                         component="img"
-                                        alt={`${album.title} cover`}
+                                        alt={`${album.name} cover`}
                                         image={album.image}
                                         sx={{ aspectRatio: '1 / 1', padding: '15px' }}
                                     />

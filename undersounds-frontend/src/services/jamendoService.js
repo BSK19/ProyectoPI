@@ -7,7 +7,7 @@ export const fetchTracks = async () => {
     try {
         const response = await axios.get(`${PROXY_BASE_URL}/tracks`, {
             params: {
-                client_id: "37a3b74b", // Puedes mantenerla o quitarla si el backend ya la incluye
+                client_id: "0cb4de5d", // Puedes mantenerla o quitarla si el backend ya la incluye
                 format: 'json',
                 limit: 20,
             },
@@ -26,7 +26,7 @@ export const fetchAlbums = async () => {
         // Cambiamos la llamada para que apunte al proxy
         const albumsResponse = await axios.get(`${PROXY_BASE_URL}/albums`, {
             params: {
-                client_id: "37a3b74b",
+                client_id: "0cb4de5d",
                 format: 'json',
                 limit: 20,
             },
@@ -40,7 +40,7 @@ export const fetchAlbums = async () => {
             try {
                 const musicInfoResponse = await axios.get(`${PROXY_BASE_URL}/albums/musicinfo`, {
                     params: {
-                        client_id: "37a3b74b",
+                        client_id: "0cb4de5d",
                         format: 'json',
                         id: album.id,
                     },
@@ -76,7 +76,7 @@ export const fetchTracklist = async (albumId) => {
     try {
         const response = await axios.get(`${PROXY_BASE_URL}/albums/tracks`, {
             params: {
-                client_id: "37a3b74b",
+                client_id: "0cb4de5d",
                 format: 'json',
                 album_id: albumId,
                 limit: 20,
@@ -104,7 +104,7 @@ export const fetchAlbumById = async (albumId) => {
   try {
     const response = await axios.get(`${PROXY_BASE_URL}/albums/musicinfo`, {
       params: {
-        client_id: "37a3b74b",
+        client_id: "0cb4de5d",
         format: 'json',
         id: albumId,
       },
@@ -122,7 +122,7 @@ export const fetchArtists = async () => {
     try {
         const response = await axios.get(`${PROXY_BASE_URL}/artists`, {
             params: {
-                client_id: "37a3b74b",
+                client_id: "0cb4de5d",
                 format: 'json',
                 limit: 20,
             },
