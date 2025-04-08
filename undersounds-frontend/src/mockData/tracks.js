@@ -1,7 +1,7 @@
 import coverImage1 from "../assets/images/EOT.jpeg";
-import Track1 from "../music/21 Questions.mp3";
-import Track2 from "../music/Back In Black.mp3";
-import Track3 from "../music/Believer.mp3";
+import Track1 from "../assets/music/21Questions.mp3";
+import Track2 from "../assets/music/BackInBlack.mp3";
+import Track3 from "../assets/music/Believer.mp3"
 
 const tracks = [
   {
