@@ -18,28 +18,30 @@ class ArtistDAO {
     }
   }
 
-  async getArtistById(id) {
+  // Se usa el campo numérico "id" en lugar de _id
+  async getArtistById(numericId) {
     try {
-      return await Artist.findById(id);
+      return await Artist.findOne({ id: numericId });
     } catch (error) {
-      throw new Error(`Error al obtener el artista con id ${id}: ${error.message}`);
+      throw new Error(`Error al obtener el artista con id ${numericId}: ${error.message}`);
     }
   }
 
-  async updateArtist(id, updateData) {
+  // Se actualiza buscando por el campo "id" numérico
+  async updateArtist(numericId, updateData) {
     try {
-      updateData.updatedAt = Date.now();
-      return await Artist.findByIdAndUpdate(id, updateData, { new: true });
+      return await Artist.findOneAndUpdate({ id: numericId }, updateData, { new: true });
     } catch (error) {
-      throw new Error(`Error al actualizar el artista con id ${id}: ${error.message}`);
+      throw new Error(`Error al actualizar el artista con id ${numericId}: ${error.message}`);
     }
   }
 
-  async deleteArtist(id) {
+  // Se elimina utilizando el campo "id" numérico
+  async deleteArtist(numericId) {
     try {
-      return await Artist.findByIdAndDelete(id);
+      return await Artist.findOneAndDelete({ id: numericId });
     } catch (error) {
-      throw new Error(`Error al eliminar el artista con id ${id}: ${error.message}`);
+      throw new Error(`Error al eliminar el artista con id ${numericId}: ${error.message}`);
     }
   }
 }

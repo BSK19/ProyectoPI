@@ -15,8 +15,8 @@ class ArtistController {
 
   async getArtistById(req, res) {
     try {
-      const { id } = req.params;
-      const artist = await ArtistDAO.getArtistById(id);
+      const numericId = Number(req.params.id);
+      const artist = await ArtistDAO.getArtistById(numericId);
       if (!artist) {
         return res.status(404).json({ error: 'Artista no encontrado' });
       }
@@ -39,9 +39,9 @@ class ArtistController {
 
   async updateArtist(req, res) {
     try {
-      const { id } = req.params;
+      const numericId = Number(req.params.id);
       const artistData = req.body;
-      const updatedArtist = await ArtistDAO.updateArtist(id, artistData);
+      const updatedArtist = await ArtistDAO.updateArtist(numericId, artistData);
       if (!updatedArtist) {
         return res.status(404).json({ error: 'Artista no encontrado' });
       }
@@ -53,8 +53,8 @@ class ArtistController {
 
   async deleteArtist(req, res) {
     try {
-      const { id } = req.params;
-      const deletedArtist = await ArtistDAO.deleteArtist(id);
+      const numericId = Number(req.params.id);
+      const deletedArtist = await ArtistDAO.deleteArtist(numericId);
       if (!deletedArtist) {
         return res.status(404).json({ error: 'Artista no encontrado' });
       }

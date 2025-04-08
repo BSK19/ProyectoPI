@@ -1,5 +1,5 @@
 {
-  "dbVersion": 5,
+  "dbVersion": 6,
   "colecciones": [
     "accounts",
     "noticiasMusica",
