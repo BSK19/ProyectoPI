@@ -1,0 +1,4 @@
+[
+{"_id":{"$oid":"67f54135665dfb8ecf467181"},"id":1,"title":"Nueva gira de The Soundscapers","content":"The Soundscapers anuncian una nueva gira mundial para 2025, con fechas en Nueva York, Londres y Madrid.","date":"2025-01-15"},
+{"_id":{"$oid":"67f54135665dfb8ecf467182"},"id":2,"title":"DJ Beats lanza nuevo single","content":"DJ Beats sorprende a sus fans con un nuevo single que combina pop y electrónica para renovar el panorama musical.","date":"2025-02-20"}
+]
