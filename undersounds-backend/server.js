@@ -3,6 +3,9 @@ const express = require('express');
 const connectDB = require('./config/db');
 const accountRoutes = require('./routes/AccountRoutes');
 const albumRoutes = require('./routes/AlbumRoutes');
+const artistRoutes = require('./routes/ArtistRoutes');
+const noticiasMusica = require('./routes/News');
+const MerchRoutes = require('./routes/MerchandisingRoutes');
 
 const passport = require('./config/passport');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -55,6 +58,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api/auth', accountRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/jamendo', jamendoRoutes);
+app.use('/api/artists', artistRoutes);
+app.use('/api/noticias', noticiasMusica);
+app.use('/api/merchandising', MerchRoutes);
 
 
 // --- Configuración de la vista (MVC tradicional) ---
