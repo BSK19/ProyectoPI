@@ -5,7 +5,7 @@ const AlbumFactory = require('../model/factory/AlbumFactory');
 class AlbumController {
   async getAlbums(req, res) {
     try {
-      const albums = await AlbumDao.getAll();
+      const albums = await AlbumDao.getAlbums();
       const albumDTOs = albums.map(album => new AlbumDTO(album));
       res.json(albumDTOs);
     } catch (error) {
@@ -41,7 +41,7 @@ class AlbumController {
     try {
       const { id } = req.params;
       const albumData = req.body;
-      const updatedAlbum = await AlbumDao.update(id, albumData);
+      const updatedAlbum = await AlbumDao.updateAlbum(id, albumData);
       if (!updatedAlbum) {
         return res.status(404).json({ error: 'Album not found' });
       }
@@ -54,7 +54,7 @@ class AlbumController {
   async deleteAlbum(req, res) {
     try {
       const { id } = req.params;
-      const deletedAlbum = await AlbumDao.delete(id);
+      const deletedAlbum = await AlbumDao.deleteAlbum(id);
       if (!deletedAlbum) {
         return res.status(404).json({ error: 'Album not found' });
       }
