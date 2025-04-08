@@ -1,5 +1,5 @@
-const MerchDAO = require('../dao/MerchandisingDAO');
-const MerchFactory = require('../factory/MerchandisingFactory');
+const MerchDAO = require('../model/dao/MerchandisingDAO');
+const MerchFactory = require('../model/factory/MerchandisingFactory');
 
 const MerchandisingController = {
   // Obtener todos los productos

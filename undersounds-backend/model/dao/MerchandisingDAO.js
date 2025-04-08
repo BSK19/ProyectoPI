@@ -1,4 +1,4 @@
-const Merch = require('../models/Merch');
+const Merch = require('../models/Merchandising');
 
 const MerchDAO = {
     // Recuperar todo el merchandising asociado a un artista

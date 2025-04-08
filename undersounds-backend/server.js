@@ -4,7 +4,7 @@ const connectDB = require('./config/db');
 const accountRoutes = require('./routes/AccountRoutes');
 const albumRoutes = require('./routes/AlbumRoutes');
 const artistRoutes = require('./routes/ArtistRoutes');
-const noticiasMusica = require('./routes/News');
+const noticiasMusica = require('./routes/NewsRoutes');
 const MerchRoutes = require('./routes/MerchandisingRoutes');
 
 const passport = require('./config/passport');
