@@ -45,12 +45,9 @@ const AlbumPage = () => {
     if (album && album.id) {
       const loadTracks = async () => {
         try {
+          // Se usa la propiedad "url" tal cual viene de la API
           const fetchedTracks = await fetchTracklist(album.id);
-          const mappedTracks = fetchedTracks.map(track => ({
-            ...track,
-            url: track.audio,
-          }));
-          setAlbumTracks(mappedTracks);
+          setAlbumTracks(fetchedTracks);
         } catch (error) {
           console.error('Error fetching album tracks:', error);
         }
@@ -200,7 +197,7 @@ const AlbumPage = () => {
               Autores
             </Typography>
             <Typography className="ind_cancion" sx={{ m: "0 0 0 39%" }}>
-              Duración
+              Reproducciones
             </Typography>
           </div>
           
@@ -232,10 +229,10 @@ const AlbumPage = () => {
                       </Typography>
                     </Box>
                     <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0 }}>
-                      {track.artist || track.artistName}
+                      {track.autor || track.artistName}
                     </Typography>
                     <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0, ml: "auto" }}>
-                    {track.duration ? formatTrackDuration(Number(track.duration)) : ''}                      
+                    {track.n_reproducciones}                      
                     </Typography>
                   </Box>
                 </Box>

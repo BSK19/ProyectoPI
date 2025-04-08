@@ -6,7 +6,7 @@ const albumRoutes = require('./routes/AlbumRoutes');
 const artistRoutes = require('./routes/ArtistRoutes');
 const noticiasMusica = require('./routes/NewsRoutes');
 const MerchRoutes = require('./routes/MerchandisingRoutes');
-
+const Stripe = require('stripe');
 const passport = require('./config/passport');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -31,6 +31,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use('/assets', express.static(path.join(__dirname, '../undersounds-frontend/src/assets')));
+
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Conectar a MongoDB
 connectDB();
@@ -198,6 +200,36 @@ process.on('SIGINT', () => {
       process.exit();
     }
   });
+});
+
+app.post('/create-checkout-session', async (req, res) => {
+  const { items } = req.body;
+
+  const lineItems = items.map(item => ({
+    price_data: {
+      currency: 'eur',
+      product_data: {
+        name: item.name,
+        //images: item.image,
+      },
+      unit_amount: Math.round(item.price * 100), // en céntimos
+    },
+    quantity: item.quantity,
+  }));
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      mode: 'payment',
+      success_url: 'http://localhost:3000/',
+      cancel_url: 'http://localhost:3000/',
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Al iniciar se verifica si hay que hacer mongoimport

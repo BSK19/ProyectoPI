@@ -13,4 +13,4 @@ const MerchSchema = new Schema({
     updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Merchandising', MerchSchema);
+module.exports = mongoose.model('tshirts', MerchSchema);

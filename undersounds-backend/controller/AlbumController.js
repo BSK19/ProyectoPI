@@ -16,7 +16,7 @@ class AlbumController {
   async getAlbumById(req, res) {
     try {
       const { id } = req.params;
-      const album = await AlbumDao.findById(id);
+      const album = await AlbumDao.getAlbumById(id);
       if (!album) {
         return res.status(404).json({ error: 'Album not found' });
       }

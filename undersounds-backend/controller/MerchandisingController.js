@@ -5,7 +5,7 @@ const MerchandisingController = {
   // Obtener todos los productos
   async getAllMerch(req, res) {
     try {
-      const merch = await MerchDAO.getAll();
+      const merch = await MerchDAO.getAllMerch();
       res.status(200).json(merch);
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener el merchandising', error });

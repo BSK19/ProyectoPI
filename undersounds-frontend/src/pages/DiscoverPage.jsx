@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Button } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-    Card,
-    CardMedia,
-    CardContent,
-    Typography,
-    Grid,
-    CardActionArea,
-} from "@mui/material";
-import {fetchAlbums, fetchArtists} from '../services/jamendoService';
-import tshirts from "../mockData/tshirts";
+import { Card, CardMedia, CardContent, Typography, Grid, CardActionArea } from "@mui/material";
+import { fetchAlbums, fetchArtists } from '../services/jamendoService';
 import { AlbumContext } from "../context/AlbumContext";
-
+import { merchService } from '../services/merchandisingService'; // Importa el servicio de merchandising
 
 const DiscoverPage = () => {
     const location = useLocation();
@@ -25,7 +17,7 @@ const DiscoverPage = () => {
 
     const [albums, setAlbums] = useState([]);
     const [artists, setArtists] = useState([]);
-
+    const [tshirts, setTshirts] = useState([]); // Para almacenar las camisetas
 
     const genreCarouselRef = useRef(null);
 
@@ -41,9 +33,7 @@ const DiscoverPage = () => {
         const loadData = async () => {
             try {
                 const albumsData = await fetchAlbums();
-                //const artistsData = await fetchArtists();
                 setAlbums(albumsData);
-                //setArtists(artistsData);
             } catch (error) {
                 console.error("Error fetching data from Jamendo:", error);
             }
@@ -51,12 +41,28 @@ const DiscoverPage = () => {
         loadData();
     }, []);
 
-    // Synchronize the query parameter with the internal state when the location changes
+    // Cargar las camisetas cuando se seleccione el filtro "tshirts"
+    useEffect(() => {
+        const loadTshirts = async () => {
+            try {
+                const tshirtsData = await merchService.getAllMerch();
+                setTshirts(tshirtsData);
+            } catch (error) {
+                console.error("Error fetching tshirts:", error);
+            }
+        };
+
+        if (selectedFilter === "tshirts") {
+            loadTshirts();
+        } else {
+            setTshirts([]); // Limpiar las camisetas si no se selecciona el filtro de camisetas
+        }
+    }, [selectedFilter]);
+
     useEffect(() => {
         const filterParam = query.get("filter") || "all";
         setSelectedFilter(filterParam);
         setSelectedGenre(filterParam); // Ensure the genre is also updated
-        
     }, [location.search, query]);
 
     const handleAlbumClick = (album) => {
@@ -118,8 +124,7 @@ const DiscoverPage = () => {
         backgroundColor: "#4F6872",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         flex: 1,
-        // Propiedades para ocultar scrollbar en IE/Edge y Firefox
-        msOverflowStyle: "none",
+        msOverflowStyle: "none", // Propiedades para ocultar scrollbar
         scrollbarWidth: "none",
     };
 
@@ -149,7 +154,7 @@ const DiscoverPage = () => {
                                 variant="contained"
                                 onClick={() => handleGenreFilterChange(genre)}
                                 sx={{
-                                    mx: 1, // Separación horizontal reducida
+                                    mx: 1,
                                     backgroundColor: selectedGenre === genre ? '#1DA0C3' : '#ffffff',
                                     color: selectedGenre === genre ? 'white' : '#333333',
                                     minWidth: '120px',
@@ -185,16 +190,16 @@ const DiscoverPage = () => {
             <Grid container spacing={2}>
                 {filteredAlbums.map((album) => (
                     <Grid item xs={12} sm={6} md={4} key={album.id}>
-                        <Card 
-                            sx={{ 
+                        <Card
+                            sx={{
                                 borderRadius: "12px", 
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
                                 transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
-                                transform: "scale(0.95)", 
-                                "&:hover": { 
-                                    transform: "scale(1.02)", 
-                                    filter: "brightness(0.8)" 
-                                } 
+                                transform: "scale(0.95)",
+                                "&:hover": {
+                                    transform: "scale(1.02)",
+                                    filter: "brightness(0.8)",
+                                }
                             }}
                         >
                             <CardActionArea onClick={() => handleAlbumClick(album)}>
@@ -202,7 +207,7 @@ const DiscoverPage = () => {
                                     component="img"
                                     alt={`${album.name} cover`}
                                     image={album.image}
-                                    sx={{ 
+                                    sx={{
                                         aspectRatio: "1 / 1", 
                                         padding: "20px",
                                         borderRadius: "12px 12px 0 0"
@@ -242,56 +247,19 @@ const DiscoverPage = () => {
                     </Grid>
                 ))}
 
-                {filteredArtists.map((artist) => (
-                    <Grid item xs={12} sm={6} md={4} key={artist.id}>
-                        <Card 
-                            sx={{ 
-                                borderRadius: "12px", 
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
-                                transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
-                                transform: "scale(0.95)",
-                                marginBottom: "30px", 
-                                "&:hover": { 
-                                    transform: "scale(1.02)", 
-                                    filter: "brightness(0.8)"  
-                                } 
-                            }}
-                        >
-                            <CardActionArea onClick={() => navigate(`/artistProfile/${artist.id}`)}>
-                                <CardMedia
-                                    component="img"
-                                    alt={`${artist.name} profile`}
-                                    image={artist.image}
-                                    sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
-                                />
-                                <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
-                                    <Typography 
-                                        gutterBottom 
-                                        variant="h6" 
-                                        sx={{ fontWeight: "bold", color: "#333" }}
-                                    >
-                                        {artist.name}
-                                    </Typography>
-
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                ))}
-
                 {filteredTshirts.map((tshirt) => (
                     <Grid item xs={12} sm={6} md={4} key={tshirt.id}>
-                        <Card 
-                            sx={{ 
-                                borderRadius: "12px", 
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", 
+                        <Card
+                            sx={{
+                                borderRadius: "12px",
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
                                 transition: "transform 0.3s ease-in-out, filter 0.3s ease-in-out",
                                 transform: "scale(0.95)",
-                                marginBottom: "30px", 
-                                "&:hover": { 
-                                    transform: "scale(1.02)", 
-                                    filter: "brightness(0.8)" 
-                                } 
+                                marginBottom: "30px",
+                                "&:hover": {
+                                    transform: "scale(1.02)",
+                                    filter: "brightness(0.8)"
+                                }
                             }}
                         >
                             <CardActionArea onClick={() => handleTshirtClick(tshirt.id)}>
@@ -299,7 +267,11 @@ const DiscoverPage = () => {
                                     component="img"
                                     alt={`${tshirt.name} shirt`}
                                     image={tshirt.tshirtImage}
-                                    sx={{ aspectRatio: "1 / 1", padding: "20px", borderRadius: "12px 12px 0 0" }}
+                                    sx={{
+                                        aspectRatio: "1 / 1", 
+                                        padding: "20px", 
+                                        borderRadius: "12px 12px 0 0"
+                                    }}
                                 />
                                 <CardContent sx={{ textAlign: "center", backgroundColor: "#fafafa" }}>
                                     <Typography 

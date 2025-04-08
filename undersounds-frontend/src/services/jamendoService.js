@@ -1,143 +1,54 @@
 import axios from 'axios';
 
-const PROXY_BASE_URL = "http://localhost:5000/api/jamendo";
+// URL base para tus endpoints de álbumes y artistas
+const ALBUM_BASE_URL = "http://localhost:5000/api/albums";
 
-// Ejemplo para obtener pistas
-export const fetchTracks = async () => {
-    try {
-        const response = await axios.get(`${PROXY_BASE_URL}/tracks`, {
-            params: {
-                client_id: "0cb4de5d", // Puedes mantenerla o quitarla si el backend ya la incluye
-                format: 'json',
-                limit: 20,
-            },
-            withCredentials: false,
-        });
-        return response.data.results;
-    } catch (error) {
-        console.error('Error fetching tracks from Jamendo (proxy):', error);
-        throw error;
-    }
-};
-
-// Ejemplo para obtener álbumes con información extendida
+// Función para obtener álbumes (usando los endpoints de AlbumController)
 export const fetchAlbums = async () => {
-    try {
-        // Cambiamos la llamada para que apunte al proxy
-        const albumsResponse = await axios.get(`${PROXY_BASE_URL}/albums`, {
-            params: {
-                client_id: "0cb4de5d",
-                format: 'json',
-                limit: 20,
-            },
-            withCredentials: false,
-        });
-        
-        const basicAlbums = albumsResponse.data.results;
-        
-        // Se mantiene el mapeo para obtener información extendida, ya que la ruta para musicinfo se define en el proxy
-        const albumsWithInfoPromises = basicAlbums.map(async (album) => {
-            try {
-                const musicInfoResponse = await axios.get(`${PROXY_BASE_URL}/albums/musicinfo`, {
-                    params: {
-                        client_id: "0cb4de5d",
-                        format: 'json',
-                        id: album.id,
-                    },
-                    withCredentials: false,
-                });
-                
-                const musicInfo = musicInfoResponse.data.results[0] || null;
-                let tagsArray = [];
-                if (musicInfo && musicInfo.musicinfo && musicInfo.musicinfo.tags) {
-                    if (typeof musicInfo.musicinfo.tags === 'string') {
-                        tagsArray = musicInfo.musicinfo.tags.split(',').map(tag => tag.trim());
-                    } else if (Array.isArray(musicInfo.musicinfo.tags)) {
-                        tagsArray = musicInfo.musicinfo.tags;
-                    }
-                }
-                const genre = tagsArray.length > 0 ? tagsArray[0] : 'Unknown';
-                return { ...album, genre, musicinfo: musicInfo };
-            } catch (error) {
-                console.error(`Error fetching musicinfo for album ${album.id} (proxy):`, error);
-                return { ...album, genre: 'Unknown', musicinfo: null };
-            }
-        });
-        
-        const albumsWithInfo = await Promise.all(albumsWithInfoPromises);
-        return albumsWithInfo;
-    } catch (error) {
-        console.error('Error fetching albums from Jamendo (proxy):', error);
-        throw error;
-    }
-};
-
-export const fetchTracklist = async (albumId) => {
-    try {
-        const response = await axios.get(`${PROXY_BASE_URL}/albums/tracks`, {
-            params: {
-                client_id: "0cb4de5d",
-                format: 'json',
-                album_id: albumId,
-                limit: 20,
-            },
-            withCredentials: false,
-        });
-        if (response.data.results && response.data.results.length > 0) {
-            const albumData = response.data.results[0];
-            // Mapear las pistas agregando el artista obtenido del álbum e incluyendo la URL correcta
-            return albumData.tracks.map(track => ({
-                ...track,
-                url: track.audio,
-                artist: albumData.artist_name, // Se extrae el nombre del artista del nivel álbum
-                // Si no quieres mostrar la posición, puedes omitirla o reemplazarla por otra cosa
-            }));
-        }
-        return [];
-    } catch (error) {
-        console.error('Error fetching tracklist from Jamendo (proxy):', error);
-        throw error;
-    }
-};
-
-export const fetchAlbumById = async (albumId) => {
   try {
-    const response = await axios.get(`${PROXY_BASE_URL}/albums/musicinfo`, {
-      params: {
-        client_id: "0cb4de5d",
-        format: 'json',
-        id: albumId,
-      },
-      withCredentials: false,
+    const response = await axios.get(`${ALBUM_BASE_URL}`, {
+      withCredentials: true,
     });
-    // Se asume que la respuesta viene en results[0]
-    return response.data.results[0] || null;
+    return response.data;
   } catch (error) {
-    console.error(`Error fetching album with id ${albumId}:`, error);
+    console.error('Error fetching albums from AlbumController:', error);
     throw error;
   }
 };
 
+// Función para obtener la información de un álbum por ID
+export const fetchAlbumById = async (albumId) => {
+  try {
+    const response = await axios.get(`${ALBUM_BASE_URL}/${albumId}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching album with id ${albumId} from AlbumController:`, error);
+    throw error;
+  }
+};
+
+// Función para obtener las pistas de un álbum (se extrae del objeto álbum)
+export const fetchTracklist = async (albumId) => {
+  try {
+    const album = await fetchAlbumById(albumId);
+    return album.tracks || [];
+  } catch (error) {
+    console.error(`Error fetching tracklist for album ${albumId}:`, error);
+    throw error;
+  }
+};
+
+// Función para obtener artistas (agrega el endpoint correspondiente en tu backend)
 export const fetchArtists = async () => {
-    try {
-        const response = await axios.get(`${PROXY_BASE_URL}/artists`, {
-            params: {
-                client_id: "0cb4de5d",
-                format: 'json',
-                limit: 20,
-            },
-            withCredentials: false,
-        });
-        console.log("Respuesta de artists:", response.data); // Verifica la estructura de la respuesta
-        // Mapea el resultado teniendo en cuenta la estructura real de la respuesta
-        const artists = response.data.results.map(artist => ({
-            id: artist.id,
-            name: artist.name,
-            image: artist.image, // Asegúrate de que la API realmente envía esta propiedad; si no, actualiza el campo
-        }));
-        return artists;
-    } catch (error) {
-        console.error('Error fetching artists from Jamendo (proxy):', error);
-        throw error;
-    }
+  try {
+    const response = await axios.get(`${ALBUM_BASE_URL}/artists`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching artists from AlbumController:', error);
+    throw error;
+  }
 };

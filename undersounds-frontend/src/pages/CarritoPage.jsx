@@ -8,6 +8,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Typography } from '@mui/material';
+import axios from 'axios';
+
 
 const CarritoPage = () => {
   const { cartItems, updateQuantity, removeFromCart } = useContext(CartContext);
@@ -16,6 +18,17 @@ const CarritoPage = () => {
 
   // Calcular el total considerando la cantidad de cada producto
   const total = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+
+  const handlePago = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/create-checkout-session', {
+        items: cartItems,
+      });
+      window.location.href = response.data.url;
+    } catch (error) {
+      alert('Error al iniciar el pago.');
+    }
+  };
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -27,8 +40,11 @@ const CarritoPage = () => {
       navigate('/login');
       return;
     }
-    navigate('/payment'); // Redirigir a la página de pago
+    //navigate('/payment'); // Redirigir a la página de pago
+    handlePago(); // Llamar a la función de pago
   };
+
+
 
   return (
     <div className="carrito-page">

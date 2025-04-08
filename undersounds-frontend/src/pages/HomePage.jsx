@@ -282,7 +282,7 @@ const HomePage = () => {
                                     <CardMedia
                                         component="img"
                                         alt={`${album.name} cover`}
-                                        image={album.image}
+                                        image={album.coverImage}
                                         sx={{ aspectRatio: '1 / 1', padding: '15px' }}
                                     />
                                     <CardActionArea>
@@ -291,7 +291,7 @@ const HomePage = () => {
                                                 {album.name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                by {album.artist_name}
+                                                by {album.artist}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                                 Genre: {album.genre}
@@ -349,7 +349,7 @@ const HomePage = () => {
                                     <CardMedia
                                         component="img"
                                         alt={`${album.name} cover`}
-                                        image={album.image}
+                                        image={album.coverImage}
                                         sx={{ aspectRatio: '1 / 1', padding: '15px' }}
                                     />
                                     <CardActionArea>
@@ -358,7 +358,7 @@ const HomePage = () => {
                                                 {album.name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                by {album.artist_name}
+                                                by {album.artist}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                                 Genre: {album.genre}
