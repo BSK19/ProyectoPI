@@ -21,6 +21,7 @@
     "nodemailer": "^6.9.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "readline-sync": "^1.4.10",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3"
   }

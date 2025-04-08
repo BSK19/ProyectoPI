@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process'); // Añadido spawn
 const readline = require('readline');
 const jamendoRoutes = require('./routes/JamendoRoutes');
 
@@ -72,20 +72,20 @@ const startServer = () => {
 
 // ----- Gestión de metadata -----
 // Definición de los archivos de metadata:
-// - sharedMetaFile: versión global (compartido en el repo, por ejemplo, dbmeta.json)
-// - localMetaFile: versión local (entorno de desarrollo, dbmeta_local.json)
+// - sharedMetaFile: versión global (compartido en el repo, por ejemplo, config/dbmeta.json)
+// - localMetaFile: versión local (entorno de desarrollo, config/dbmeta_local.json)
 const sharedMetaFile = path.join(__dirname, 'config', 'dbmeta.json');
 const localMetaFile = path.join(__dirname, 'config', 'dbmeta_local.json');
 
 // Función auxiliar: obtiene la versión guardada en un fichero (o 0 si no existe)
+// Si es el archivo local y no existe, se crea con valor 0
 const getVersionFromFile = (filePath) => {
   let version = 0;
   try {
     if (!fs.existsSync(filePath)) {
-      // Si es el archivo local, crearlo con valor 0
       if (filePath === localMetaFile) {
-        fs.writeFileSync(filePath, JSON.stringify({ dbVersion: 0 }, null, 2));
-        console.log(`${filePath} no existía, se ha creado con valor 0.`);
+        fs.writeFileSync(filePath, JSON.stringify({ dbVersion: 0, colecciones: [] }, null, 2));
+        console.log(`${filePath} no existía, se ha creado con valor 0 y colecciones vacías.`);
         return 0;
       }
     } else {
@@ -99,15 +99,23 @@ const getVersionFromFile = (filePath) => {
   return version;
 };
 
-// Función auxiliar: actualiza un fichero de metadata con la nueva versión
-const updateVersionFile = (filePath, newVersion) => {
-  fs.writeFileSync(filePath, JSON.stringify({ dbVersion: newVersion }, null, 2), (err) => {
-    if (err) {
-      console.error(`Error actualizando ${filePath}:`, err);
-    } else {
-      console.log(`${filePath} actualizado a la versión ${newVersion}`);
+// Función auxiliar: actualiza un fichero de metadata con la nueva versión y opcionalmente las colecciones
+const updateVersionFile = (filePath, newVersion, newColecciones = null) => {
+  let meta = {};
+  try {
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
+      meta = JSON.parse(data);
     }
-  });
+  } catch (err) {
+    console.error(`Error leyendo ${filePath}:`, err);
+  }
+  meta.dbVersion = newVersion;
+  if (newColecciones !== null) {
+    meta.colecciones = newColecciones;
+  }
+  fs.writeFileSync(filePath, JSON.stringify(meta, null, 2));
+  console.log(`${filePath} actualizado a la versión ${newVersion} con colecciones:`, meta.colecciones);
 };
 
 // La versión global (esperada en el repo) se extrae de dbmeta.json
@@ -125,9 +133,16 @@ const checkAndImportData = () => {
         startServer();
       } else {
         console.log("mongoimport completado:", stdout);
-        // Se actualizan ambos ficheros para que tengan la versión global actual
-        updateVersionFile(sharedMetaFile, CURRENT_DB_VERSION);
-        updateVersionFile(localMetaFile, CURRENT_DB_VERSION);
+        // Se conserva el array actual de colecciones, o se usa [] si no existe
+        let currentCollections = [];
+        try {
+          const metaData = fs.existsSync(sharedMetaFile) ? JSON.parse(fs.readFileSync(sharedMetaFile, 'utf8')) : {};
+          currentCollections = metaData.colecciones || [];
+        } catch (e) {
+          console.error(e);
+        }
+        updateVersionFile(sharedMetaFile, CURRENT_DB_VERSION, currentCollections);
+        updateVersionFile(localMetaFile, CURRENT_DB_VERSION, currentCollections);
         startServer();
       }
     });
@@ -147,16 +162,27 @@ process.on('SIGINT', () => {
   rl.question("¿Desea respaldar los datos con mongoexport? (S/N): ", (answer) => {
     if (answer.trim().toUpperCase() === "S") {
       console.log("Ejecutando mongoexport para respaldar datos...");
-      exec('npm run mongoexport', (err, stdout, stderr) => {
-        if (err) {
-          console.error("Error ejecutando mongoexport:", err);
-        } else {
-          console.log("mongoexport completado:", stdout);
-          // Se actualiza tanto la versión global como la local a CURRENT_DB_VERSION + 1, reflejando el nuevo respaldo.
-          const newVersion = CURRENT_DB_VERSION + 1;
-          updateVersionFile(sharedMetaFile, newVersion);
-          updateVersionFile(localMetaFile, newVersion);
+      
+      // Usar spawn en lugar de exec para mantener la interactividad
+      const child = spawn('node', ['export-db.js'], { 
+        stdio: 'inherit' // Esto conecta stdin/stdout/stderr del hijo al padre
+      });
+
+      child.on('exit', (code) => {
+        console.log(`\nExportación de datos completada con código ${code}`);
+        
+        // Se actualiza tanto la versión global como la local a CURRENT_DB_VERSION + 1
+        const newVersion = CURRENT_DB_VERSION + 1;
+        let currentCollections = [];
+        try {
+          const metaData = fs.existsSync(sharedMetaFile) ? JSON.parse(fs.readFileSync(sharedMetaFile, 'utf8')) : {};
+          currentCollections = metaData.colecciones || [];
+        } catch (e) {
+          console.error(e);
         }
+        updateVersionFile(sharedMetaFile, newVersion, currentCollections);
+        updateVersionFile(localMetaFile, newVersion, currentCollections);
+        
         rl.close();
         process.exit();
       });
