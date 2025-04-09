@@ -16,7 +16,7 @@ const MerchandisingController = {
   async getByType(req, res) {
     try {
       const type = parseInt(req.params.type);
-      const merch = await MerchDAO.getByType(type);
+      const merch = await MerchDAO.getBasicMerchByType(type);
       res.status(200).json(merch);
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener por tipo', error });

@@ -36,12 +36,22 @@ const CarritoPage = () => {
       return;
     }
     if (!user) {
-      // Si no está logueado, redirigir a la página de login
+      // Redirigir a la página de login si el usuario no está logueado
       navigate('/login');
       return;
     }
-    //navigate('/payment'); // Redirigir a la página de pago
-    handlePago(); // Llamar a la función de pago
+  
+    // Crear el resumen del pedido: items del carrito y total (añadiendo, por ejemplo, gastos de envío)
+    const orderSummary = {
+      items: cartItems,
+      total: total + 5  // Puedes ajustar el coste de envío según corresponda
+    };
+  
+    // Guardar el resumen en localStorage
+    localStorage.setItem('orderSummary', JSON.stringify(orderSummary));
+  
+    // Iniciar el proceso de pago (por ejemplo, llamando a Stripe)
+    handlePago();
   };
 
 
