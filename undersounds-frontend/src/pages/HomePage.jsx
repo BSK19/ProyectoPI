@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import artists from '../mockData/artists';
+import axios from 'axios';
 import '../styles/homePage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Grid, Typography, Box, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
@@ -11,6 +11,10 @@ import { fetchAlbums } from '../services/jamendoService.js';
 const HomePage = () => {
     const [news, setNews] = useState([]);
     const [albums, setAlbums] = useState([]);
+    const [artists, setArtists] = useState([]);
+    const navigate = useNavigate();
+    const { setSelectedAlbumId } = useContext(AlbumContext);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const loadNews = async () => {
@@ -34,14 +38,24 @@ const HomePage = () => {
         loadAlbums();
     }, []);
 
+    // Cargar artistas desde el backend
+    useEffect(() => {
+        const loadArtists = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/artists');
+                // Ajusta res.data según el formato que devuelva tu API
+                setArtists(response.data.results || response.data);
+            } catch (error) {
+                console.error('Error fetching artists:', error);
+            }
+        };
+        loadArtists();
+    }, []);
+
     // Destructure first three news items; include fallback empty objects
     const noticia = news[0] || {};
     const noticia2 = news[1] || {};
     const noticia3 = news[2] || {};
-
-    const { setSelectedAlbumId } = useContext(AlbumContext);
-    const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const handleAlbumClick = (album) => {
         setSelectedAlbumId(album.id);
@@ -77,8 +91,9 @@ const HomePage = () => {
         }
     };
 
+    // Se corrige: Usar artists.length para los artistas
     const nextSlideArt = () => {
-        if (startIndexArt + itemsPerPage < albums.length) {
+        if (startIndexArt + itemsPerPage < artists.length) {
             setStartIndexArt(startIndexArt + itemsPerPage);
         }
     };
@@ -244,7 +259,7 @@ const HomePage = () => {
                 </Grid>
             </Grid>
 
-            {/* The rest of your component remains unchanged */}
+            {/* Sección de Álbumes Recomendados */}
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
@@ -305,7 +320,7 @@ const HomePage = () => {
                 </div>
             </Box>
 
-            {/* New Albums Section */}
+            {/* Sección de Nuevos Álbumes */}
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
@@ -366,6 +381,7 @@ const HomePage = () => {
                 </div>
             </Box>
             
+            {/* Sección de Artistas */}
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
@@ -374,7 +390,7 @@ const HomePage = () => {
                             <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.max(0, startIndexArt - 3))}>
                                 {"<"}
                             </button>
-                            <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.min(albums.length - 4, startIndexArt + 3))}>
+                            <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.min(artists.length - 4, startIndexArt + 3))}>
                                 {">"}
                             </button>
                         </div>

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { getFormattedAlbumDuration } from '../utils/formatters';
+import { fetchAlbums } from '../services/jamendoService';
 import '../styles/explorepage.css';
-
-const PROXY_BASE_URL = "http://localhost:5000/api/jamendo";
 
 const ExplorePage = () => {
   // States for data
   const [albums, setAlbums] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [tracks, setTracks] = useState([]);
+  const [artists, setArtists] = useState([]); // You can load artists similarly if needed
+  const [tracks, setTracks] = useState([]);   // and tracks if required
 
   // States for search and filter
   const [searchTerm, setSearchTerm] = useState('all');
@@ -31,88 +29,18 @@ const ExplorePage = () => {
     if (!filter) setFilter('all');
   }, [filter]);
 
-  // Load data using axios
+  // Load albums from the database using fetchAlbums
   useEffect(() => {
-    const loadData = async () => {
+    const loadAlbums = async () => {
       try {
-        // Fetch basic albums and extended info
-        const albumsResponse = await axios.get(`${PROXY_BASE_URL}/albums`, {
-          params: {
-            client_id: "37a3b74b",
-            format: 'json',
-            limit: 20,
-          },
-          withCredentials: false,
-        });
-        const basicAlbums = albumsResponse.data.results;
-        const albumsWithInfo = await Promise.all(
-          basicAlbums.map(async (album) => {
-            try {
-              const musicInfoResponse = await axios.get(`${PROXY_BASE_URL}/albums/musicinfo`, {
-                params: {
-                  client_id: "37a3b74b",
-                  format: 'json',
-                  id: album.id,
-                },
-                withCredentials: false,
-              });
-              const musicInfo = musicInfoResponse.data.results[0] || null;
-              let tagsArray = [];
-              if (musicInfo && musicInfo.musicinfo && musicInfo.musicinfo.tags) {
-                if (typeof musicInfo.musicinfo.tags === 'string') {
-                  tagsArray = musicInfo.musicinfo.tags.split(',').map(tag => tag.trim());
-                } else if (Array.isArray(musicInfo.musicinfo.tags)) {
-                  tagsArray = musicInfo.musicinfo.tags;
-                }
-              }
-              const genre = tagsArray.length > 0 ? tagsArray[0] : 'Unknown';
-              return { ...album, genre, musicinfo: musicInfo };
-            } catch (err) {
-              console.error(`Error fetching musicinfo for album ${album.id}:`, err);
-              return { ...album, genre: 'Unknown', musicinfo: null };
-            }
-          })
-        );
-        setAlbums(albumsWithInfo);
-
-        // Fetch artists
-        const artistsResponse = await axios.get(`${PROXY_BASE_URL}/artists`, {
-          params: {
-            client_id: "37a3b74b",
-            format: 'json',
-            limit: 20,
-          },
-          withCredentials: false,
-        });
-        setArtists(artistsResponse.data.results);
-
-        // Fetch tracks
-        const tracksResponse = await axios.get(`${PROXY_BASE_URL}/tracks`, {
-          params: {
-            client_id: "37a3b74b",
-            format: 'json',
-            limit: 20,
-          },
-          withCredentials: false,
-        });
-        console.log("Tracks fetched:", tracksResponse.data.results);
-        setTracks(tracksResponse.data.results);
+        const fetchedAlbums = await fetchAlbums();
+        // Assuming the returned albums have the proper properties like title, coverImage, etc.
+        setAlbums(fetchedAlbums);
       } catch (error) {
-        console.error("Error fetching data from Jamendo (axios):", error);
+        console.error('Error fetching albums:', error);
       }
-
-      // Example placeholder for additional album loading if needed
-      const loadAlbums = async () => {
-        try {
-          const fetchedAlbums = await fetchAlbums();
-          setAlbums(fetchedAlbums);
-        } catch (error) {
-          console.error('Error fetching albums:', error);
-        }
-      };
-      loadAlbums();
     };
-    loadData();
+    loadAlbums();
   }, []);
 
   // Effective search query (empty string if 'all')

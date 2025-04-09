@@ -94,6 +94,39 @@ const AlbumPage = () => {
     }
   };
 
+  // Nueva función para descargar la canción en diferentes formatos
+  const handleDownload = (track) => {
+    // Solicita al usuario el formato deseado
+    const format = window.prompt("Selecciona el formato para descargar (mp3, wav o flac):", "mp3");
+    if (!format) return;
+    const validFormats = ["mp3", "wav", "flac"];
+    if (!validFormats.includes(format.toLowerCase())) {
+      alert("Formato no válido. Intente con mp3, wav o flac.");
+      return;
+    }
+    // Se asume que track.url es la URL base con extensión .mp3, se reemplaza por el formato seleccionado
+    let downloadUrl = "";
+    if (track.url.endsWith(".mp3")) {
+      downloadUrl = track.url.replace(".mp3", `.${format.toLowerCase()}`);
+    } else {
+      downloadUrl = track.url; // Fallback en caso de formato inesperado
+    }
+    window.open(downloadUrl, "_blank");
+  };
+
+  // Nueva función para comprar la canción
+  const handleBuySong = (track) => {
+    addToCart({
+      id: track.id,
+      name: track.title || track.name,
+      price: 0.99,
+      image: track.coverImage || album.coverImage || album.image || '/assets/images/default-cover.jpg',
+      type: 'song',
+      formats: ['mp3', 'wav', 'flac']
+    });
+    
+  };
+
   return (
     <Box
       sx={{
@@ -183,27 +216,32 @@ const AlbumPage = () => {
             Lista de canciones:
           </Typography>
           
+          {/* Encabezado de la lista de canciones */}
           <div className='lista_espaciada'>
-            <Typography className="ind_cancion" sx={{ m: "0 0 0 4%" }}>
+            <Typography className="ind_cancion" sx={{ width: "5%", m: "0 2% 0 4%" }}>
               #
             </Typography>
-            <Typography className="ind_cancion" sx={{ m: "0 0 0 9%" }}>
+            <Typography className="ind_cancion" sx={{ width: "35%", m: "0 2%" }}>
               Nombre
             </Typography>
-            <Typography className="ind_cancion" sx={{ m: "0 0 0 19%" }}>
+            <Typography className="ind_cancion" sx={{ width: "30%", m: "0 2%" }}>
               Autores
             </Typography>
-            <Typography className="ind_cancion" sx={{ m: "0 0 0 39%" }}>
+            <Typography className="ind_cancion" sx={{ width: "20%", m: "0 2%" }}>
               Reproducciones
             </Typography>
+            <Typography className="ind_cancion" sx={{ width: "10%", m: "0 2%" }}>
+              Comprar
+            </Typography>
           </div>
-          
+
+          {/* Lista de cada track */}
           <Grid container spacing={0}>
             {tracks.map((track, index) => (
               <Grid item xs={12} key={track.id || index}>
                 <Box className="track-item" sx={{ p: 1, borderRadius: '8px', boxShadow: 3, backgroundColor: '#fff' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                    <Typography sx={{ fontSize: "1.1rem", color: "black", m: "0 20px 0 0" }}>
+                    <Typography sx={{ fontSize: "1.1rem", color: "black", m: "0 20px 0 0", width: "5%" }}>
                       {track.position || index + 1}
                     </Typography>
                     <img
@@ -220,17 +258,25 @@ const AlbumPage = () => {
                         transition: "filter 0.3s ease-in-out",
                       }}
                     />
-                    <Box sx={{ ml: 1, mt: 0, width: '200px', height: '40px' }}>
+                    <Box sx={{ ml: 1, mt: 0, width: '200px', height: '40px', flex: "35%" }}>
                       <Typography sx={{ fontSize: "1rem", color: "black", m: 0 }}>
                         {track.title || track.name}
                       </Typography>
                     </Box>
-                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0 }}>
+                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0, flex: "30%" }}>
                       {track.autor || track.artistName}
                     </Typography>
-                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0, ml: "auto" }}>
-                    {track.n_reproducciones}                      
+                    <Typography sx={{ fontSize: "0.8rem", color: "gray", m: 0, ml: "auto", flex: "20%" }}>
+                      {track.n_reproducciones}
                     </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleBuySong(track)}
+                      sx={{ ml: 2, flex: "10%" }}
+                    >
+                      Comprar 0.99
+                    </Button>
                   </Box>
                 </Box>
               </Grid>

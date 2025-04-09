@@ -23,11 +23,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
-import albums from '../../mockData/albums';
 import artists from '../../mockData/artists';
 import tracks from '../../mockData/tracks';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
+import { fetchAlbums } from '../../services/jamendoService';
 
 const Header = () => {
   const [query, setQuery] = useState('');
@@ -43,8 +43,26 @@ const Header = () => {
   // Se usa la propiedad correcta "cartItems" del CartContext
   const { cartItems } = useContext(CartContext);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     let filteredResults = [];
+
+    // Cargar álbumes desde el servidor siempre que el filtro sea 'all' o 'albums'
+    if (filter === 'all' || filter === 'albums') {
+      try {
+        const serverAlbums = await fetchAlbums();
+        const albumMatches = serverAlbums.filter(album =>
+          album.title.toLowerCase().includes(query.toLowerCase())
+        );
+        filteredResults = [
+          ...filteredResults,
+          ...albumMatches.map(item => ({ type: 'album', data: item }))
+        ];
+      } catch (error) {
+        console.error("Error fetching albums from server:", error);
+      }
+    }
+
+    // Continuar usando datos locales para artistas y pistas, si corresponde
     if (filter === 'all' || filter === 'artists') {
       const artistMatches = artists.filter(artist =>
         artist.name.toLowerCase().includes(query.toLowerCase())
@@ -54,15 +72,7 @@ const Header = () => {
         ...artistMatches.map(item => ({ type: 'artist', data: item }))
       ];
     }
-    if (filter === 'all' || filter === 'albums') {
-      const albumMatches = albums.filter(album =>
-        album.title.toLowerCase().includes(query.toLowerCase())
-      );
-      filteredResults = [
-        ...filteredResults,
-        ...albumMatches.map(item => ({ type: 'album', data: item }))
-      ];
-    }
+
     if (filter === 'all' || filter === 'tracks') {
       const trackMatches = tracks.filter(track =>
         track.title.toLowerCase().includes(query.toLowerCase())
@@ -72,6 +82,7 @@ const Header = () => {
         ...trackMatches.map(item => ({ type: 'track', data: item }))
       ];
     }
+
     setResults(filteredResults);
   };
 
@@ -79,8 +90,11 @@ const Header = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.trim()) {
-        handleSearch();
-        setShowDropdown(true);
+        // Llama a la función asíncrona dentro de una IIFE
+        (async () => {
+          await handleSearch();
+          setShowDropdown(true);
+        })();
       } else {
         setResults([]);
         setShowDropdown(false);
@@ -316,20 +330,15 @@ const Header = () => {
           ) : (
             <>
               <Button color="inherit" onClick={handleOpenSignUp}>
-                Registrate
+                Registrarse
               </Button>
-              <Button color="inherit" component={Link} to="/login">
-                Inicia Sesión
-              </Button>
+              <SignUpDialog open={openSignUp} onClose={handleCloseSignUp} />
             </>
           )}
         </Box>
       </Toolbar>
-      <SignUpDialog open={openSignUp} handleClose={handleCloseSignUp} />
     </AppBar>
   );
 };
-
-
 
 export default Header;
