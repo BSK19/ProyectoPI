@@ -1,6 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
-import { Box, Button, Card, CardContent, CardMedia, Grid, Typography, Avatar } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Rating,
+} from '@mui/material';
 import { Star } from '@mui/icons-material';
 import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
@@ -9,9 +24,8 @@ import { AuthContext } from '../context/AuthContext';
 import tracksData from '../mockData/tracks';
 import defaultImage from '../assets/images/botonPlay.jpg';
 import { fetchAlbumById, fetchTracklist } from '../services/jamendoService';
-import { formatTrackDuration } from '../utils/formatters';
 
-const ProfileImage = ''; 
+const ProfileImage = 'https://via.placeholder.com/40';
 
 const AlbumPage = () => {
   const { id } = useParams();
@@ -20,12 +34,17 @@ const AlbumPage = () => {
   const { playTrack } = useContext(PlayerContext);
   const { addToCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-  
+
   const [album, setAlbum] = useState(location.state?.album || null);
   const [albumTracks, setAlbumTracks] = useState([]);
   const [activeTrackId, setActiveTrackId] = useState(null);
   const [feedback, setFeedback] = useState(false);
-  
+
+  // Estados para el diálogo de valoración
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newRating, setNewRating] = useState(0);
+  const [newComment, setNewComment] = useState("");
+
   useEffect(() => {
     if (!album) {
       const loadAlbum = async () => {
@@ -39,12 +58,11 @@ const AlbumPage = () => {
       loadAlbum();
     }
   }, [album, id]);
-  
+
   useEffect(() => {
     if (album && album.id) {
       const loadTracks = async () => {
         try {
-          // Se usa la propiedad "url" tal cual viene de la API
           const fetchedTracks = await fetchTracklist(album.id);
           setAlbumTracks(fetchedTracks);
         } catch (error) {
@@ -54,14 +72,14 @@ const AlbumPage = () => {
       loadTracks();
     }
   }, [album]);
-  
+
   if (!album) {
     return <Typography variant="h5">Cargando álbum...</Typography>;
   }
-  
+
   const tracks = albumTracks;
   const ratings = album.ratings || [];
-    
+
   const handleAddToCart = () => {
     addToCart({
       id: album.id,
@@ -80,13 +98,15 @@ const AlbumPage = () => {
       navigate("/login");
       return;
     }
-    const trackDetail = tracks.find((t) => t.id === track.id) || tracksData.find((t) => t.id === track.id);
+    const trackDetail =
+      tracks.find((t) => t.id === track.id) || tracksData.find((t) => t.id === track.id);
     if (trackDetail) {
       playTrack({
         ...trackDetail,
         title: trackDetail.title || trackDetail.name,
-        coverImage: trackDetail.coverImage || album.coverImage || album.image || '/assets/images/default-cover.jpg',
-        tracklist: tracks
+        coverImage:
+          trackDetail.coverImage || album.coverImage || album.image || '/assets/images/default-cover.jpg',
+        tracklist: tracks,
       });
       setActiveTrackId(track.id);
     } else {
@@ -94,9 +114,8 @@ const AlbumPage = () => {
     }
   };
 
-  // Nueva función para descargar la canción en diferentes formatos
+  // Función para descargar la canción en diferentes formatos
   const handleDownload = (track) => {
-    // Solicita al usuario el formato deseado
     const format = window.prompt("Selecciona el formato para descargar (mp3, wav o flac):", "mp3");
     if (!format) return;
     const validFormats = ["mp3", "wav", "flac"];
@@ -104,17 +123,16 @@ const AlbumPage = () => {
       alert("Formato no válido. Intente con mp3, wav o flac.");
       return;
     }
-    // Se asume que track.url es la URL base con extensión .mp3, se reemplaza por el formato seleccionado
     let downloadUrl = "";
     if (track.url.endsWith(".mp3")) {
       downloadUrl = track.url.replace(".mp3", `.${format.toLowerCase()}`);
     } else {
-      downloadUrl = track.url; // Fallback en caso de formato inesperado
+      downloadUrl = track.url;
     }
     window.open(downloadUrl, "_blank");
   };
 
-  // Nueva función para comprar la canción
+  // Función para comprar la canción
   const handleBuySong = (track) => {
     addToCart({
       id: track.id,
@@ -122,9 +140,39 @@ const AlbumPage = () => {
       price: 0.99,
       image: track.coverImage || album.coverImage || album.image || '/assets/images/default-cover.jpg',
       type: 'song',
-      formats: ['mp3', 'wav', 'flac']
+      formats: ['mp3', 'wav', 'flac'],
     });
-    
+  };
+
+  // Función para enviar la nueva valoración y actualizar el estado del álbum
+  const handleSubmitRating = () => {
+    if (!user) {
+      alert("Debes iniciar sesión para añadir una valoración.");
+      return;
+    }
+    // Crear el nuevo objeto de valoración incluyendo la foto de perfil del usuario
+    const newRatingObj = {
+      rating: newRating,
+      comment: newComment,
+      profileImage: user.profileImage // Aquí se usa la foto de perfil del usuario
+    };
+  
+    // Actualizar la lista de valoraciones
+    const updatedRatings = [...ratings, newRatingObj];
+    setAlbum({ ...album, ratings: updatedRatings });
+    setNewRating(0);
+    setNewComment("");
+    setDialogOpen(false);
+  };
+
+  // Verificación para que solo se pueda abrir el diálogo si hay usuario logeado
+  const handleOpenRatingDialog = () => {
+    if (!user) {
+      alert("Debes iniciar sesión para añadir una valoración.");
+      navigate("/login");
+      return;
+    }
+    setDialogOpen(true);
   };
 
   return (
@@ -192,9 +240,7 @@ const AlbumPage = () => {
             </Grid>
             <Grid container spacing={1} sx={{ mt: 2 }}>
               <Grid item xs={12}>
-                <h4 className="precio">
-                  ${album.price}
-                </h4>
+                <h4 className="precio">${album.price}</h4>
               </Grid>
             </Grid>
             <Box sx={{ my: 2, display: 'flex', justifyContent: 'space-between' }}>
@@ -209,15 +255,13 @@ const AlbumPage = () => {
             </Box>
           </CardContent>
         </Card>
-        
+
         {/* Lista de canciones */}
         <Box sx={{ mt: 4 }}>
           <Typography variant="h5" gutterBottom>
             Lista de canciones:
           </Typography>
-          
-          {/* Encabezado de la lista de canciones */}
-          <div className='lista_espaciada'>
+          <div className="lista_espaciada">
             <Typography className="ind_cancion" sx={{ width: "5%", m: "0 2% 0 4%" }}>
               #
             </Typography>
@@ -234,8 +278,6 @@ const AlbumPage = () => {
               Comprar
             </Typography>
           </div>
-
-          {/* Lista de cada track */}
           <Grid container spacing={0}>
             {tracks.map((track, index) => (
               <Grid item xs={12} key={track.id || index}>
@@ -283,16 +325,33 @@ const AlbumPage = () => {
             ))}
           </Grid>
         </Box>
-        
+
         {/* Valoraciones */}
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 4, position: 'relative' }}>
           <Typography variant="h5" gutterBottom>
             Valoraciones:
           </Typography>
+          <Button 
+            variant="contained" 
+            size="small" 
+            onClick={handleOpenRatingDialog}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              mt: '4px'
+            }}
+          >
+            Añadir valoración
+          </Button>
           <Box component="ul" sx={{ pl: 2 }}>
             {ratings.map((rating, index) => (
               <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                <Avatar src={ProfileImage} alt="Perfil Usuario" sx={{ width: 40, height: 40, mr: 2 }} />
+                <Avatar
+                  src={rating.profileImage ? rating.profileImage : ProfileImage}
+                  alt="Perfil Usuario"
+                  sx={{ width: 40, height: 40, mr: 2 }}
+                />
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     {rating.comment}
@@ -314,6 +373,40 @@ const AlbumPage = () => {
           </Box>
         </Box>
       </Box>
+  
+      {/* Diálogo para añadir valoración */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Añadir valoración</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Typography sx={{ mr: 2 }}>Puntuación:</Typography>
+            <Rating 
+              name="new-rating" 
+              value={newRating} 
+              onChange={(_, newValue) => setNewRating(newValue)}
+              precision={1}
+            />
+          </Box>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Comentario"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setDialogOpen(false); setNewRating(0); setNewComment(""); }}>
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmitRating}>
+            Enviar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
