@@ -275,7 +275,6 @@ const DiscoverPage = () => {
                                         sx={{ fontWeight: "bold", color: "#333" }}
                                     >
                                         {merch.name}
-                                        {merch._id}
                                     </Typography>
                                     <Typography 
                                         variant="h6" 
