@@ -12,7 +12,6 @@ import { fetchAlbumById, fetchTracklist } from '../services/jamendoService';
 import { formatTrackDuration } from '../utils/formatters';
 
 const ProfileImage = ''; 
-const PRICE_PER_TRACK = 0.99;
 
 const AlbumPage = () => {
   const { id } = useParams();
@@ -62,14 +61,12 @@ const AlbumPage = () => {
   
   const tracks = albumTracks;
   const ratings = album.ratings || [];
-  
-  const calculatedPrice = (tracks.length * PRICE_PER_TRACK).toFixed(2);
-  
+    
   const handleAddToCart = () => {
     addToCart({
       id: album.id,
       name: album.title || album.name,
-      price: parseFloat(calculatedPrice),
+      price: album.price || 0,
       image: album.coverImage || album.image || '/assets/images/default-cover.jpg',
       type: 'album',
     });
@@ -163,7 +160,7 @@ const AlbumPage = () => {
             <Grid container spacing={1} sx={{ mt: 2 }}>
               <Grid item xs={12}>
                 <h4 className="precio">
-                  ${calculatedPrice}
+                  ${album.price}
                 </h4>
               </Grid>
             </Grid>
