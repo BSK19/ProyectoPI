@@ -17,7 +17,7 @@ const DiscoverPage = () => {
 
     const [albums, setAlbums] = useState([]);
     const [artists, setArtists] = useState([]);
-    const [tshirts, setTshirts] = useState([]); // Para almacenar las camisetas
+    const [merch, setMerch] = useState([]); // Para almacenar las camisetas
 
     const genreCarouselRef = useRef(null);
 
@@ -43,21 +43,16 @@ const DiscoverPage = () => {
 
     // Cargar las camisetas cuando se seleccione el filtro "tshirts"
     useEffect(() => {
-        const loadTshirts = async () => {
+        const loadMerch = async () => {
             try {
-                const tshirtsData = await merchService.getAllMerch();
-                setTshirts(tshirtsData);
+                const merchData = await merchService.getAllMerch();
+                setMerch(merchData);
             } catch (error) {
-                console.error("Error fetching tshirts:", error);
+                console.error("Error fetching merch:", error);
             }
         };
-
-        if (selectedFilter === "tshirts") {
-            loadTshirts();
-        } else {
-            setTshirts([]); // Limpiar las camisetas si no se selecciona el filtro de camisetas
-        }
-    }, [selectedFilter]);
+            loadMerch();
+    }, []);
 
     useEffect(() => {
         const filterParam = query.get("filter") || "all";
@@ -84,21 +79,21 @@ const DiscoverPage = () => {
     
     let filteredAlbums = [];
     let filteredArtists = [];
-    let filteredTshirts = [];
+    let filteredMerch = [];
 
     if (selectedFilter === "all") {
         filteredAlbums = albums;
         filteredArtists = artists;
-        filteredTshirts = [];
+        filteredMerch = merch;
     } else if (specialFilters.includes(selectedFilter)) {
         if (selectedFilter === "vinyl") {
-            filteredAlbums = albums.filter((album) => album.vinyl === true);
+            filteredMerch = merch.filter((merch)=>merch.type==0);
         } else if (selectedFilter === "cds") {
-            filteredAlbums = albums.filter((album) => album.cd === true);
+            filteredMerch = merch.filter((merch)=>merch.type==1);
         } else if (selectedFilter === "cassettes") {
-            filteredAlbums = albums.filter((album) => album.cassettes === true);
+            filteredMerch = merch.filter((merch)=>merch.type==2);
         } else if (selectedFilter === "tshirts") {
-            filteredTshirts = tshirts;
+            filteredMerch = merch.filter((merch)=>merch.type==3);
         }
     } else {
         filteredAlbums = albums.filter(
@@ -247,8 +242,8 @@ const DiscoverPage = () => {
                     </Grid>
                 ))}
 
-                {filteredTshirts.map((tshirt) => (
-                    <Grid item xs={12} sm={6} md={4} key={tshirt.id}>
+                {filteredMerch.map((merch) => (
+                    <Grid item xs={12} sm={6} md={4} key={merch.id}>
                         <Card
                             sx={{
                                 borderRadius: "12px",
@@ -262,11 +257,11 @@ const DiscoverPage = () => {
                                 }
                             }}
                         >
-                            <CardActionArea onClick={() => handleTshirtClick(tshirt.id)}>
+                            <CardActionArea onClick={() => handleTshirtClick(merch.id)}>
                                 <CardMedia
                                     component="img"
-                                    alt={`${tshirt.name} shirt`}
-                                    image={tshirt.tshirtImage}
+                                    alt={`${merch.name} shirt`}
+                                    image={merch.image}
                                     sx={{
                                         aspectRatio: "1 / 1", 
                                         padding: "20px", 
@@ -279,13 +274,13 @@ const DiscoverPage = () => {
                                         variant="h6" 
                                         sx={{ fontWeight: "bold", color: "#333" }}
                                     >
-                                        {tshirt.name}
+                                        {merch.name}
                                     </Typography>
                                     <Typography 
                                         variant="h6" 
                                         sx={{ color: "#1976d2", fontWeight: "bold", marginTop: "8px" }}
                                     >
-                                        ${tshirt.price.toFixed(2)}
+                                        ${merch.price.toFixed(2)}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>

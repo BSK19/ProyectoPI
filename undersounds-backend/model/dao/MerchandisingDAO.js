@@ -12,6 +12,7 @@ const MerchDAO = {
             .select('name image price') // Solo estos campos
             .exec();
     },
+    
 
     // Recuperar merchandising básico de un artista, filtrado por tipo (camisetas, vinilos, etc.)
     getBasicMerchByArtistAndType: async (artistId, type) => {

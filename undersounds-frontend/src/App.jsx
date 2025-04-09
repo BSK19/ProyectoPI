@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import AlbumPage from './pages/AlbumPage';
 import News from './pages/News';
+import PaymentSuccess from './pages/PaymentSuccess';
 import ScrollToTop from './components/Common/ScrollToTop';
 import ArtistProfile from './pages/ArtistProfile';
 import ArtistDashboard from './pages/ArtistDashboard';
@@ -61,6 +62,7 @@ const AppContent = () => {
                 <Route path="/tshirt/:id" element={<TshirtPage />} />
                 <Route path="/cart" element={<CarritoPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/paymentSuccess" element={<PaymentSuccess />} />
                 <Route path="/concert/:artistId/:concertId" element={<ConcertPage />} />
             </Routes>
             <Footer />
