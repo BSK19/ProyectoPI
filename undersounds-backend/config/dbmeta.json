@@ -1,6 +1,6 @@
 {
-  "dbVersion": 9,
+  "dbVersion": 10,
   "colecciones": [
-    "tshirts"
+    "artists"
   ]
 }

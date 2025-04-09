@@ -34,6 +34,13 @@ const AudioPlayer = () => {
     }
   }, [currentTrack]);
 
+  // Restaurar la visibilidad del reproductor cuando se cambie la pista
+  useEffect(() => {
+    if (currentTrack) {
+      setIsVisible(true);
+    }
+  }, [currentTrack]);
+
   // Actualizar el volumen sin reiniciar la reproducción
   useEffect(() => {
     audioRef.current.volume = volume;
@@ -69,7 +76,7 @@ const AudioPlayer = () => {
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
+};
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -89,7 +96,7 @@ const AudioPlayer = () => {
       const nextTrack = trackList[currentIndex + 1];
       playTrack({
         ...nextTrack,
-        title: nextTrack.title || nextTrack.name, // Agregado aquí
+        title: nextTrack.title || nextTrack.name,
         coverImage: nextTrack.coverImage || currentTrack.coverImage || '/assets/images/default-cover.jpg',
         tracklist: trackList
       });
@@ -106,7 +113,7 @@ const AudioPlayer = () => {
       const prevTrack = trackList[currentIndex - 1];
       playTrack({
         ...prevTrack,
-        title: prevTrack.title || prevTrack.name, // Agregado aquí
+        title: prevTrack.title || prevTrack.name,
         coverImage: prevTrack.coverImage || currentTrack.coverImage || '/assets/images/default-cover.jpg',
         tracklist: trackList
       });

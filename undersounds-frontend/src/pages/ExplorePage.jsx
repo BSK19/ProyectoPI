@@ -100,12 +100,26 @@ const ExplorePage = () => {
       } catch (error) {
         console.error("Error fetching data from Jamendo (axios):", error);
       }
+
+      // Example placeholder for additional album loading if needed
+      const loadAlbums = async () => {
+        try {
+          const fetchedAlbums = await fetchAlbums();
+          setAlbums(fetchedAlbums);
+        } catch (error) {
+          console.error('Error fetching albums:', error);
+        }
+      };
+      loadAlbums();
     };
     loadData();
   }, []);
 
   // Effective search query (empty string if 'all')
-  const effectiveSearchQuery = searchTerm.toLowerCase() === 'all' ? '' : searchTerm.toLowerCase();
+  const effectiveSearchQuery =
+    searchTerm.toLowerCase() === 'all'
+      ? ''
+      : searchTerm.toLowerCase();
 
   const getFilteredAlbums = () =>
     albums.filter(album => {
@@ -118,42 +132,73 @@ const ExplorePage = () => {
       const trackName = (track.track_name || track.name || '').toLowerCase();
       const trackArtist = (track.artist_name || track.artist || '').toLowerCase();
       const trackAlbum = (track.album_name || track.album || '').toLowerCase();
-      return trackName.includes(effectiveSearchQuery) ||
-             trackArtist.includes(effectiveSearchQuery) ||
-             trackAlbum.includes(effectiveSearchQuery);
+      return (
+        trackName.includes(effectiveSearchQuery) ||
+        trackArtist.includes(effectiveSearchQuery) ||
+        trackAlbum.includes(effectiveSearchQuery)
+      );
     });
 
   const getFilteredArtists = () =>
-    artists.filter(artist => artist.name.toLowerCase().includes(effectiveSearchQuery));
+    artists.filter(artist =>
+      artist.name.toLowerCase().includes(effectiveSearchQuery)
+    );
 
   // Render an album with its details and track list (if available)
   const renderAlbumItem = (album) => (
     <Grid item key={album.id} className="item-container">
-      <Grid container spacing={2} alignItems="center" className="album-item" wrap="nowrap" style={{ gap: '10px' }}>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        className="album-item"
+        wrap="nowrap"
+        style={{ gap: '10px' }}
+      >
         <Grid item xs="auto" sm="auto">
           <div className="album-image-container">
             <img
-              src={album.coverImage || album.image || '/assets/images/default-cover.jpg'}
+              src={
+                album.coverImage ||
+                album.image ||
+                '/assets/images/default-cover.jpg'
+              }
               alt={album.name || album.title}
               className="album-image"
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+              }}
             />
           </div>
         </Grid>
         <Grid item xs={6} sm={8}>
           <div className="album-details">
-            <Typography variant="caption" display="block" className="item-type">
+            <Typography
+              variant="caption"
+              display="block"
+              className="item-type"
+            >
               Album
             </Typography>
-            <Typography variant="h6" className="album-title">
-              <Link to={`/album/${album.id}`}>{album.name || album.title}</Link>
+            <Typography
+              variant="h6"
+              className="album-title"
+            >
+              <Link to={`/album/${album.id}`}>
+                {album.name || album.title}
+              </Link>
             </Typography>
             <Typography variant="body1" className="album-artist">
               {album.artist || album.artist_name}
             </Typography>
             <br />
             <Typography variant="body2" className="album-details">
-              {album.musicinfo && album.musicinfo.tracks ? album.musicinfo.tracks.length : 0} tracks, {getFormattedAlbumDuration(album)}
+              {album.musicinfo && album.musicinfo.tracks
+                ? album.musicinfo.tracks.length
+                : 0}{' '}
+              tracks, {getFormattedAlbumDuration(album)}
             </Typography>
             <Typography variant="body2" className="album-details">
               Publicado en {album.releaseYear || album.releasedate}
@@ -162,15 +207,22 @@ const ExplorePage = () => {
               Genre: {album.genre}
             </Typography>
             {/* Render track list if available in extended info */}
-            {album.musicinfo && album.musicinfo.tracks && album.musicinfo.tracks.length > 0 && (
-              <Box className="track-list" sx={{ mt: 1, ml: 2 }}>
-                {album.musicinfo.tracks.map((track, index) => (
-                  <Typography key={track.id || index} variant="body2" sx={{ color: '#555' }}>
-                    {index + 1}. {track.title || track.name} - {track.duration}
-                  </Typography>
-                ))}
-              </Box>
-            )}
+            {album.musicinfo &&
+              album.musicinfo.tracks &&
+              album.musicinfo.tracks.length > 0 && (
+                <Box className="track-list" sx={{ mt: 1, ml: 2 }}>
+                  {album.musicinfo.tracks.map((track, index) => (
+                    <Typography
+                      key={track.id || index}
+                      variant="body2"
+                      sx={{ color: '#555' }}
+                    >
+                      {index + 1}. {track.title || track.name} -{' '}
+                      {track.duration}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
           </div>
         </Grid>
       </Grid>
@@ -180,30 +232,54 @@ const ExplorePage = () => {
   // Render a track
   const renderTrackItem = (track) => (
     <Grid item key={track.id} className="item-container">
-      <Grid container spacing={2} alignItems="center" className="track-item" wrap="nowrap" style={{ gap: '10px' }}>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        className="track-item"
+        wrap="nowrap"
+        style={{ gap: '10px' }}
+      >
         <Grid item xs="auto" sm="auto">
           <div className="track-image-container">
             <img
-              src={track.coverImage || track.artwork || '/assets/images/default-cover.jpg'}
+              src={
+                track.coverImage ||
+                track.artwork ||
+                '/assets/images/default-cover.jpg'
+              }
               alt={track.track_name || track.name}
               className="track-image"
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+              }}
             />
           </div>
         </Grid>
         <Grid item xs={6} sm={8}>
           <div className="track-details">
-            <Typography variant="caption" display="block" className="item-type">
+            <Typography
+              variant="caption"
+              display="block"
+              className="item-type"
+            >
               Canción
             </Typography>
             <Typography variant="h6" className="track-title">
-              <Link to={`/album/${track.albumId || track.album_id}`}>{track.track_name || track.name}</Link>
+              <Link to={`/album/${track.albumId || track.album_id}`}>
+                {track.track_name || track.name}
+              </Link>
             </Typography>
             <Typography variant="body1" className="track-artist">
               {track.artist_name || track.artist}
             </Typography>
             <Typography variant="body2" className="track-album">
-              Álbum: <Link to={`/album/${track.albumId || track.album_id}`}>{track.album_name || track.album}</Link>
+              Álbum:{' '}
+              <Link to={`/album/${track.albumId || track.album_id}`}>
+                {track.album_name || track.album}
+              </Link>
             </Typography>
             <Typography variant="body2" className="track-info">
               Duración: {track.duration}
@@ -214,20 +290,29 @@ const ExplorePage = () => {
     </Grid>
   );
 
-  // Render an artist section: for each matching artist, show its name, then the albums and tracks belonging to it
+  // Render an artist section: for each matching artist, show its name,
+  // then the albums and tracks belonging to it
   const renderArtistSection = (artist) => {
-    const artistAlbums = albums.filter(album =>
-      ((album.artist || album.artist_name) || '').toLowerCase() === artist.name.toLowerCase()
+    const artistAlbums = albums.filter(
+      (album) =>
+        ((album.artist || album.artist_name) || '')
+          .toLowerCase() === artist.name.toLowerCase()
     );
-    const artistTracks = tracks.filter(track =>
-      ((track.artist || track.artist_name) || '').toLowerCase() === artist.name.toLowerCase()
+    const artistTracks = tracks.filter(
+      (track) =>
+        ((track.artist || track.artist_name) || '')
+          .toLowerCase() === artist.name.toLowerCase()
     );
     return (
       <div key={artist.id} className="artist-section" style={{ marginBottom: '2rem' }}>
-        <Typography variant="h5" sx={{ marginBottom: '1rem' }}>{artist.name}</Typography>
+        <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
+          {artist.name}
+        </Typography>
         {artistAlbums.length > 0 && (
           <div>
-            <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>Álbumes:</Typography>
+            <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>
+              Álbumes:
+            </Typography>
             <Grid container direction="column" spacing={2}>
               {artistAlbums.map(renderAlbumItem)}
             </Grid>
@@ -235,7 +320,9 @@ const ExplorePage = () => {
         )}
         {artistTracks.length > 0 && (
           <div>
-            <Typography variant="subtitle1" sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}>Canciones:</Typography>
+            <Typography variant="subtitle1" sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}>
+              Canciones:
+            </Typography>
             <Grid container direction="column" spacing={2}>
               {artistTracks.map(renderTrackItem)}
             </Grid>

@@ -9,7 +9,6 @@ import { AuthContext } from '../context/AuthContext';
 import { fetchAlbums } from '../services/jamendoService.js';
 
 const HomePage = () => {
-    // Replace usage of mockData with API news
     const [news, setNews] = useState([]);
     const [albums, setAlbums] = useState([]);
 
@@ -249,7 +248,7 @@ const HomePage = () => {
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                        <h2>Recommended Selection</h2>
+                        <h2> Álbumes Recomendados</h2>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button className="boton-carrusel" onClick={() => setStartIndex(Math.max(0, startIndex - 3))}>
                                 {"<"}
@@ -285,10 +284,10 @@ const HomePage = () => {
                                                     {album.title}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    by {album.artist}
+                                                    por {album.artist}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    Genre: {album.genre}
+                                                    Género: {album.genre}
                                                 </Typography>
                                             </CardContent>
                                         </CardActionArea>
@@ -310,7 +309,7 @@ const HomePage = () => {
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                        <h2>New Albums</h2>
+                        <h2>Nuevos Álbumes</h2>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button className="boton-carrusel" onClick={() => setStartIndexNew(Math.max(0, startIndexNew - 3))}>
                                 {"<"}
@@ -346,10 +345,10 @@ const HomePage = () => {
                                                     {album.title}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    by {album.artist}
+                                                    por {album.artist}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    Genre: {album.genre}
+                                                    Género: {album.genre}
                                                 </Typography>
                                             </CardContent>
                                         </CardActionArea>
@@ -370,7 +369,7 @@ const HomePage = () => {
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                        <h2>Discover Our Best Artists</h2>
+                        <h2>Descubre a nuestros artistas</h2>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.max(0, startIndexArt - 3))}>
                                 {"<"}
