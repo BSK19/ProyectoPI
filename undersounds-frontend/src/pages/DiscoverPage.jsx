@@ -64,8 +64,8 @@ const DiscoverPage = () => {
         navigate(`/album/${album.id}`, { state: { album } });
     };
     
-    const handleTshirtClick = (tshirtId) => {
-        navigate(`/tshirt/${tshirtId}`);
+    const handleTshirtClick = (tshirt_Id) => {
+        navigate(`/tshirt/${tshirt_Id}`);
     };
 
     // Change filter when a genre button is clicked
@@ -257,7 +257,7 @@ const DiscoverPage = () => {
                                 }
                             }}
                         >
-                            <CardActionArea onClick={() => handleTshirtClick(merch.id)}>
+                            <CardActionArea onClick={() => handleTshirtClick(merch._id)}>
                                 <CardMedia
                                     component="img"
                                     alt={`${merch.name} shirt`}
@@ -275,6 +275,7 @@ const DiscoverPage = () => {
                                         sx={{ fontWeight: "bold", color: "#333" }}
                                     >
                                         {merch.name}
+                                        {merch._id}
                                     </Typography>
                                     <Typography 
                                         variant="h6" 

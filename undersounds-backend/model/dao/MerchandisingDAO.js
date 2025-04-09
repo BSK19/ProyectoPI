@@ -1,5 +1,7 @@
 const Merch = require('../models/Merchandising');
 
+
+
 const MerchDAO = {
     // Recuperar todo el merchandising asociado a un artista
     getByArtistId: async (artistId) => {
@@ -24,6 +26,12 @@ const MerchDAO = {
     // Recuperar todo el merchandising (sin filtros específicos)
     getAllMerch: async () => {
         return await Merch.find().exec();
+    },
+
+    getById: async (id) => {
+        return await Merch.findById(id)
+            .select()
+            .exec();
     }
 };
 

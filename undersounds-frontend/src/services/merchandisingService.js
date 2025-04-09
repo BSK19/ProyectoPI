@@ -28,9 +28,15 @@ export const createMerch = async (merchData) => {
   return response.data;
 };
 
+export const getMerchById = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`);
+  return response.data;
+};
+
 export const merchService = {
   getAllMerch,
   getMerchByType,
   getMerchByArtist,
-  createMerch
+  createMerch,
+  getMerchById
 };
