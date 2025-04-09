@@ -1,6 +1,7 @@
 {
-  "dbVersion": 10,
+  "dbVersion": 11,
   "colecciones": [
-    "artists"
+    "artists",
+    "albums"
   ]
 }
