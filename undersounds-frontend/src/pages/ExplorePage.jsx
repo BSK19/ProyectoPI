@@ -9,7 +9,7 @@ const ExplorePage = () => {
   // States for data
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]); // You can load artists similarly if needed
-  const [tracks, setTracks] = useState([]);   // and tracks if required
+  const [tracks, setTracks] = useState([]);   // Tracks will be extracted from albums
 
   // States for search and filter
   const [searchTerm, setSearchTerm] = useState('all');
@@ -34,7 +34,6 @@ const ExplorePage = () => {
     const loadAlbums = async () => {
       try {
         const fetchedAlbums = await fetchAlbums();
-        // Assuming the returned albums have the proper properties like title, coverImage, etc.
         setAlbums(fetchedAlbums);
       } catch (error) {
         console.error('Error fetching albums:', error);
@@ -42,6 +41,21 @@ const ExplorePage = () => {
     };
     loadAlbums();
   }, []);
+
+  // Extract tracks from the loaded albums and attach album info to each track
+  useEffect(() => {
+    if (albums.length > 0) {
+      const allTracks = albums.flatMap(album =>
+        (album.tracks || []).map(track => ({
+          ...track,
+          album_id: album.id,
+          album_name: album.name || album.title,
+          album_cover: album.coverImage || album.image || '/assets/images/default-cover.jpg',
+        }))
+      );
+      setTracks(allTracks);
+    }
+  }, [albums]);
 
   // Effective search query (empty string if 'all')
   const effectiveSearchQuery =
@@ -110,10 +124,7 @@ const ExplorePage = () => {
             >
               Album
             </Typography>
-            <Typography
-              variant="h6"
-              className="album-title"
-            >
+            <Typography variant="h6" className="album-title">
               <Link to={`/album/${album.id}`}>
                 {album.name || album.title}
               </Link>
@@ -123,10 +134,7 @@ const ExplorePage = () => {
             </Typography>
             <br />
             <Typography variant="body2" className="album-details">
-              {album.musicinfo && album.musicinfo.tracks
-                ? album.musicinfo.tracks.length
-                : 0}{' '}
-              tracks, {getFormattedAlbumDuration(album)}
+              {album.tracks ? album.tracks.length : 0} tracks, {getFormattedAlbumDuration(album)}
             </Typography>
             <Typography variant="body2" className="album-details">
               Publicado en {album.releaseYear || album.releasedate}
@@ -134,92 +142,69 @@ const ExplorePage = () => {
             <Typography variant="body2" className="album-details">
               Genre: {album.genre}
             </Typography>
-            {/* Render track list if available in extended info */}
-            {album.musicinfo &&
-              album.musicinfo.tracks &&
-              album.musicinfo.tracks.length > 0 && (
-                <Box className="track-list" sx={{ mt: 1, ml: 2 }}>
-                  {album.musicinfo.tracks.map((track, index) => (
-                    <Typography
-                      key={track.id || index}
-                      variant="body2"
-                      sx={{ color: '#555' }}
-                    >
-                      {index + 1}. {track.title || track.name} -{' '}
-                      {track.duration}
-                    </Typography>
-                  ))}
-                </Box>
-              )}
+
           </div>
         </Grid>
       </Grid>
     </Grid>
   );
 
-  // Render a track
+  // Render a track item con la información del álbum incluida
   const renderTrackItem = (track) => (
     <Grid item key={track.id} className="item-container">
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        className="track-item"
-        wrap="nowrap"
-        style={{ gap: '10px' }}
-      >
-        <Grid item xs="auto" sm="auto">
-          <div className="track-image-container">
-            <img
-              src={
-                track.coverImage ||
-                track.artwork ||
-                '/assets/images/default-cover.jpg'
-              }
-              alt={track.track_name || track.name}
-              className="track-image"
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-              }}
-            />
-          </div>
+        <Grid
+            container
+            spacing={2}
+            alignItems="flex-start" // Se cambia de "center" a "flex-start"
+            className="track-item"
+            wrap="nowrap"
+            style={{ gap: '10px' }}
+        >
+            <Grid item xs="auto" sm="auto">
+                <div className="track-image-container">
+                    <img
+                        src={track.album_cover || track.artwork || '/assets/images/default-cover.jpg'}
+                        alt={track.track_name || track.name}
+                        className="track-image"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            borderRadius: '8px',
+                        }}
+                    />
+                </div>
+            </Grid>
+            <Grid item xs={6} sm={8}>
+                <div className="track-details" style={{ textAlign: 'left' }}>
+                    <Typography
+                        variant="caption"
+                        display="block"
+                        className="item-type"
+                    >
+                        Canción
+                    </Typography>
+                    <Typography variant="h6" className="track-title">
+                        {track.track_name || track.name || track.title || 'Sin título'}
+                    </Typography>
+                    <Typography variant="body1" className="track-artist">
+                        {track.artist_name || track.artist}
+                    </Typography>
+                    <Typography variant="body2" className="track-album">
+                        Álbum:{' '}
+                        <Link to={`/album/${track.album_id}`}>
+                            {track.album_name}
+                        </Link>
+                    </Typography>
+                    <Typography variant="body2" className="track-info">
+                        Duración: {track.duration}
+                    </Typography>
+                </div>
+            </Grid>
         </Grid>
-        <Grid item xs={6} sm={8}>
-          <div className="track-details">
-            <Typography
-              variant="caption"
-              display="block"
-              className="item-type"
-            >
-              Canción
-            </Typography>
-            <Typography variant="h6" className="track-title">
-              <Link to={`/album/${track.albumId || track.album_id}`}>
-                {track.track_name || track.name}
-              </Link>
-            </Typography>
-            <Typography variant="body1" className="track-artist">
-              {track.artist_name || track.artist}
-            </Typography>
-            <Typography variant="body2" className="track-album">
-              Álbum:{' '}
-              <Link to={`/album/${track.albumId || track.album_id}`}>
-                {track.album_name || track.album}
-              </Link>
-            </Typography>
-            <Typography variant="body2" className="track-info">
-              Duración: {track.duration}
-            </Typography>
-          </div>
-        </Grid>
-      </Grid>
     </Grid>
   );
 
-  // Render an artist section: for each matching artist, show its name,
-  // then the albums and tracks belonging to it
+  // Render an artist section
   const renderArtistSection = (artist) => {
     const artistAlbums = albums.filter(
       (album) =>
