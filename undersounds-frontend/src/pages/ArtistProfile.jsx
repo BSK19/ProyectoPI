@@ -5,12 +5,15 @@ import '../styles/artistProfile.css';
 import { AuthContext } from '../context/AuthContext';
 import albumIMG from '../assets/images/albumPortada.jpg';
 import { fetchArtistById } from '../services/artistService';
+import { merchService } from '../services/merchandisingService'; 
+
 
 const ArtistProfile = () => {
   const { id } = useParams();
   const numericId = parseInt(id);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [merch, setMerch] = useState([]); // Para almacenar el merchandising
 
   // Estados para la carga del artista, error y tabs
   const [artist, setArtist] = useState(null);
@@ -19,18 +22,38 @@ const ArtistProfile = () => {
   const [value, setValue] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
 
+  const handleTshirtClick = (tshirt_Id) => {
+    navigate(`/tshirt/${tshirt_Id}`);
+  };
+
   useEffect(() => {
+    // Cargar los datos del artista
     fetchArtistById(numericId)
-      .then((data) => {
-        setArtist(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching artist:', err);
-        setError(err);
-        setLoading(false);
-      });
-  }, [numericId]);
+        .then((data) => {
+            setArtist(data);
+            setLoading(false);
+        })
+        .catch((err) => {
+            console.error('Error fetching artist:', err);
+            setError(err);
+            setLoading(false);
+        });
+}, [numericId]); // Dependencia en el ID del artista
+
+  // Efecto para cargar el merch
+  useEffect(() => {
+    const loadMerch = async () => {
+      try {
+        const merchData = await merchService.getMerchByArtist(id);
+        setMerch(merchData);
+      } catch (error) {
+        console.error('Error fetching merch:', error);
+      }
+    };
+    loadMerch();
+  }, []); // Este efecto solo se ejecutará una vez al montar el componente
+
+
 
   if (loading) {
     return <Typography variant="h5">Cargando...</Typography>;
@@ -115,7 +138,7 @@ const ArtistProfile = () => {
             xs={6} sm={2} md={3} lg={3}
             sx={{ display: 'flex', flexDirection: 'column' }}
             className="grid-item"
-            onClick={() => navigate(`/tshirt/${item.id}`, { state: { from: 'artistMerch' } })}
+            onClick={() => handleTshirtClick(item._id)}
             style={{ cursor: 'pointer' }}
           >
             <div style={{
@@ -127,7 +150,7 @@ const ArtistProfile = () => {
               boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
             }}>
               <img
-                src={item.merchImage}
+                src={item.image}
                 alt={item.name}
                 style={{
                   position: 'absolute',
@@ -246,7 +269,7 @@ const ArtistProfile = () => {
               {artist.albums && artist.albums.length > 0 ? renderAlbums(artist.albums) : <Typography variant="body1">No hay álbumes</Typography>}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              {artist.merchandising && artist.merchandising.length > 0 ? renderMerchandise(artist.merchandising) : <Typography variant="body1">No hay merchandising</Typography>}
+              {artist.merchandising && artist.merchandising.length > 0 ? renderMerchandise(merch) : <Typography variant="body1">No hay merchandising</Typography>}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
               {artist.concerts && artist.concerts.length > 0 ? renderConcerts(artist.concerts) : <Typography variant="body1">No hay conciertos</Typography>}

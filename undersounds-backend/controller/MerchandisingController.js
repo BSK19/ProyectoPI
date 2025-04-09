@@ -28,7 +28,7 @@ const MerchandisingController = {
   async getByArtist(req, res) {
     try {
       const artistId = req.params.artistId;
-      const merch = await MerchDAO.getByArtist(artistId);
+      const merch = await MerchDAO.getByArtistId(artistId);
       res.status(200).json(merch);
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener por artista', error });
