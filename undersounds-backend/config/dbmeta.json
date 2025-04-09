@@ -1,7 +1,6 @@
 {
-  "dbVersion": 11,
+  "dbVersion": 12,
   "colecciones": [
-    "artists",
-    "albums"
+    "merchandising"
   ]
 }
