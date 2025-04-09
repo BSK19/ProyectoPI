@@ -320,63 +320,72 @@ const HomePage = () => {
                 </div>
             </Box>
 
-            {/* Sección de Nuevos Álbumes */}
+            {/* Sección "Nuevos Álbumes" */}
             <Box className="envoltorio">
                 <div className="featured-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-                        <h2>Nuevos Álbumes</h2>
-                        <div style={{ display: 'flex', gap: '10px' }}>
-                            <button className="boton-carrusel" onClick={() => setStartIndexNew(Math.max(0, startIndexNew - 3))}>
-                                {"<"}
-                            </button>
-                            <button className="boton-carrusel" onClick={() => setStartIndexNew(Math.min(albums.length - 4, startIndexNew + 3))}>
-                                {">"}
-                            </button>
-                        </div>
+                    <h2>Nuevos Álbumes</h2>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button className="boton-carrusel" onClick={() => setStartIndexNew(Math.max(0, startIndexNew - 3))}>
+                        {"<"}
+                        </button>
+                        <button className="boton-carrusel" onClick={() => setStartIndexNew(Math.min(albums.length - 4, startIndexNew + 3))}>
+                        {">"}
+                        </button>
+                    </div>
                     </div>
 
                     <div style={{ overflow: 'hidden', width: '100%' }}>
-                        <div
-                            className="album-list"
-                            style={{
-                                display: 'flex',
-                                gap: '10px',
-                                transform: `translateX(-${(startIndexNew * 100) / 4}%)`,
-                                transition: 'transform 0.5s ease-in-out'
-                            }}
-                        >
-                            {albums.map((album) => (
-                                <div key={album.id} onClick={() => handleAlbumClick(album)} style={{ flex: '0 0 calc(25%)' }}>
-                                    <Card className="item" sx={{ maxWidth: 310 }}>
-                                        <CardMedia
-                                            component="img"
-                                            alt={`${album.name} cover`}
-                                            image={album.coverImage}
-                                            sx={{ aspectRatio: '1 / 1', padding: '15px' }}
-                                        />
-                                        <CardActionArea>
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {album.title}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    por {album.artist}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    Género: {album.genre}
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </div>
-                            ))}
-                        </div>
+                    <div
+                        className="album-list"
+                        style={{
+                        display: 'flex',
+                        gap: '10px',
+                        transform: `translateX(-${(startIndexNew * 100) / 4}%)`,
+                        transition: 'transform 0.5s ease-in-out'
+                        }}
+                    >
+                        {albums
+                        .slice()
+                        .sort((a, b) => {
+                            if (b.releaseYear !== a.releaseYear) {
+                            return b.releaseYear - a.releaseYear; // Los más recientes primero
+                            }
+                            return a.title.localeCompare(b.title); // Orden alfabético si la fecha es igual
+                        })
+                        .map((album) => (
+                            <div key={album.id} onClick={() => handleAlbumClick(album)} style={{ flex: '0 0 calc(25%)' }}>
+                            <Card className="item" sx={{ maxWidth: 310 }}>
+                                <CardMedia
+                                component="img"
+                                alt={`${album.name} cover`}
+                                image={album.coverImage}
+                                sx={{ aspectRatio: '1 / 1', padding: '15px' }}
+                                />
+                                <CardActionArea>
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                    {album.title}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    por {album.artist}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    Género: {album.genre}
+                                    </Typography>
+                                </CardContent>
+                                </CardActionArea>
+                            </Card>
+                            </div>
+                        ))
+                        }
+                    </div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '0px' }}>
-                        <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', marginTop: '1%' }}>
-                            <h6>Ver más</h6>
-                        </Link>
+                    <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', marginTop: '1%' }}>
+                        <h6>Ver más</h6>
+                    </Link>
                     </div>
                 </div>
             </Box>
