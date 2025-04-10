@@ -122,6 +122,25 @@ class AccountController {
     }
   }
 
+  // Nuevo método para generar token (usado en autenticación OAuth)
+  generateToken(user) {
+    if (!user) {
+      throw new Error('Usuario no válido para generar token');
+    }
+    
+    // Genera el access token usando la misma estructura y secreto que el método login
+    const accessToken = jwt.sign(
+      { 
+        id: user._id || user.id,
+        email: user.email
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1d' } // Token válido por 1 día
+    );
+    
+    return accessToken;
+  }
+
   async updateProfile(req, res) {
     try {
       const { id } = req.params;
