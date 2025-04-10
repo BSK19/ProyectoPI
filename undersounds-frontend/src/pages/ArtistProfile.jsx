@@ -150,7 +150,7 @@ const ArtistProfile = () => {
               boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
             }}>
               <img
-                src={item.image}
+                src={item.merchImage || item.tshirtImage || item.image}
                 alt={item.name}
                 style={{
                   position: 'absolute',
@@ -167,9 +167,6 @@ const ArtistProfile = () => {
             </Typography>
             <Typography variant="body2" sx={{ textAlign: 'left' }} className="item-details">
               Precio: ${item.price}
-            </Typography>
-            <Typography variant="body2" sx={{ textAlign: 'left' }} className="item-details">
-              {item.description}
             </Typography>
           </Grid>
         ))}
