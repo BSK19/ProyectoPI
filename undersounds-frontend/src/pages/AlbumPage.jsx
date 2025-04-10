@@ -24,8 +24,16 @@ import { AuthContext } from '../context/AuthContext';
 import tracksData from '../mockData/tracks';
 import defaultImage from '../assets/images/botonPlay.jpg';
 import { fetchAlbumById, fetchTracklist } from '../services/jamendoService';
+import axios from 'axios';
 
 const ProfileImage = 'https://via.placeholder.com/40';
+
+// Mapeo de artistas (puedes reemplazarlo por tu lógica o traerlo desde el backend)
+const artistMapping = {
+  1: "The Soundscapers",
+  2: "DJ Beats",
+  3: "Soulful Voices",
+};
 
 const AlbumPage = () => {
   const { id } = useParams();
@@ -44,6 +52,36 @@ const AlbumPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
+
+  const artistMapping = {
+    1: "The Soundscapers",
+    2: "DJ Beats",
+    3: "Soulful Voices",
+  };
+  
+  const getArtistName = (album) => {
+    // Si existe el campo artist como cadena o como objeto con propiedad name, se usa de inmediato
+    if (album.artist) {
+      if (typeof album.artist === 'string') return album.artist;
+      if (typeof album.artist === 'object' && album.artist.name) return album.artist.name;
+    }
+    // Si no, se utiliza artistId
+    if (album.artistId) {
+      // Si viene en formato Buffer (objeto con propiedad type y data)
+      if (album.artistId.type === 'Buffer' && Array.isArray(album.artistId.data) && album.artistId.data.length > 0) {
+        const lastByte = album.artistId.data[album.artistId.data.length - 1];
+        if (lastByte === 215) return artistMapping[2];
+        if (lastByte === 216) return artistMapping[1];
+        if (lastByte === 214) return artistMapping[3];
+        return 'Desconocido';
+      }
+      // Si es numérico o ya procesado
+      if (typeof album.artistId === 'number') {
+        return artistMapping[album.artistId] || 'Desconocido';
+      }
+    }
+    return 'Desconocido';
+  };
 
   useEffect(() => {
     if (!album) {
@@ -114,7 +152,6 @@ const AlbumPage = () => {
     }
   };
 
-  // Función para descargar la canción en diferentes formatos
   const handleDownload = (track) => {
     const format = window.prompt("Selecciona el formato para descargar (mp3, wav o flac):", "mp3");
     if (!format) return;
@@ -132,7 +169,6 @@ const AlbumPage = () => {
     window.open(downloadUrl, "_blank");
   };
 
-  // Función para comprar la canción
   const handleBuySong = (track) => {
     addToCart({
       id: track.id,
@@ -144,28 +180,37 @@ const AlbumPage = () => {
     });
   };
 
-  // Función para enviar la nueva valoración y actualizar el estado del álbum
-  const handleSubmitRating = () => {
+  const handleSubmitRating = async () => {
     if (!user) {
       alert("Debes iniciar sesión para añadir una valoración.");
       return;
     }
-    // Crear el nuevo objeto de valoración incluyendo la foto de perfil del usuario
     const newRatingObj = {
+      userId: user.id, 
       rating: newRating,
       comment: newComment,
-      profileImage: user.profileImage // Aquí se usa la foto de perfil del usuario
+      profileImage: user.profileImage
     };
-  
-    // Actualizar la lista de valoraciones
-    const updatedRatings = [...ratings, newRatingObj];
-    setAlbum({ ...album, ratings: updatedRatings });
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/albums/${album.id}/rate`,
+        newRatingObj,
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        setAlbum(response.data.album);
+      } else {
+        alert("Error al guardar la valoración.");
+      }
+    } catch (error) {
+      console.error("Error saving rating:", error);
+      alert("Error al guardar la valoración.");
+    }
     setNewRating(0);
     setNewComment("");
     setDialogOpen(false);
   };
 
-  // Verificación para que solo se pueda abrir el diálogo si hay usuario logeado
   const handleOpenRatingDialog = () => {
     if (!user) {
       alert("Debes iniciar sesión para añadir una valoración.");
@@ -217,12 +262,12 @@ const AlbumPage = () => {
               {album.title || album.name}
             </Typography>
             <Typography variant="subtitle1" color="black">
-              by{' '}
+              por{' '}
               <Link
                 to={`/artistProfile/${album.artistId || album.artist_id}`}
                 style={{ textDecoration: 'none', color: '#1DA0C3', fontWeight: 'bold' }}
               >
-                {album.artist || album.artist_name}
+                {getArtistName(album)}
               </Link>
             </Typography>
             <Grid container>

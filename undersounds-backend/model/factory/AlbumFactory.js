@@ -1,13 +1,9 @@
-const Album = require('../models/Album');
-const AlbumDTO = require('../dto/AlbumDTO');
-
 class AlbumFactory {
-  // Crea una instancia del modelo Album a partir de datos crudos
-  static createAlbum(data) {
-    return new Album({
+  createAlbum(data) {
+    return {
       title: data.title,
-      artist: data.artist,
-      artistId: data.artistId,
+      // Guardamos la referencia al artista usando el id recibido (más adelante se actualizará en el Artist)
+      artist: data.artistId,
       coverImage: data.coverImage || '',
       price: data.price,
       releaseYear: data.releaseYear,
@@ -19,16 +15,9 @@ class AlbumFactory {
       cassettes: data.cassettes || false,
       destacado: data.destacado || false,
       description: data.description || '',
-      label: data.label || '',
-      createdAt: data.createdAt || new Date(),
-      updatedAt: data.updatedAt || new Date()
-    });
-  }
-
-  // Convierte un documento Album en un DTO
-  static createAlbumDTO(album) {
-    return new AlbumDTO(album);
+      label: data.label || ''
+    };
   }
 }
 
-module.exports = AlbumFactory;
+module.exports = new AlbumFactory();

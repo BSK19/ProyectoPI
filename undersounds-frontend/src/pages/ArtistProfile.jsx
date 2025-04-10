@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import albumIMG from '../assets/images/albumPortada.jpg';
 import { fetchArtistById } from '../services/artistService';
 import { merchService } from '../services/merchandisingService'; 
-
+import { formatDate } from '../utils/formatters';
 
 const ArtistProfile = () => {
   const { id } = useParams();
@@ -91,7 +91,7 @@ const ArtistProfile = () => {
             xs={6} sm={2} md={3} lg={3}
             sx={{ display: 'flex', flexDirection: 'column' }}
             className="grid-item"
-            onClick={() => navigate(`/album/${album.id}`, { state: { album } })}
+            onClick={() => navigate(`/album/${album.id}`)}            
             style={{ cursor: 'pointer' }}
           >
             <div className="image-container">
@@ -216,7 +216,7 @@ const ArtistProfile = () => {
               Concierto en {concert.location}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: 'left' }} className="item-details">
-              Fecha: {concert.date}
+              Fecha: {formatDate(concert.date)}
             </Typography>
           </Grid>
         ))}

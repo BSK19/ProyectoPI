@@ -7,5 +7,7 @@ router.get('/:id', AlbumController.getAlbumById);
 router.post('/', AlbumController.createAlbum);
 router.put('/:id', AlbumController.updateAlbum);
 router.delete('/:id', AlbumController.deleteAlbum);
+router.post('/:id/rate', AlbumController.addRating);
+
 
 module.exports = router;

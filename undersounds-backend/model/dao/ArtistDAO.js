@@ -12,31 +12,42 @@ class ArtistDAO {
 
   async getArtists(filter = {}) {
     try {
-      return await Artist.find(filter).sort({ createdAt: -1 });
+      return await Artist.find(filter)
+        .populate({
+          path: 'albums',
+          select: '_id id title coverImage releaseYear price genre tracks ratings'
+        })
+        .sort({ createdAt: -1 });
     } catch (error) {
       throw new Error(`Error al obtener artistas: ${error.message}`);
     }
   }
 
-  // Se usa el campo numérico "id" en lugar de _id
+  // Busca por el campo numérico "id" y realiza populate de "albums" incluyendo el campo genre
   async getArtistById(numericId) {
     try {
-      return await Artist.findOne({ id: numericId });
+      return await Artist.findOne({ id: numericId })
+        .populate({
+          path: 'albums',
+          select: '_id id title coverImage releaseYear price genre tracks ratings'
+        });
     } catch (error) {
       throw new Error(`Error al obtener el artista con id ${numericId}: ${error.message}`);
     }
   }
 
-  // Se actualiza buscando por el campo "id" numérico
   async updateArtist(numericId, updateData) {
     try {
-      return await Artist.findOneAndUpdate({ id: numericId }, updateData, { new: true });
+      return await Artist.findOneAndUpdate({ id: numericId }, updateData, { new: true })
+        .populate({
+          path: 'albums',
+          select: '_id id title coverImage releaseYear price genre tracks ratings'
+        });
     } catch (error) {
       throw new Error(`Error al actualizar el artista con id ${numericId}: ${error.message}`);
     }
   }
 
-  // Se elimina utilizando el campo "id" numérico
   async deleteArtist(numericId) {
     try {
       return await Artist.findOneAndDelete({ id: numericId });

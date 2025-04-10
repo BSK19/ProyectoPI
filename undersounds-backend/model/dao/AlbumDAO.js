@@ -9,7 +9,7 @@ class AlbumDAO {
       throw new Error(`Error al crear el álbum: ${error.message}`);
     }
   }
-
+  
   async getAlbums(filter = {}) {
     try {
       return await Album.find(filter).sort({ createdAt: -1 });
@@ -17,7 +17,7 @@ class AlbumDAO {
       throw new Error(`Error al obtener álbumes: ${error.message}`);
     }
   }
-
+  
   async getAlbumById(id) {
     try {
       return await Album.findById(id);
@@ -25,7 +25,7 @@ class AlbumDAO {
       throw new Error(`Error al obtener el álbum con id ${id}: ${error.message}`);
     }
   }
-
+  
   async updateAlbum(id, data) {
     try {
       data.updatedAt = new Date();
@@ -34,7 +34,7 @@ class AlbumDAO {
       throw new Error(`Error al actualizar el álbum con id ${id}: ${error.message}`);
     }
   }
-
+  
   async deleteAlbum(id) {
     try {
       return await Album.findByIdAndDelete(id);

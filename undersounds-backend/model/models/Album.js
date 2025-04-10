@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
+const RatingSchema = new mongoose.Schema({
+  userId: { type: String, required: true }, 
+  rating: { type: Number, required: true },
+  comment: { type: String, required: true },
+  profileImage: { type: String, default: '' }
+}, { _id: false });
+
 const AlbumSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  artist: { type: String, required: true },
-  artistId: { type: Number, required: true },
+  artist: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist', required: true },
   coverImage: { type: String, default: '' },
   price: { type: Number, required: true },
   releaseYear: { type: Number, required: true },
@@ -16,19 +22,15 @@ const AlbumSchema = new mongoose.Schema({
     autor: { type: String },
     n_reproducciones: { type: Number }
   }],
-  ratings: [{
-    userId: { type: Number, required: true },
-    rating: { type: Number, required: true },
-    comment: { type: String }
-  }],
+  ratings: { type: [RatingSchema], default: [] },
   vinyl: { type: Boolean, default: false },
   cd: { type: Boolean, default: false },
   cassettes: { type: Boolean, default: false },
   destacado: { type: Boolean, default: false },
   description: { type: String, default: '' },
   label: { type: String, default: '' },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Album', AlbumSchema);

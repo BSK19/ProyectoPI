@@ -2,8 +2,14 @@ class AlbumDTO {
   constructor(album) {
     this.id = album._id;
     this.title = album.title;
-    this.artist = album.artist;
-    this.artistId = album.artistId;
+    // Si el artista fue populated, se puede extraer más información
+    if (album.artist && album.artist._id) {
+      this.artist = album.artist.name;
+      this.artistId = album.artist.id;
+    } else {
+      this.artist = album.artist;
+      this.artistId = album.artistId;
+    }
     this.coverImage = album.coverImage;
     this.price = album.price;
     this.releaseYear = album.releaseYear;
