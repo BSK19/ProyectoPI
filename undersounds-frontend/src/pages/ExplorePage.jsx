@@ -3,12 +3,13 @@ import { Box, Grid, TextField, Tabs, Tab, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { getFormattedAlbumDuration } from '../utils/formatters';
 import { fetchAlbums } from '../services/jamendoService';
+import { fetchArtists } from '../services/artistService'; // Added import for artists
 import '../styles/explorepage.css';
 
 const ExplorePage = () => {
   // States for data
   const [albums, setAlbums] = useState([]);
-  const [artists, setArtists] = useState([]); // You can load artists if needed
+  const [artists, setArtists] = useState([]); // Artists will now be loaded
   const [tracks, setTracks] = useState([]);   // Tracks will be extracted from albums
 
   // States for search and filtering
@@ -42,6 +43,19 @@ const ExplorePage = () => {
     loadAlbums();
   }, []);
 
+  // Load artists using fetchArtists (similar to ArtistProfile)
+  useEffect(() => {
+    const loadArtists = async () => {
+      try {
+        const fetchedArtists = await fetchArtists();
+        setArtists(fetchedArtists);
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+      }
+    };
+    loadArtists();
+  }, []);
+
   // Extract tracks from the loaded albums and attach album info to each track
   useEffect(() => {
     if (albums.length > 0) {
@@ -49,7 +63,6 @@ const ExplorePage = () => {
         (album.tracks || []).map(track => ({
           ...track,
           album_id: album.id,
-          // Use title first, then fallback to names
           album_name: album.name || album.title,
           album_cover: album.coverImage || album.image || '/assets/images/default-cover.jpg',
         }))
@@ -68,7 +81,6 @@ const ExplorePage = () => {
       return albumName.includes(effectiveSearchQuery);
     });
 
-  // Modified getFilteredTracks based on header's example
   const getFilteredTracks = () =>
     tracks.filter(track => {
       const title = (track.title || track.track_name || track.name || '').toLowerCase();
@@ -229,6 +241,60 @@ const ExplorePage = () => {
     );
   };
 
+  // New rendering function: formatted similar to album and track items.
+  const renderArtistItem = (artist) => (
+    <Grid item key={artist.id} className="item-container">
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        className="album-item"
+        wrap="nowrap"
+        style={{ gap: '10px' }}
+      >
+        <Grid item xs="auto" sm="auto">
+          <div className="album-image-container">
+            <img
+              src={
+                artist.profileImage ||
+                '/assets/images/default-avatar.jpg'
+              }
+              alt={artist.name}
+              className="album-image"
+              style={{ width: '100%', height: '100%', borderRadius: '8px' }}
+
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/assets/images/default-avatar.jpg';
+              }}
+            />
+          </div>
+        </Grid>
+        <Grid item xs={6} sm={8}>
+          <div className="album-details">
+            <Typography
+              variant="caption"
+              display="block"
+              className="item-type"
+            >
+              Artist
+            </Typography>
+            <Typography variant="h6" className="album-title">
+              <Link to={`/artistProfile/${artist.id}`}>
+                {artist.name}
+              </Link>
+            </Typography>
+            {artist.genre && (
+              <Typography variant="body1" className="album-artist">
+                {artist.genre}
+              </Typography>
+            )}
+          </div>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
   // Build filtered content based on selected filter
   let filteredContent = null;
   if (filter === 'all') {
@@ -250,7 +316,9 @@ const ExplorePage = () => {
         )}
         {getFilteredArtists().length > 0 && (
           <div className="filtered-section">
-            {getFilteredArtists().map(renderArtistSection)}
+            <Grid container direction="column" spacing={2}>
+              {getFilteredArtists().map(renderArtistItem)}
+            </Grid>
           </div>
         )}
       </>
@@ -284,10 +352,14 @@ const ExplorePage = () => {
   } else if (filter === 'artists') {
     filteredContent = (
       <div className="filtered-section">
-        {getFilteredArtists().map(renderArtistSection)}
-        {getFilteredArtists().length === 0 && (
-          <div className="no-results">No artists found</div>
-        )}
+        <Grid container direction="column" spacing={2}>
+          {getFilteredArtists().map(renderArtistItem)}
+          {getFilteredArtists().length === 0 && (
+            <Grid item>
+              <div className="no-results">No artists found</div>
+            </Grid>
+          )}
+        </Grid>
       </div>
     );
   }
