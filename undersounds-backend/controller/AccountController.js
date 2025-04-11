@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
+// Importaciones corregidas con nombres exactos
+const ArtistDAO = require('../model/dao/ArtistDAO');
+const ArtistaFactory = require('../model/factory/ArtistaFactory');
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -50,6 +54,41 @@ class AccountController {
       inputData.profileImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(inputData.username)}&size=128&background=random&color=fff`;
       const accountData = AccountFactory.createAccount(inputData);
       accountData.password = await bcrypt.hash(accountData.password, 10);
+      
+      // Verificar si es una cuenta de banda y crear artista asociado
+      if (accountData.role === 'band') {
+        try {
+          // Crear datos del artista basados en los datos de la cuenta
+          const artistData = {
+            name: accountData.bandName || accountData.username,
+            profileImage: accountData.profileImage,
+            bannerImage: accountData.bannerImage,
+            genre: accountData.genre || '',
+            bio: accountData.bio || '',
+            followers: 0,
+            albums: []
+          };
+          
+          // Ya no necesitamos asignar el ID manualmente
+          // ArtistDAO.createArtist() se encargará de asignar un ID único
+          
+          // Usar ArtistaFactory para crear el objeto de artista
+          const newArtistData = ArtistaFactory.createArtist(artistData);
+          
+          // Guardar el nuevo artista en la base de datos
+          const newArtist = await ArtistDAO.createArtist(newArtistData);
+          
+          // Asignar el ID de MongoDB del artista a la cuenta
+          accountData.artistId = newArtist._id;
+          
+          console.log(`Artista creado con MongoDB ID: ${newArtist._id}, ID numérico: ${newArtist.id} para cuenta: ${accountData.email}`);
+        } catch (artistError) {
+          console.error('Error al crear artista vinculado:', artistError);
+          // Continuamos con la creación de la cuenta aunque falle la creación del artista
+        }
+      }
+      
+      // Crear la cuenta (ahora posiblemente con artistId)
       const newAccount = await AccountDao.create(accountData);
       res.status(201).json(new AccountDTO(newAccount));
     } catch (error) {
@@ -64,6 +103,12 @@ class AccountController {
       if (!account) return res.status(401).json({ error: 'Credenciales inválidas' });
       const valid = await bcrypt.compare(password, account.password);
       if (!valid) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+      // Si es una banda y tiene artistId, cargar datos completos
+      let accountToReturn = account;
+      if (account.role === 'band' && account.artistId) {
+        accountToReturn = await AccountDao.findByIdWithArtist(account._id);
+      }
 
       // Genera el access token y el refresh token
       const accessToken = jwt.sign(
@@ -87,7 +132,7 @@ class AccountController {
 
       // Envía el access token y la cuenta en el body
       res.json({
-        account: new AccountDTO(account),
+        account: new AccountDTO(accountToReturn),
         accessToken
       });
     } catch (error) {
@@ -112,9 +157,16 @@ class AccountController {
         // Obtén la cuenta existente en la base de datos
         const account = await AccountDao.findById(decoded.id);
         if (!account) return res.status(404).json({ error: 'Cuenta no encontrada' });
+
+        // Si es una banda con artistId, cargar datos completos
+        let accountToReturn = account;
+        if (account.role === 'band' && account.artistId) {
+          accountToReturn = await AccountDao.findByIdWithArtist(account._id);
+        }
+
         res.json({ 
           accessToken: newAccessToken,
-          account: new AccountDTO(account) 
+          account: new AccountDTO(accountToReturn) 
         });
       });
     } catch (error) {
@@ -231,6 +283,57 @@ class AccountController {
       await account.save();
       
       res.json({ message: 'Contraseña actualizada exitosamente' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Método para vincular una cuenta de banda existente a un artista (útil para migraciones)
+  async linkBandToArtist(req, res) {
+    try {
+      const { accountId } = req.params;
+      const account = await AccountDao.findById(accountId);
+      
+      if (!account) {
+        return res.status(404).json({ error: 'Cuenta no encontrada' });
+      }
+      
+      if (account.role !== 'band') {
+        return res.status(400).json({ error: 'Solo se pueden vincular cuentas de tipo banda' });
+      }
+      
+      if (account.artistId) {
+        return res.status(400).json({ error: 'Esta cuenta ya está vinculada a un artista' });
+      }
+      
+      try {
+        // Crear un nuevo artista basado en los datos de la cuenta
+        const artistData = {
+          name: account.bandName || account.username,
+          profileImage: account.profileImage,
+          bannerImage: account.bannerImage,
+          genre: account.genre || '',
+          bio: account.bio || '',
+          followers: account.followers || 0,
+          albums: []
+        };
+        
+        // ArtistDAO.createArtist() ahora se encarga de asignar un ID único
+        const newArtistData = ArtistaFactory.createArtist(artistData);
+        const newArtist = await ArtistDAO.createArtist(newArtistData);
+        
+        // Vincular el artista a la cuenta
+        const updatedAccount = await AccountDao.linkToArtist(accountId, newArtist._id);
+        
+        res.json({ 
+          success: true, 
+          message: 'Cuenta vinculada correctamente con un nuevo artista',
+          account: new AccountDTO(updatedAccount)
+        });
+      } catch (error) {
+        console.error('Error al vincular cuenta a artista:', error);
+        res.status(500).json({ error: error.message });
+      }
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

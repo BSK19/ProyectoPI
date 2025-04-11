@@ -8,6 +8,7 @@ const os = require('os');
 const archiver = require('archiver');
 const axios = require('axios');
 const audioConverter = require('../services/AudioConverterService');
+const mongoose = require('mongoose');
 
 // Usar rutas relativas para los archivos de música
 const MUSIC_FILES_PATH = path.join(process.cwd(), '..', 'undersounds-frontend', 'src', 'assets', 'music');
@@ -15,23 +16,58 @@ const MUSIC_FILES_PATH = path.join(process.cwd(), '..', 'undersounds-frontend', 
 class AlbumController {
   async getAlbums(req, res) {
     try {
+      // Modificar para hacer populate del campo artist, seleccionando solo campos necesarios
       const albums = await AlbumDao.getAlbums();
+      // Populate los objetos de artista
+      await Promise.all(albums.map(async album => {
+        if (album.artist && typeof album.artist === 'object' && album.artist._id) {
+          try {
+            const artistData = await Artist.findById(album.artist._id).select('name bandName profileImage');
+            if (artistData) {
+              album.artist.name = artistData.name || artistData.bandName || 'Unknown Artist';
+              album.artist.profileImage = artistData.profileImage;
+            }
+          } catch (err) {
+            console.warn(`Error poblando artista para álbum ${album._id}: ${err.message}`);
+          }
+        }
+      }));
+      
       const albumDTOs = albums.map(album => new AlbumDTO(album));
       res.json(albumDTOs);
     } catch (error) {
+      console.error("Error en getAlbums:", error);
       res.status(500).json({ error: error.message });
     }
   }
-  
+
   async getAlbumById(req, res) {
     try {
       const { id } = req.params;
+      // Modificar para hacer populate del campo artist
       const album = await AlbumDao.getAlbumById(id);
       if (!album) {
         return res.status(404).json({ error: 'Album not found' });
       }
+      
+      // Populate el objeto artist si existe
+      if (album.artist && typeof album.artist === 'object' && album.artist._id) {
+        try {
+          const artistData = await Artist.findById(album.artist._id).select('name bandName profileImage genre bio');
+          if (artistData) {
+            album.artist.name = artistData.name || artistData.bandName || 'Unknown Artist';
+            album.artist.profileImage = artistData.profileImage;
+            album.artist.genre = artistData.genre;
+            album.artist.bio = artistData.bio;
+          }
+        } catch (err) {
+          console.warn(`Error poblando artista para álbum ${id}: ${err.message}`);
+        }
+      }
+      
       res.json(new AlbumDTO(album));
     } catch (error) {
+      console.error("Error en getAlbumById:", error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -40,46 +76,205 @@ class AlbumController {
     try {
       // Los datos del formulario se encuentran en req.body
       const albumData = req.body;
-      albumData.price = 10;
       
-      // Procesar archivo de coverImage si existe (asegúrate de que Multer lo haya cargado)
+      // Verificar que artistId sea válido antes de continuar
+      console.log('⚠️ artistId type:', typeof albumData.artistId);
+      console.log('⚠️ artistId value:', albumData.artistId);
+      
+      if (!albumData.artistId) {
+        return res.status(400).json({
+          success: false,
+          error: 'Se requiere el ID del artista (artistId)'
+        });
+      }
+      
+      // NUEVA LÓGICA PARA MANEJAR OBJETO COMPLETO
+      let artistIdValue = albumData.artistId;
+      
+      // Si artistId es un string complejo, puede ser un objeto serializado
+      if (typeof artistIdValue === 'string') {
+        // Comprobar si es un objeto serializado que contiene _id
+        if (artistIdValue.includes('_id') && artistIdValue.includes('ObjectId')) {
+          // Extraer el ID del formato "new ObjectId("ID")"
+          const matches = artistIdValue.match(/ObjectId\("([^"]+)"\)/);
+          if (matches && matches[1]) {
+            artistIdValue = matches[1];
+            console.log('ID extraído del objeto:', artistIdValue);
+          } else {
+            // Intentar buscar cualquier formato de ID entre comillas
+            const idMatches = artistIdValue.match(/"([a-f0-9]{24})"/);
+            if (idMatches && idMatches[1]) {
+              artistIdValue = idMatches[1];
+              console.log('ID alternativo extraído:', artistIdValue);
+            }
+          }
+        }
+        
+        // Si parece un objeto JSON, intentar parsearlo
+        if (artistIdValue.startsWith('{') && artistIdValue.includes('_id')) {
+          try {
+            // Limpiar strings malformados - reemplazar comillas simples por dobles
+            const cleanedString = artistIdValue
+              .replace(/([a-zA-Z0-9]+):/g, '"$1":')  // Agregar comillas a keys
+              .replace(/'/g, '"');                   // Reemplazar comillas simples
+              
+            console.log('Intentando parsear:', cleanedString);
+            
+            // Intentar usar regex para extraer el ID directamente
+            const objectIdMatch = cleanedString.match(/"_id"\s*:\s*(?:new ObjectId\()?["']([a-f0-9]{24})["']/i);
+            if (objectIdMatch && objectIdMatch[1]) {
+              artistIdValue = objectIdMatch[1];
+              console.log('ID extraído via regex:', artistIdValue);
+            } else {
+              // Último intento: buscar cualquier ID de 24 caracteres
+              const idMatch = cleanedString.match(/([a-f0-9]{24})/);
+              if (idMatch) {
+                artistIdValue = idMatch[1];
+                console.log('ID de 24 caracteres encontrado:', artistIdValue);
+              }
+            }
+          } catch (e) {
+            console.error('Error parseando objeto artistId:', e);
+          }
+        }
+      } else if (typeof artistIdValue === 'object' && artistIdValue._id) {
+        // Es un objeto con _id
+        artistIdValue = artistIdValue._id.toString();
+        console.log('ID extraído del objeto:', artistIdValue);
+      }
+      
+      // Verificar que el ID extraído sea válido
+      if (!mongoose.Types.ObjectId.isValid(artistIdValue)) {
+        return res.status(400).json({
+          success: false,
+          error: `ID de artista no válido después de procesamiento: "${artistIdValue}"`
+        });
+      }
+      
+      // Convertir artista a ObjectId explícitamente
+      albumData.artist = new mongoose.Types.ObjectId(artistIdValue);
+      console.log('🔍 artist (ObjectId):', albumData.artist);
+      
+      // Convertir campos numéricos
+      albumData.price = parseFloat(albumData.price) || 9.99;
+      albumData.releaseYear = parseInt(albumData.releaseYear) || new Date().getFullYear();
+      
+      // Convertir campos booleanos
+      albumData.vinyl = albumData.vinyl === 'true' || albumData.vinyl === true;
+      albumData.cd = albumData.cd === 'true' || albumData.cd === true;
+      albumData.cassettes = albumData.cassettes === 'true' || albumData.cassettes === true;
+      albumData.destacado = albumData.destacado === 'true' || albumData.destacado === true;
+      
+      // Procesar archivo de coverImage si existe
       if (req.files && req.files.coverImage && req.files.coverImage.length > 0) {
-        albumData.coverImage = "http://localhost:5000/assets/images/" + req.files.coverImage [0].filename;
+        albumData.coverImage = "http://localhost:5000/assets/images/" + req.files.coverImage[0].filename;
       }
   
       // Procesar los archivos de las pistas (tracks)
-      // Procesar los archivos de las pistas (tracks)
       if (req.files && req.files.tracks) {
-        // Se espera que los títulos de las pistas se envíen en el campo "trackTitles"
+        // Extraer los metadatos de las pistas del formulario
         let trackTitles = albumData.trackTitles || [];
-        if (!Array.isArray(trackTitles)) {
-          trackTitles = [trackTitles];
-        }
-        // Asocia cada archivo de pista con su título; si no se proporciona, usa el nombre del archivo. 
-        // Además, asigna valores por defecto para "n_reproducciones" y "author".
+        let trackDurations = albumData.trackDurations || [];
+        let trackAutors = albumData.trackAutors || [];
+        
+        // Asegurar que son arrays incluso si solo hay un elemento
+        if (!Array.isArray(trackTitles)) trackTitles = [trackTitles].filter(Boolean);
+        if (!Array.isArray(trackDurations)) trackDurations = [trackDurations].filter(Boolean);
+        if (!Array.isArray(trackAutors)) trackAutors = [trackAutors].filter(Boolean);
+        
+        // Asociar cada archivo con sus metadatos
         albumData.tracks = req.files.tracks.map((file, index) => ({
-          title: file.originalname, // Título de la pista o nombre del archivo
-          filePath: file.path,
-          url: "http://localhost:5000/assets/music/" + file.filename, // URL por defecto
-          duration: "0:00", // Valor por defecto para la duración
-          n_reproducciones: 0, // Valores por defecto para reproducciones
-          autor: albumData.artist || 'Unknown' // Se toma el artista del álbum o se asigna 'Unknown'
+          id: index + 1,
+          title: (trackTitles[index] || file.originalname).trim(),
+          duration: (trackDurations[index] || '0:00').trim(),
+          url: "http://localhost:5000/assets/music/" + file.filename,
+          autor: (trackAutors[index] || albumData.artistName || 'Unknown').trim(),
+          n_reproducciones: 0
         }));
       }
-
-      console.log('albumData recibido:', albumData); // Depuración
-
+      
+      // Limpiar campos temporales que no pertenecen al modelo
+      delete albumData.trackTitles;
+      delete albumData.trackDurations;
+      delete albumData.trackAutors;
+      delete albumData.artistName;
+      // NO ELIMINAR ARTISTID HASTA DESPUÉS DE CREAR EL ALBUM
+      // delete albumData.artistId; // ← Esta línea estaba causando el problema
+      
+      console.log('⚠️ Antes de pasar a factory, artist es:', albumData.artist);
+      console.log('⚠️ Antes de pasar a factory, artistId es:', albumData.artistId);
+      
+      if (albumData.artist instanceof mongoose.Types.ObjectId) {
+        console.log('El tipo es ObjectId, correcto');
+      } else if (typeof albumData.artist === 'string') {
+        console.log('El tipo es string:', albumData.artist);
+        if (mongoose.Types.ObjectId.isValid(albumData.artist)) {
+          console.log('Es un string válido para ObjectId');
+        } else {
+          console.log('NO es un string válido para ObjectId');
+        }
+      } else if (typeof albumData.artist === 'object') {
+        console.log('El tipo es object con propiedades:', Object.keys(albumData.artist));
+      }
+      
+      console.log('albumData procesado:', albumData);
+      
       // Crear la entidad álbum usando la fábrica
-      const albumEntity = AlbumFactory.createAlbum(albumData);
-      const newAlbum = await AlbumDao.createAlbum(albumEntity);
-      res.status(201).json(new AlbumDTO(newAlbum));
+      try {
+        const albumEntity = AlbumFactory.createAlbum(albumData);
+        console.log('albumEntity creado por factory:', albumEntity);
+        
+        // Asegurarse de que el campo artist esté presente y sea válido
+        if (!albumEntity.artist || !mongoose.Types.ObjectId.isValid(albumEntity.artist)) {
+          console.error('Error: Campo artist inválido después de factory:', albumEntity.artist);
+          return res.status(400).json({
+            success: false,
+            error: 'Error interno: Campo artist es inválido'
+          });
+        }
+        
+        const newAlbum = await AlbumDao.createAlbum(albumEntity);
+        
+        // Si el artista existe, actualizamos su colección de álbumes
+        try {
+          const artist = await Artist.findById(albumData.artist);
+          if (artist) {
+            artist.albums.push(newAlbum._id);
+            await artist.save();
+            console.log(`Álbum ${newAlbum._id} añadido al artista ${artist.name || artist.id}`);
+          } else {
+            console.log(`Artista con ID ${albumData.artist} no encontrado`);
+          }
+        } catch (artistError) {
+          console.warn('Error al actualizar el artista:', artistError.message);
+          // No queremos que un error aquí impida la creación del álbum
+        }
+        
+        // Ahora sí podemos eliminar el artistId si es necesario
+        delete albumData.artistId;
+        
+        res.status(201).json({ 
+          success: true, 
+          message: 'Álbum creado exitosamente', 
+          album: new AlbumDTO(newAlbum) 
+        });
+      } catch (factoryError) {
+        console.error('Error al crear el álbum desde la factory:', factoryError);
+        return res.status(400).json({
+          success: false,
+          error: factoryError.message || 'Error al procesar los datos del álbum'
+        });
+      }
     } catch (error) {
       console.error('Error en createAlbum:', error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ 
+        success: false, 
+        error: error.message || 'Error interno del servidor' 
+      });
     }
   }
 
-  
+  // El resto de los métodos permanecen sin cambios...
   async updateAlbum(req, res) {
     try {
       const { id } = req.params;
@@ -123,7 +318,6 @@ class AlbumController {
     }
   }
   
-    
   async downloadTrack(req, res) {
     try {
       const { id } = req.params;

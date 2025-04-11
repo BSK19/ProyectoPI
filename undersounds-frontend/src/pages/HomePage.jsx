@@ -74,22 +74,6 @@ const HomePage = () => {
     if (album.artist && typeof album.artist === 'object' && album.artist.name) {
       return album.artist.name;
     }
-    // En caso de que no exista, se intenta usar artistId que viene en formato Buffer
-    if (album.artistId && album.artistId.type === 'Buffer' && Array.isArray(album.artistId.data)) {
-      // Basándonos en tus datos, notamos que el último byte varía y se puede mapear
-      // Ejemplo de mapeo observado:
-      // - Si el último byte es 215 => artista con id 2 (DJ Beats)
-      // - Si es 216 => artista con id 1 (The Soundscapers)
-      // - Si es 214 => artista con id 3 (Soulful Voices)
-      const lastByte = album.artistId.data[album.artistId.data.length - 1];
-      let computedId = null;
-      if (lastByte === 215) computedId = 2;
-      else if (lastByte === 216) computedId = 1;
-      else if (lastByte === 214) computedId = 3;
-      const found = artists.find(a => a.id === computedId);
-      return found ? found.name : 'Desconocido';
-    }
-    return 'Desconocido';
   };
 
   // Función para renderizar cada álbum
@@ -355,53 +339,65 @@ const HomePage = () => {
         </div>
       </Box>
 
-      {/* Sección de Artistas */}
-      <Box className="envoltorio">
-        <div className="featured-section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
-            <h2>Descubre a nuestros artistas</h2>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.max(0, startIndexArt - 3))}>
-                {"<"}
-              </button>
-              <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.min(artists.length - 4, startIndexArt + 3))}>
-                {">"}
-              </button>
-            </div>
-          </div>
+{/* Sección de Artistas */}
+<Box className="envoltorio">
+  <div className="featured-section">
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', color: 'black' }}>
+      <h2>Descubre a nuestros artistas</h2>
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.max(0, startIndexArt - 3))}>
+          {"<"}
+        </button>
+        <button className="boton-carrusel" onClick={() => setStartIndexArt(Math.min(artists.length - 4, startIndexArt + 3))}>
+          {">"}
+        </button>
+      </div>
+    </div>
 
-          <div className="album-list">
-            {artists.map((artist) => (
-              <Link to={`/artistProfile/${artist.id}`} key={artist.id} style={{ textDecoration: 'none' }}>
-                <Card className="item" sx={{ maxWidth: 345 }}>
-                  <CardMedia
-                    component="img"
-                    image={artist.profileImage}
-                    alt={`${artist.name} profile`}
-                    sx={{ aspectRatio: '1 / 1', padding: '25px' }}
-                  />
-                  <CardActionArea>
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {artist.name}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Genre: {artist.genre}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Link>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '0px' }}>
-            <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', marginTop: '1%' }}>
-              <h6>Ver más</h6>
+    <div style={{ overflow: 'hidden', width: '100%' }}>
+      <div 
+        className="album-list" 
+        style={{
+          display: 'flex',
+          gap: '10px',
+          transform: `translateX(-${(startIndexArt * 100) / 4}%)`,
+          transition: 'transform 0.5s ease-in-out'
+        }}
+      >
+        {artists.map((artist) => (
+          <div key={artist.id} style={{ flex: '0 0 calc(25%)', cursor: 'pointer' }}>
+            <Link to={`/artistProfile/${artist.id}`} style={{ textDecoration: 'none' }}>
+              <Card className="item" sx={{ maxWidth: 310 }}>
+                <CardMedia
+                  component="img"
+                  image={artist.profileImage || '/assets/default-profile.jpg'}
+                  alt={`${artist.name} profile`}
+                  sx={{ aspectRatio: '1 / 1', padding: '15px' }}
+                />
+                <CardActionArea>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {artist.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Género: {artist.genre}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
             </Link>
           </div>
-        </div>
-      </Box>
+        ))}
+      </div>
+    </div>
+
+    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '0px' }}>
+      <Link to="/discover" style={{ textDecoration: 'underline', color: '#0066cc', marginTop: '1%' }}>
+        <h6>Ver más</h6>
+      </Link>
+    </div>
+  </div>
+</Box>
 
       {/* Sección para invitación a registrarse si no hay usuario */}
       {!user && (

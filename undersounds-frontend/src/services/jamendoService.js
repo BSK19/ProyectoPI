@@ -226,12 +226,28 @@ export const downloadAlbum = async (albumId, format = 'mp3') => {
 
 export const createAlbum = async (albumData) => {
   try {
-    const response = await axios.post(`${ALBUM_BASE_URL}`, albumData, {
-      withCredentials: true,
-    });
+    // Establecer un timeout más largo para permitir la subida de archivos grandes
+    const response = await axios.post(
+      `${ALBUM_BASE_URL}`,
+      albumData,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        timeout: 60000 // 60 segundos
+      }
+    );
+    
     return { success: true, ...response.data };
   } catch (error) {
     console.error('Error creating album:', error);
-    throw error;
+    if (error.response && error.response.data) {
+      return { 
+        success: false, 
+        error: error.response.data.error || 'Error del servidor' 
+      };
+    }
+    return { success: false, error: error.message || 'Error desconocido' };
   }
 };

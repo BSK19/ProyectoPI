@@ -23,6 +23,7 @@ const AccountSchema = new mongoose.Schema({
   purchaseHistory: { type: Array, default: [] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist' },
   // Campos para autenticación vía OAuth2.0
   provider: { type: String },       // Ejemplo: "google", "facebook"
   providerId: { type: String }        // ID único devuelto por el proveedor

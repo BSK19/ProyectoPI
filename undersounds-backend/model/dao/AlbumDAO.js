@@ -13,7 +13,10 @@ class AlbumDAO {
   
   async getAlbums(filter = {}) {
     try {
-      return await Album.find(filter).sort({ createdAt: -1 });
+      // Modificar el populate para incluir ambos IDs (numérico y ObjectId)
+      return await Album.find(filter)
+        .populate('artist', '_id id name bandName profileImage') // Incluye tanto _id como id numérico
+        .sort({ createdAt: -1 });
     } catch (error) {
       throw new Error(`Error al obtener álbumes: ${error.message}`);
     }
@@ -21,17 +24,19 @@ class AlbumDAO {
   
   async getAlbumById(id) {
     try {
-      // Si es un ObjectId válido, buscar directamente
+      // Si es un ObjectId válido, buscar directamente con populate
       if (mongoose.Types.ObjectId.isValid(id)) {
-        return await Album.findById(id);
+        return await Album.findById(id)
+          .populate('artist', '_id id name bandName profileImage genre bio'); // Incluir tanto _id como id numérico
       }
       
       // Si no es un ObjectId válido (ejemplo: id numérico como string "2")
       // Intentar buscar por otros campos
       const numericId = parseInt(id);
       if (!isNaN(numericId)) {
-        // Buscar por campo id numérico si existe
-        const albumByNumericId = await Album.findOne({ id: numericId });
+        // Buscar por campo id numérico si existe, también con populate
+        const albumByNumericId = await Album.findOne({ id: numericId })
+          .populate('artist', '_id id name bandName profileImage genre bio'); // Incluir tanto _id como id numérico
         if (albumByNumericId) return albumByNumericId;
       }
       

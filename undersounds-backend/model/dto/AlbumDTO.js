@@ -1,15 +1,27 @@
 class AlbumDTO {
   constructor(album) {
-    this.id = album._id;
-    this.title = album.title;
-    // Si el artista fue populated, se puede extraer más información
-    if (album.artist && album.artist._id) {
-      this.artist = album.artist.name;
-      this.artistId = album.artist.id;
-    } else {
-      this.artist = album.artist;
-      this.artistId = album.artistId;
-    }
+      this.id = album._id || album.id;
+      this.title = album.title;
+      
+      // Extraer tanto el nombre como el ID numérico del artista correctamente
+      if (album.artist) {
+        if (typeof album.artist === 'object') {
+          // Si el objeto artist está poblado, extraer sus propiedades
+          this.artist = album.artist.name || album.artist.bandName || 'Unknown Artist';
+          
+          // Asegurarse de usar el ID numérico explícitamente
+          // El campo 'id' en el modelo de Artist se refiere al ID numérico, no al ObjectId
+          this.artistId = album.artist.id; // Usar directamente el ID numérico
+        } else {
+          // Si artist es solo un string o ID
+          this.artist = 'Unknown Artist';
+          this.artistId = album.artist; // El ID en formato string
+        }
+      } else {
+        this.artist = 'Unknown Artist';
+        this.artistId = null;
+      }
+    // Resto de propiedades
     this.coverImage = album.coverImage;
     this.price = album.price;
     this.releaseYear = album.releaseYear;
@@ -22,7 +34,6 @@ class AlbumDTO {
     this.destacado = album.destacado;
     this.description = album.description;
     this.label = album.label;
-    this.createdAt = album.createdAt;
     this.updatedAt = album.updatedAt;
   }
 }

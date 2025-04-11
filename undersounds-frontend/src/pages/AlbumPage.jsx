@@ -28,13 +28,6 @@ import axios from 'axios';
 
 const ProfileImage = 'https://via.placeholder.com/40';
 
-// Mapeo de artistas (puedes reemplazarlo por tu lógica o traerlo desde el backend)
-const artistMapping = {
-  1: "The Soundscapers",
-  2: "DJ Beats",
-  3: "Soulful Voices",
-};
-
 const AlbumPage = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -53,32 +46,11 @@ const AlbumPage = () => {
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
 
-  const artistMapping = {
-    1: "The Soundscapers",
-    2: "DJ Beats",
-    3: "Soulful Voices",
-  };
-  
   const getArtistName = (album) => {
     // Si existe el campo artist como cadena o como objeto con propiedad name, se usa de inmediato
     if (album.artist) {
       if (typeof album.artist === 'string') return album.artist;
       if (typeof album.artist === 'object' && album.artist.name) return album.artist.name;
-    }
-    // Si no, se utiliza artistId
-    if (album.artistId) {
-      // Si viene en formato Buffer (objeto con propiedad type y data)
-      if (album.artistId.type === 'Buffer' && Array.isArray(album.artistId.data) && album.artistId.data.length > 0) {
-        const lastByte = album.artistId.data[album.artistId.data.length - 1];
-        if (lastByte === 215) return artistMapping[2];
-        if (lastByte === 216) return artistMapping[1];
-        if (lastByte === 214) return artistMapping[3];
-        return 'Desconocido';
-      }
-      // Si es numérico o ya procesado
-      if (typeof album.artistId === 'number') {
-        return artistMapping[album.artistId] || 'Desconocido';
-      }
     }
     return 'Desconocido';
   };

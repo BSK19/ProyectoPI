@@ -80,6 +80,32 @@ const UserProfile = () => {
     }
   };
 
+  // Función para cambiar la imagen de perfil
+  const handleChangeProfileImage = async () => {
+    const newProfileImageUrl = prompt("Introduce la URL de la nueva imagen de perfil:");
+    if (newProfileImageUrl) {
+      try {
+        new URL(newProfileImageUrl);
+      } catch (err) {
+        alert("La URL ingresada no es válida.");
+        return;
+      }
+      const updatedUser = { ...user, profileImage: newProfileImageUrl };
+      try {
+        const response = await updateUserProfile(updatedUser);
+        if (response.success) {
+          setUser(updatedUser);
+          alert("Imagen de perfil actualizada correctamente!");
+        } else {
+          alert("Fallo al actualizar la imagen de perfil.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Ocurrió un error al actualizar la imagen de perfil.");
+      }
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -93,9 +119,11 @@ const UserProfile = () => {
       </div>
       <div className="profile-header">
         <img
-          src={user.profileImage}
+          src={user.profileImage || '/assets/default-profile.jpg'}
           alt={user.username || user.bandName || 'Usuario'}
           className="profile-image"
+          onClick={handleChangeProfileImage}
+          style={{ cursor: 'pointer' }}
         />
         <div className="profile-info">
           <h2>User Profile</h2>
@@ -187,47 +215,47 @@ const UserProfile = () => {
         </button>
       </form>
       <div className="user-additional-functions" style={{ marginTop: '20px' }}>
-    {user.role === 'band' && (
-      <div>
-        <h3>Funciones para Artistas</h3>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAlbumModal(true)}
-        >
-          Subir Álbum
-        </Button>
+        {user.role === 'band' && (
+          <div>
+            <h3>Funciones para Artistas</h3>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setOpenAlbumModal(true)}
+            >
+              Subir Álbum
+            </Button>
+          </div>
+        )}
+        {user.role === 'label' && (
+          <div>
+            <h3>Funciones para Sellos Discográficos</h3>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setOpenAlbumModal(true)}
+              style={{ marginRight: '10px' }}
+            >
+              Subir Álbum
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => setOpenMerchModal(true)}
+              style={{ marginRight: '10px' }}
+            >Subir Merchandising</Button>
+             <Button
+              variant="contained"
+              color="success"
+              onClick={() => setOpenRegisterArtistModal(true)}
+            >
+              Dar de Alta Artista Emergente
+            </Button>
+          </div>
+        )}
       </div>
-    )}
-    {user.role === 'label' && (
-      <div>
-        <h3>Funciones para Sellos Discográficos</h3>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAlbumModal(true)}
-          style={{ marginRight: '10px' }}
-        >
-          Subir Álbum
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setOpenMerchModal(true)}
-          style={{ marginRight: '10px' }}
-        >Subir Merchandising</Button>
-         <Button
-          variant="contained"
-          color="success"
-          onClick={() => setOpenRegisterArtistModal(true)}
-        >
-          Dar de Alta Artista Emergente
-        </Button>
-      </div>
-    )}
-    </div>
 
-    {openAlbumModal && (
+      {openAlbumModal && (
         <UploadAlbumForm 
           open={openAlbumModal} 
           onClose={() => setOpenAlbumModal(false)} 

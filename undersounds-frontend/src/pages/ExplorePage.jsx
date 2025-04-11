@@ -387,7 +387,7 @@ const ExplorePage = () => {
             mb: 2,
           }}
         >
-          Explore Music
+          Explorar Música
         </Typography>
         <TextField
           variant="outlined"
