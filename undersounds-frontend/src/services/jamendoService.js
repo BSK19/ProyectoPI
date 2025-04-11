@@ -52,3 +52,100 @@ export const fetchArtists = async () => {
     throw error;
   }
 };
+
+// Función para descargar una pista en el formato seleccionado
+// Actualizar la función downloadTrack para manejar mejor los IDs
+
+// Función para descargar una pista en el formato seleccionado
+export const downloadTrack = async (trackId, albumId, format = 'mp3') => {
+  try {
+    console.log(`Descargando track ${trackId} del álbum ${albumId} en formato ${format}`);
+    
+    // Asegurarse de que albumId esté definido
+    if (!albumId) {
+      throw new Error('ID del álbum es requerido para descargar una pista');
+    }
+    
+    // Asegurar que los IDs sean siempre strings para consistencia
+    const trackIdStr = String(trackId);
+    const albumIdStr = String(albumId);
+    
+    console.log(`Realizando petición a: ${ALBUM_BASE_URL}/${albumIdStr}/download?trackId=${trackIdStr}&format=${format}`);
+    
+    // La URL incluye el formato solicitado como parámetro de consulta
+    const response = await axios({
+      url: `${ALBUM_BASE_URL}/${albumIdStr}/download?trackId=${trackIdStr}&format=${format}`,
+      method: 'GET',
+      responseType: 'blob', // Importante para recibir datos binarios
+      withCredentials: true,
+    });
+    
+    // Resto del código igual...
+    const blob = new Blob([response.data]);
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = `track-${trackIdStr}.${format}`;
+    
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    
+    return true;
+  } catch (error) {
+    console.error(`Error downloading track ${trackId} in format ${format}:`, error);
+    if (error.response) {
+      console.error('Respuesta del servidor:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+// Función para descargar un álbum completo en el formato seleccionado
+export const downloadAlbum = async (albumId, format = 'mp3') => {
+  try {
+    const response = await axios({
+      url: `${ALBUM_BASE_URL}/${albumId}/download-album?format=${format}`,
+      method: 'GET',
+      responseType: 'blob',
+      withCredentials: true,
+    });
+    
+    const blob = new Blob([response.data]);
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = `album-${albumId}.zip`;
+    
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    
+    return true;
+  } catch (error) {
+    console.error(`Error downloading album ${albumId} in format ${format}:`, error);
+    throw error;
+  }
+};

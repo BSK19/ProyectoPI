@@ -1,18 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardContent, Grid, Button, Select, MenuItem } from '@mui/material';
+import { 
+  Typography, 
+  Card, 
+  CardContent, 
+  Grid, 
+  Button, 
+  Select, 
+  MenuItem,
+  CircularProgress,
+  Snackbar,
+  Alert
+} from '@mui/material';
 import { Link } from 'react-router-dom';
+import { downloadTrack, downloadAlbum } from '../services/jamendoService';
 
 const PaymentSuccess = () => {
   const [orderSummary, setOrderSummary] = useState(null);
-  // State to keep track of download format for each eligible item (keyed by item id)
   const [selectedFormats, setSelectedFormats] = useState({});
+  const [loading, setLoading] = useState({});
+  const [notification, setNotification] = useState({ 
+    open: false, 
+    message: '', 
+    severity: 'info' 
+  });
 
   useEffect(() => {
     const storedSummary = localStorage.getItem('orderSummary');
     if (storedSummary) {
-      setOrderSummary(JSON.parse(storedSummary));
+      const parsedSummary = JSON.parse(storedSummary);
+      setOrderSummary(parsedSummary);
+      
+      // Inicializar formatos predeterminados para todos los items
+      const initialFormats = {};
+      parsedSummary.items.forEach(item => {
+        initialFormats[item.id] = 'mp3'; // Formato por defecto
+      });
+      setSelectedFormats(initialFormats);
+      
       // Opcional: limpiar el resumen almacenado
-      localStorage.removeItem('orderSummary');
+      // localStorage.removeItem('orderSummary');
     }
   }, []);
 
@@ -20,43 +46,82 @@ const PaymentSuccess = () => {
     setSelectedFormats(prev => ({ ...prev, [itemId]: value }));
   };
 
-  // Helper function to simulate conversion.
-  // In a real app, you might call a backend API or use a library like ffmpeg.wasm.
-  const convertAudioFormat = async (mp3Blob, targetFormat) => {
-    // Esta función simula la conversión:
-    // Simplemente cambia el tipo MIME según el formato seleccionado.
-    let mimeType = 'audio/mpeg';
-    if (targetFormat === '.wav') {
-      mimeType = 'audio/wav';
-    } else if (targetFormat === '.flac') {
-      mimeType = 'audio/flac';
-    }
-    // Nota: en una conversión real se modificarían los datos del blob.
-    return new Blob([mp3Blob], { type: mimeType });
+  const showNotification = (message, severity = 'info') => {
+    setNotification({ open: true, message, severity });
   };
 
-  // Nueva función para descargar y convertir el artículo en el formato seleccionado
-  const handleDownload = async (item) => {
-    const format = selectedFormats[item.id] || '.mp3';
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
+  };
+
+  // Función para descargar una pista individual
+// Actualizar la función handleDownloadTrack
+
+// Función para descargar una pista individual
+const handleDownloadTrack = async (item) => {
+  const format = selectedFormats[item.id] || 'mp3';
+  
+  // Marcar este item como en proceso de descarga
+  setLoading(prev => ({ ...prev, [item.id]: true }));
+  
+  try {
+    console.log("Iniciando descarga de track, datos completos:", item);
+    
+    // Identificar correctamente los IDs
+    // Para la descarga de una pista individual, necesitamos:
+    // 1. El ID de la pista (trackId)
+    // 2. El ID del álbum al que pertenece la pista (albumId que es ObjectID)
+    const trackId = item.trackId || item.id;
+    
+    // Aquí es crucial usar el ID del álbum que sea el ObjectID de MongoDB
+    const albumId = item.id; // Este ya debe ser el ObjectID según tu DTO
+    
+    console.log(`Descargando: trackId=${trackId}, albumId=${albumId}, format=${format}`);
+    
+    // Llamar al servicio de descarga
+    await downloadTrack(trackId, albumId, format);
+    
+    showNotification(`Descarga de "${item.name || item.title}" completada con éxito`, 'success');
+  } catch (error) {
+    console.error('Error en la descarga:', error);
+    console.error('Error detallado:', error.response?.data || error.message);
+    showNotification(`Error al descargar: ${error.message}`, 'error');
+  } finally {
+    // Desmarcar el estado de carga
+    setLoading(prev => ({ ...prev, [item.id]: false }));
+  }
+};
+
+  // Función para descargar un álbum completo
+  const handleDownloadAlbum = async (item) => {
+    const format = selectedFormats[item.id] || 'mp3';
+    
+    // Marcar este item como en proceso de descarga
+    setLoading(prev => ({ ...prev, [item.id]: true }));
+    
     try {
-      // Descarga el archivo mp3 original
-      const response = await fetch(item.url);
-      if (!response.ok) throw new Error("Error de red al descargar el archivo");
-      const mp3Blob = await response.blob();
-      // Si el formato solicitado no es mp3, convertirlo (simulación)
-      const finalBlob = format === '.mp3' ? mp3Blob : await convertAudioFormat(mp3Blob, format);
-      // Crear enlace de descarga
-      const blobUrl = URL.createObjectURL(finalBlob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = `${item.name}${format}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
+      // El álbum puede tener albumId o id dependiendo de la estructura de datos
+      const albumId = item.albumId || item.id;
+      
+      // Llamar al servicio de descarga de álbum
+      await downloadAlbum(albumId, format);
+      
+      showNotification(`Descarga del álbum "${item.name || item.title}" completada con éxito`, 'success');
     } catch (error) {
-      console.error("Error al descargar y convertir el archivo:", error);
-      alert("No se pudo descargar el archivo en el formato seleccionado.");
+      console.error('Error en la descarga del álbum:', error);
+      showNotification(`Error al descargar el álbum: ${error.message}`, 'error');
+    } finally {
+      // Desmarcar el estado de carga
+      setLoading(prev => ({ ...prev, [item.id]: false }));
+    }
+  };
+
+  // Función que determina qué tipo de descarga realizar
+  const handleDownload = (item) => {
+    if (item.type === 'album') {
+      handleDownloadAlbum(item);
+    } else {
+      handleDownloadTrack(item);
     }
   };
 
@@ -100,30 +165,38 @@ const PaymentSuccess = () => {
                 <Typography variant="body2">
                   <strong>Total:</strong> €{(item.price * (item.quantity || 1)).toFixed(2)}
                 </Typography>
-                {/* Mostrar dropdown y botón para canciones de 0.99 y álbumes digitales */}
-                {((item.type === 'song' && item.price === 0.99) || (item.type === 'album')) && (
-                  <div style={{ marginTop: '0.5rem' }}>
+                {/* Mostrar dropdown y botón para productos descargables (canciones y álbumes) */}
+                {((item.type === 'song' && item.price) || (item.type === 'album')) && (
+                  <div style={{ marginTop: '1rem' }}>
                     <Typography variant="body2" style={{ marginBottom: '0.3rem' }}>
                       <strong>Formato de descarga:</strong>
                     </Typography>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                       <Select
-                        value={selectedFormats[item.id] || '.mp3'}
+                        value={selectedFormats[item.id] || 'mp3'}
                         onChange={(e) => handleFormatChange(item.id, e.target.value)}
                         size="small"
+                        disabled={loading[item.id]}
                       >
-                        <MenuItem value=".mp3">.mp3</MenuItem>
-                        <MenuItem value=".wav">.wav</MenuItem>
-                        <MenuItem value=".flac">.flac</MenuItem>
+                        <MenuItem value="mp3">MP3 (Compresión eficiente)</MenuItem>
+                        <MenuItem value="wav">WAV (Alta calidad)</MenuItem>
+                        <MenuItem value="flac">FLAC (Sin pérdida)</MenuItem>
                       </Select>
                       <Button 
                         variant="contained" 
                         color="secondary" 
                         onClick={() => handleDownload(item)}
+                        disabled={loading[item.id]}
+                        startIcon={loading[item.id] ? <CircularProgress size={20} color="inherit" /> : null}
                       >
-                        Descargar
+                        {loading[item.id] ? 'Descargando...' : 'Descargar'}
                       </Button>
                     </div>
+                    {item.type === 'album' && (
+                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                        Se descargarán todas las pistas del álbum en formato {selectedFormats[item.id] || 'mp3'}
+                      </Typography>
+                    )}
                   </div>
                 )}
               </CardContent>
@@ -134,12 +207,24 @@ const PaymentSuccess = () => {
       <Button 
         variant="contained" 
         color="primary" 
-        style={{ marginTop: '1rem' }} 
+        style={{ marginTop: '2rem' }} 
         component={Link} 
         to="/"
       >
         Ir a inicio
       </Button>
+      
+      {/* Notificaciones */}
+      <Snackbar 
+        open={notification.open} 
+        autoHideDuration={6000} 
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseNotification} severity={notification.severity} sx={{ width: '100%' }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

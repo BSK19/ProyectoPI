@@ -8,6 +8,7 @@ router.post('/', AlbumController.createAlbum);
 router.put('/:id', AlbumController.updateAlbum);
 router.delete('/:id', AlbumController.deleteAlbum);
 router.post('/:id/rate', AlbumController.addRating);
-
+router.get('/:id/download', AlbumController.downloadTrack);
+router.get('/:id/download-album', AlbumController.downloadAlbum);
 
 module.exports = router;

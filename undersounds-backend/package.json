@@ -9,6 +9,7 @@
     "mongoexport": "node export-db.js"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
@@ -16,6 +17,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.18.1",
+    "fluent-ffmpeg": "^2.1.3",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.0",
     "node-cache": "^5.1.2",

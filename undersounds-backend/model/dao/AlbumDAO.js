@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Album = require('../models/Album');
 
 class AlbumDAO {
@@ -20,7 +21,22 @@ class AlbumDAO {
   
   async getAlbumById(id) {
     try {
-      return await Album.findById(id);
+      // Si es un ObjectId válido, buscar directamente
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        return await Album.findById(id);
+      }
+      
+      // Si no es un ObjectId válido (ejemplo: id numérico como string "2")
+      // Intentar buscar por otros campos
+      const numericId = parseInt(id);
+      if (!isNaN(numericId)) {
+        // Buscar por campo id numérico si existe
+        const albumByNumericId = await Album.findOne({ id: numericId });
+        if (albumByNumericId) return albumByNumericId;
+      }
+      
+      // Si llegamos aquí, no se encontró el álbum
+      return null;
     } catch (error) {
       throw new Error(`Error al obtener el álbum con id ${id}: ${error.message}`);
     }
