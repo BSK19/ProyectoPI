@@ -29,16 +29,16 @@ const ArtistProfile = () => {
   useEffect(() => {
     // Cargar los datos del artista
     fetchArtistById(numericId)
-        .then((data) => {
-            setArtist(data);
-            setLoading(false);
-        })
-        .catch((err) => {
-            console.error('Error fetching artist:', err);
-            setError(err);
-            setLoading(false);
-        });
-}, [numericId]); // Dependencia en el ID del artista
+      .then((data) => {
+        setArtist(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching artist:', err);
+        setError(err);
+        setLoading(false);
+      });
+  }, [numericId]); // Dependencia en el ID del artista
 
   // Efecto para cargar el merch
   useEffect(() => {
@@ -52,8 +52,6 @@ const ArtistProfile = () => {
     };
     loadMerch();
   }, []); // Este efecto solo se ejecutará una vez al montar el componente
-
-
 
   if (loading) {
     return <Typography variant="h5">Cargando...</Typography>;
@@ -80,18 +78,28 @@ const ArtistProfile = () => {
     setIsFollowing(!isFollowing);
   };
 
-  // Renderizado de álbumes (se espera que artist.albums contenga la información)
+  // Renderizado de álbumes con scroll vertical (permitiendo ver más de 4 elementos)
   const renderAlbums = (albumsArray) => {
     return (
-      <Grid container spacing={0} justifyContent="flex-start" className="tab-content">
+      <Grid 
+        container 
+        spacing={2} 
+        justifyContent="flex-start" 
+        className="tab-content"
+        sx={{ 
+          maxHeight: '400px', 
+          overflowY: 'auto',
+          marginBottom: '20px'
+        }}
+      >
         {albumsArray.map((album) => (
           <Grid
             item
             key={album.id}
             xs={6} sm={2} md={3} lg={3}
-            sx={{ display: 'flex', flexDirection: 'column' }}
+            sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }}
             className="grid-item"
-            onClick={() => navigate(`/album/${album.id}`)}            
+            onClick={() => navigate(`/album/${album.id}`)}
             style={{ cursor: 'pointer' }}
           >
             <div className="image-container">
@@ -127,10 +135,20 @@ const ArtistProfile = () => {
     );
   };
 
-  // Renderizado de merchandising (se espera artist.merchandising)
+  // Renderizado de merchandising con scroll vertical
   const renderMerchandise = (merchandise) => {
     return (
-      <Grid container spacing={0} justifyContent="flex-start" className="tab-content">
+      <Grid 
+        container 
+        spacing={2} 
+        justifyContent="flex-start" 
+        className="tab-content"
+        sx={{ 
+          maxHeight: '400px', 
+          overflowY: 'auto',
+          marginBottom: '20px'
+        }}
+      >
         {merchandise.map((item) => (
           <Grid
             item
@@ -141,14 +159,7 @@ const ArtistProfile = () => {
             onClick={() => handleTshirtClick(item._id)}
             style={{ cursor: 'pointer' }}
           >
-            <div style={{
-              width: '100%',
-              paddingTop: '100%',
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: '0px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-            }}>
+            <div className="image-container">
               <img
                 src={item.merchImage || item.tshirtImage || item.image}
                 alt={item.name}
@@ -158,7 +169,8 @@ const ArtistProfile = () => {
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'contain',
+                  borderRadius: '0px',
+                  objectFit: 'cover',
                 }}
               />
             </div>
@@ -174,10 +186,20 @@ const ArtistProfile = () => {
     );
   };
 
-  // Renderizado de conciertos (se espera artist.concerts)
+  // Renderizado de conciertos con scroll vertical y formateo de fecha
   const renderConcerts = (concerts) => {
     return (
-      <Grid container spacing={0} justifyContent="flex-start" className="tab-content">
+      <Grid 
+        container 
+        spacing={2} 
+        justifyContent="flex-start" 
+        className="tab-content"
+        sx={{ 
+          maxHeight: '400px', 
+          overflowY: 'auto',
+          marginBottom: '20px'
+        }}
+      >
         {concerts.map((concert) => (
           <Grid
             item
