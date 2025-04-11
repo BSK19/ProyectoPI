@@ -86,8 +86,7 @@ const AudioPlayer = () => {
   };
 
   // Usamos la lista de pistas enviada en currentTrack.tracklist, si existe, o fallback a tracksData
-  const trackList = currentTrack?.tracklist || tracksData;
-
+  const trackList = currentTrack?.tracklist || [];
   const handleSkipNext = () => {
     if (!currentTrack) return;
     const currentIndex = trackList.findIndex(t => t.id === currentTrack.id);

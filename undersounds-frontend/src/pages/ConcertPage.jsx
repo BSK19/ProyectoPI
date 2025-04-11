@@ -3,7 +3,6 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Snackbar } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { AuthContext } from '../context/AuthContext';
-import artists from '../mockData/artists';
 import '../styles/concert.css';
 import { formatDate } from '../utils/formatters';
 

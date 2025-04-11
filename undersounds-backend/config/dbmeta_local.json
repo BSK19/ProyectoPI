@@ -1,5 +1,5 @@
 {
-  "dbVersion": 15,
+  "dbVersion": 16,
   "colecciones": [
     "artists",
     "albums",

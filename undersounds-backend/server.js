@@ -17,7 +17,6 @@ const path = require('path');
 const fs = require('fs');
 const { exec, spawn } = require('child_process');
 const readline = require('readline');
-const jamendoRoutes = require('./routes/JamendoRoutes');
 const session = require('express-session');
 
 mongoose.set('strictQuery', false);
@@ -74,7 +73,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Rutas de la API
 app.use('/api/auth', accountRoutes);
 app.use('/api/albums', albumRoutes);
-app.use('/api/jamendo', jamendoRoutes);
 app.use('/api/artists', artistRoutes);
 app.use('/api/noticias', noticiasMusica);
 app.use('/api/merchandising', MerchRoutes);
