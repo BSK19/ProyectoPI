@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
-import tshirts from '../mockData/tshirts';
-import artists from '../mockData/artists';
+import { merchService } from '../services/merchandisingService'; // Servicio real
+import axios from 'axios'; // Asegúrate de importar axios
 import '../styles/tshirt.css';
 
 const TshirtPage = () => {
@@ -12,62 +12,86 @@ const TshirtPage = () => {
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-  const [feedback, setFeedback] = useState(false); // Estado para el feedback visual
-  const itemId = parseInt(id);
-  const from = location.state?.from;
 
-  let item;
+  const [item, setItem] = useState(null);
+  const [feedback, setFeedback] = useState(false);
 
-  if (from === "artistMerch") {
-    const allMerchandising = artists.flatMap(artist => artist.merchandising);
-    item = allMerchandising.find((m) => m.id === itemId);
-  } else {
-    item = tshirts.find((t) => t.id === itemId);
-    if (!item) {
-      const allMerchandising = artists.flatMap(artist => artist.merchandising);
-      item = allMerchandising.find((m) => m.id === itemId);
-    }
-  }
+  // Cargar camiseta desde Mongo por ID
+  useEffect(() => {
+    const fetchTshirt = async () => {
+      try {
+        const tshirt = await merchService.getMerchById(id); // Asegúrate de tener este método
+        setItem(tshirt);
+      } catch (err) {
+        console.error('Error fetching merch item:', err);
+      }
+    };
+
+    fetchTshirt();
+  }, [id]);
 
   if (!item) {
-    return <div>Camiseta no encontrada</div>;
+    return <div>Camiseta no encontrada {id}</div>;
   }
+
+  console.log("ITEM:", item);
 
   const handleAddToCart = () => {
     addToCart({
-      id: item.id,
+      id: item._id,
       name: item.name,
       price: item.price,
-      image: item.merchImage || item.tshirtImage || item.image,
+      image: item.image,
     });
-    setFeedback(true); // Activar feedback
-    setTimeout(() => setFeedback(false), 1000); // Desactivar feedback después de 1 segundo
+    setFeedback(true);
+    setTimeout(() => setFeedback(false), 1000);
   };
 
-  const handleBuyNow = () => {
+  // Actualización de handleBuyNow para replicar la funcionalidad de proceder al pago
+  const handleBuyNow = async () => {
     if (!user) {
       navigate('/login');
       return;
     }
-    addToCart({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.merchImage || item.tshirtImage || item.image,
-    });
-    navigate('/payment');
+
+    // Se crea un resumen de pedido para un solo producto con cantidad 1
+    const orderSummary = {
+      items: [
+        {
+          id: item._id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1,
+        },
+      ],
+      total: item.price + 5, // Agregando, por ejemplo, un coste de envío fijo de 5
+    };
+
+    // Guardar el resumen en localStorage
+    localStorage.setItem('orderSummary', JSON.stringify(orderSummary));
+
+    // Iniciar el proceso de pago, similar al botón "proceder al pago"
+    try {
+      const response = await axios.post('http://localhost:5000/create-checkout-session', {
+        items: orderSummary.items,
+      });
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error("Error al iniciar el pago:", error);
+      alert("Error al iniciar el pago.");
+    }
   };
 
   return (
     <div className="tshirt-page">
       <img
-        src={item.merchImage || item.tshirtImage || item.image}
+        src={item.image}
         alt={`${item.name} shirt`}
       />
       <div className="tshirt-details">
         <h1>{item.name}</h1>
         <p className="tshirt-description">{item.description}</p>
-        <p className="shipping-time">Tiempo de envío: {item.shippingTime}</p>
         <p className="price-text">
           Precio: ${typeof item.price === 'number' ? item.price.toFixed(2) : 'Precio no disponible'}
         </p>

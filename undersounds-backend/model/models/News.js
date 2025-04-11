@@ -10,4 +10,4 @@ const NewsSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('News', NewsSchema);
+module.exports = mongoose.model('noticiasMusica', NewsSchema,'noticiasMusica');

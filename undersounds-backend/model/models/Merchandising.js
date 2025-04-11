@@ -8,7 +8,7 @@ const MerchSchema = new Schema({
     price: { type: Number, required: true },
     image: { type: String, required: true },
     type: { type: Number, required: true }, // 0 = vinilo, 1 = CD, 2 = Cassettes, 3 = tshirts, 4 = others, etc.
-    artistId: { type: Types.ObjectId, ref: 'Artist', default: null }, // Referencia opcional
+    artistId: { type: Number, ref: 'Artist', default: null },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

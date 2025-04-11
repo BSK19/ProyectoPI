@@ -15,9 +15,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { exec, spawn } = require('child_process'); // Añadido spawn
+const { exec, spawn } = require('child_process');
 const readline = require('readline');
 const jamendoRoutes = require('./routes/JamendoRoutes');
+const session = require('express-session');
 
 mongoose.set('strictQuery', false);
 
@@ -29,7 +30,21 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'undersounds_secret_key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', 
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 1 día en milisegundos
+  }
+}));
+
 app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/assets', express.static(path.join(__dirname, '../undersounds-frontend/src/assets')));
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);

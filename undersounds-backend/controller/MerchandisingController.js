@@ -1,6 +1,7 @@
 const MerchDAO = require('../model/dao/MerchandisingDAO');
 const MerchFactory = require('../model/factory/MerchandisingFactory');
 
+
 const MerchandisingController = {
   // Obtener todos los productos
   async getAllMerch(req, res) {
@@ -27,7 +28,7 @@ const MerchandisingController = {
   async getByArtist(req, res) {
     try {
       const artistId = req.params.artistId;
-      const merch = await MerchDAO.getByArtist(artistId);
+      const merch = await MerchDAO.getByArtistId(artistId);
       res.status(200).json(merch);
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener por artista', error });
@@ -43,7 +44,25 @@ const MerchandisingController = {
     } catch (error) {
       res.status(500).json({ message: 'Error al crear el merchandising', error });
     }
+  },
+
+
+  // Obtener un producto por ID
+  async getById(req, res) {
+    try {
+      const id = req.params.id;
+      const merch = await MerchDAO.getById(id);
+      if (!merch) {
+        return res.status(404).json({ message: 'Producto no encontrado XD' });
+      }
+      res.status(200).json(merch);
+    } catch (error) {
+      res.status(500).json({
+        message: `Error al obtener el producto por ID (${req.params.id})`,
+        error: error.message
+      });
+    }
   }
-};
+  };
 
 module.exports = MerchandisingController;

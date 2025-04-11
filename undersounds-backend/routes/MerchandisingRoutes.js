@@ -14,4 +14,8 @@ router.get('/artist/:artistId', MerchandisingController.getByArtist);
 // Crear un nuevo producto (cuando haya panel admin)
 router.post('/', MerchandisingController.createMerch);
 
+// Obtener un producto de merchandising por ID
+router.get('/:id', MerchandisingController.getById);
+
+
 module.exports = router;

@@ -1,6 +1,7 @@
 {
-  "dbVersion": 8,
+  "dbVersion": 16,
   "colecciones": [
-    "tshirts"
+    "artists",
+    "albums"
   ]
 }

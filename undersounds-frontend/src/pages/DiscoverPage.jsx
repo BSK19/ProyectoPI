@@ -51,21 +51,21 @@ const DiscoverPage = () => {
                 console.error("Error fetching merch:", error);
             }
         };
-            loadMerch();
+        loadMerch();
     }, []);
 
     useEffect(() => {
         const filterParam = query.get("filter") || "all";
         setSelectedFilter(filterParam);
         setSelectedGenre(filterParam); // Ensure the genre is also updated
-    }, [location.search, query]);
+    }, [location.search]); // query depende de location.search
 
     const handleAlbumClick = (album) => {
         navigate(`/album/${album.id}`, { state: { album } });
     };
-
-    const handleTshirtClick = (tshirtId) => {
-        navigate(`/tshirt/${tshirtId}`);
+    
+    const handleTshirtClick = (tshirt_Id) => {
+        navigate(`/tshirt/${tshirt_Id}`);
     };
 
     // Change filter when a genre button is clicked
@@ -87,13 +87,13 @@ const DiscoverPage = () => {
         filteredMerch = merch;
     } else if (specialFilters.includes(selectedFilter)) {
         if (selectedFilter === "vinyl") {
-            filteredMerch = merch.filter((merch)=>merch.type==0);
+            filteredMerch = merch.filter((merch) => merch.type === 0);
         } else if (selectedFilter === "cds") {
-            filteredMerch = merch.filter((merch)=>merch.type==1);
+            filteredMerch = merch.filter((merch) => merch.type === 1);
         } else if (selectedFilter === "cassettes") {
-            filteredMerch = merch.filter((merch)=>merch.type==2);
+            filteredMerch = merch.filter((merch) => merch.type === 2);
         } else if (selectedFilter === "tshirts") {
-            filteredMerch = merch.filter((merch)=>merch.type==3);
+            filteredMerch = merch.filter((merch) => merch.type === 3);
         }
     } else {
         filteredAlbums = albums.filter(
@@ -201,7 +201,7 @@ const DiscoverPage = () => {
                                 <CardMedia
                                     component="img"
                                     alt={`${album.name} cover`}
-                                    image={album.image}
+                                    image={album.coverImage}
                                     sx={{
                                         aspectRatio: "1 / 1", 
                                         padding: "20px",
@@ -220,7 +220,7 @@ const DiscoverPage = () => {
                                         variant="body2" 
                                         sx={{ color: "#555", fontStyle: "italic", marginBottom: "5px" }}
                                     >
-                                        by {album.artist_name}
+                                        by {album.artist}
                                     </Typography>
                                     <Typography 
                                         variant="body2" 
@@ -257,7 +257,7 @@ const DiscoverPage = () => {
                                 }
                             }}
                         >
-                            <CardActionArea onClick={() => handleTshirtClick(merch.id)}>
+                            <CardActionArea onClick={() => handleTshirtClick(merch._id)}>
                                 <CardMedia
                                     component="img"
                                     alt={`${merch.name} shirt`}

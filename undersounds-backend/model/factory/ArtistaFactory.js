@@ -11,8 +11,9 @@ class ArtistaFactory {
             genre: data.genre,
             bio: data.bio || '',
             banner: data.banner || '',
-            seguidores: data.seguidores || Math.floor(Math.random() * (2000000 - 4000 + 1)) + 4000,
+            seguidores: data.seguidores || '0',
             ubicacion: data.ubicacion || '',
+            // Inicializar álbumes, luego se podrán popular
             albums: data.albums || [],
             concerts: data.concerts || [],
             merchandising: data.merchandising || [],

@@ -23,11 +23,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../assets/images/logo.png';
 import SignUpDialog from '../Auth/SignUpDx';
-import albums from '../../mockData/albums';
-import artists from '../../mockData/artists';
-import tracks from '../../mockData/tracks';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
+import { fetchArtists as fetchArtistsService } from '../../services/artistService';
+import { fetchAlbums } from '../../services/jamendoService';
 
 const Header = () => {
   const [query, setQuery] = useState('');
@@ -40,39 +39,59 @@ const Header = () => {
   const location = useLocation();
   const containerRef = useRef(null);
   const { user, logout, setUser } = useContext(AuthContext);
-  // Se usa la propiedad correcta "cartItems" del CartContext
   const { cartItems } = useContext(CartContext);
 
-  const handleSearch = () => {
-    let filteredResults = [];
-    if (filter === 'all' || filter === 'artists') {
-      const artistMatches = artists.filter(artist =>
-        artist.name.toLowerCase().includes(query.toLowerCase())
-      );
-      filteredResults = [
-        ...filteredResults,
-        ...artistMatches.map(item => ({ type: 'artist', data: item }))
-      ];
+  // Función que realiza la búsqueda usando las funciones de los servicios
+  const handleSearch = async () => {
+    try {
+      let filteredResults = [];
+      const lowerQuery = query.toLowerCase();
+
+      if (filter === 'all' || filter === 'artists') {
+        const artists = await fetchArtistsService();
+        const artistMatches = artists.filter(artist =>
+          artist.name.toLowerCase().includes(lowerQuery)
+        );
+        filteredResults = filteredResults.concat(
+          artistMatches.map(item => ({ type: 'artist', data: item }))
+        );
+      }
+      
+      if (filter === 'all' || filter === 'albums') {
+        const albums = await fetchAlbums();
+        const albumMatches = albums.filter(album =>
+          album.title.toLowerCase().includes(lowerQuery)
+        );
+        filteredResults = filteredResults.concat(
+          albumMatches.map(item => ({ type: 'album', data: item }))
+        );
+      }
+
+      if (filter === 'all' || filter === 'tracks') {
+        // Se utilizan los álbumes para extraer las pistas, agregando albumId y albumCover
+        const albums = await fetchAlbums();
+        let tracksList = [];
+        albums.forEach(album => {
+          if (Array.isArray(album.tracks)) {
+            const matchingTracks = album.tracks.filter(track =>
+              track.title.toLowerCase().includes(lowerQuery)
+            ).map(track => ({
+              ...track,
+              albumId: album.id,
+              albumCover: album.coverImage
+            }));
+            tracksList = tracksList.concat(matchingTracks);
+          }
+        });
+        filteredResults = filteredResults.concat(
+          tracksList.map(item => ({ type: 'track', data: item }))
+        );
+      }
+
+      setResults(filteredResults);
+    } catch (error) {
+      console.error('Error during search:', error);
     }
-    if (filter === 'all' || filter === 'albums') {
-      const albumMatches = albums.filter(album =>
-        album.title.toLowerCase().includes(query.toLowerCase())
-      );
-      filteredResults = [
-        ...filteredResults,
-        ...albumMatches.map(item => ({ type: 'album', data: item }))
-      ];
-    }
-    if (filter === 'all' || filter === 'tracks') {
-      const trackMatches = tracks.filter(track =>
-        track.title.toLowerCase().includes(query.toLowerCase())
-      );
-      filteredResults = [
-        ...filteredResults,
-        ...trackMatches.map(item => ({ type: 'track', data: item }))
-      ];
-    }
-    setResults(filteredResults);
   };
 
   // Debounce para búsquedas
@@ -146,11 +165,11 @@ const Header = () => {
         <ListItem
           button
           component={Link}
-          to={`/track/${result.data.id}`}
+          to={`/album/${result.data.albumId}`}
           key={`track-${result.data.id}`}
         >
           <ListItemAvatar>
-            <Avatar src={result.data.artwork || result.data.coverImage} alt={result.data.title} />
+            <Avatar src={result.data.albumCover} alt={result.data.title} />
           </ListItemAvatar>
           <ListItemText primary={result.data.title} secondary="Pista" />
         </ListItem>
@@ -194,21 +213,14 @@ const Header = () => {
           </Link>
         </Box>
         {/* Zona central: Área de búsqueda */}
-        <Box
-          ref={containerRef}
-          sx={{ display: 'flex', flexDirection: 'column', mx: 2, flexGrow: 1, position: 'relative' }}
-        >
+        <Box ref={containerRef} sx={{ display: 'flex', flexDirection: 'column', mx: 2, flexGrow: 1, position: 'relative' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <InputBase
               placeholder="Buscar música, artistas, álbumes, pistas..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => {
-                if (query.trim()) setShowDropdown(true);
-              }}
-              onClick={() => {
-                if (query.trim()) setShowDropdown(true);
-              }}
+              onFocus={() => { if (query.trim()) setShowDropdown(true); }}
+              onClick={() => { if (query.trim()) setShowDropdown(true); }}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -223,9 +235,9 @@ const Header = () => {
             <IconButton
               type="button"
               color="inherit"
-              onClick={() => {
+              onClick={async () => {
                 if (query.trim()) {
-                  handleSearch(); // Asegúrate de que los resultados se actualicen antes de redirigir
+                  await handleSearch();
                 }
                 navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`);
               }}
@@ -262,9 +274,7 @@ const Header = () => {
                   {results.slice(0, 4).map(renderResultItem)}
                   <ListItem
                     button
-                    onClick={() =>
-                      navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`)
-                    }
+                    onClick={() => navigate(`/explore?filter=${filter}&q=${encodeURIComponent(query.trim())}`)}
                   >
                     <ListItemText primary="Mostrar más" />
                   </ListItem>
@@ -296,11 +306,7 @@ const Header = () => {
           {user ? (
             <>
               <IconButton onClick={handleAvatarClick}>
-                <Avatar
-                  src={user.profileImage}
-                  alt={user.username || user.bandName || 'Usuario'}
-                  sx={{ width: 40, height: 40 }}
-                />
+                <Avatar src={user.profileImage} alt={user.username || user.bandName || 'Usuario'} sx={{ width: 40, height: 40 }} />
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
@@ -329,7 +335,5 @@ const Header = () => {
     </AppBar>
   );
 };
-
-
 
 export default Header;
