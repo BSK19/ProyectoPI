@@ -8,7 +8,6 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { PlayerContext } from '../../context/PlayerContext';
-import tracksData from '../../mockData/tracks';
 
 const AudioPlayer = () => {
   const { currentTrack, isPlaying, playTrack, pauseTrack, stopTrack, volume, changeVolume } = useContext(PlayerContext);

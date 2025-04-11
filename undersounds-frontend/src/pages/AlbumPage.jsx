@@ -21,7 +21,6 @@ import '../styles/album.css';
 import { PlayerContext } from '../context/PlayerContext';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
-import tracksData from '../mockData/tracks';
 import defaultImage from '../assets/images/botonPlay.jpg';
 import { fetchAlbumById, fetchTracklist } from '../services/jamendoService';
 import axios from 'axios';

@@ -2,6 +2,9 @@
   "dbVersion": 16,
   "colecciones": [
     "artists",
-    "albums"
+    "albums",
+    "accounts",
+    "tshirts",
+    "noticiasMusica"
   ]
 }
