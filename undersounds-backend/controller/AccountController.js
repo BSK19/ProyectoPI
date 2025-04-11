@@ -141,6 +141,19 @@ class AccountController {
     return accessToken;
   }
 
+  async getAccountType(req, res) {
+    try {
+      const { id } = req.params;
+      const account = await AccountDao.findById(id);
+      if (!account) {
+        return res.status(404).json({ error: 'Cuenta no encontrada' });
+      }
+      res.json({ type: account.type });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async updateProfile(req, res) {
     try {
       const { id } = req.params;

@@ -2,6 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { updateUserProfile } from '../services/authService';
+import Button from '@mui/material/Button';
+import UploadAlbumForm from '../components/Upload/Upload';
+
 import '../styles/userprofile.css';
 
 const UserProfile = () => {
@@ -20,6 +23,10 @@ const UserProfile = () => {
   // Campos para cuentas de sello
   const [labelName, setLabelName] = useState(user?.labelName || '');
   const [website, setWebsite] = useState(user?.website || '');
+
+  const [openAlbumModal, setOpenAlbumModal] = useState(false);
+  const [openMerchModal, setOpenMerchModal] = useState(false);
+  const [openRegisterArtistModal, setOpenRegisterArtistModal] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -179,6 +186,54 @@ const UserProfile = () => {
           Actualizar Perfil
         </button>
       </form>
+      <div className="user-additional-functions" style={{ marginTop: '20px' }}>
+    {user.role === 'band' && (
+      <div>
+        <h3>Funciones para Artistas</h3>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setOpenAlbumModal(true)}
+        >
+          Subir Álbum
+        </Button>
+      </div>
+    )}
+    {user.role === 'label' && (
+      <div>
+        <h3>Funciones para Sellos Discográficos</h3>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setOpenAlbumModal(true)}
+          style={{ marginRight: '10px' }}
+        >
+          Subir Álbum
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setOpenMerchModal(true)}
+          style={{ marginRight: '10px' }}
+        >Subir Merchandising</Button>
+         <Button
+          variant="contained"
+          color="success"
+          onClick={() => setOpenRegisterArtistModal(true)}
+        >
+          Dar de Alta Artista Emergente
+        </Button>
+      </div>
+    )}
+    </div>
+
+    {openAlbumModal && (
+        <UploadAlbumForm 
+          open={openAlbumModal} 
+          onClose={() => setOpenAlbumModal(false)} 
+        />
+      )}
+
     </div>
   );
 };

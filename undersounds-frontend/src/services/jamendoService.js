@@ -223,3 +223,15 @@ export const downloadAlbum = async (albumId, format = 'mp3') => {
     throw error;
   }
 };
+
+export const createAlbum = async (albumData) => {
+  try {
+    const response = await axios.post(`${ALBUM_BASE_URL}`, albumData, {
+      withCredentials: true,
+    });
+    return { success: true, ...response.data };
+  } catch (error) {
+    console.error('Error creating album:', error);
+    throw error;
+  }
+};

@@ -38,19 +38,47 @@ class AlbumController {
   
   async createAlbum(req, res) {
     try {
+      // Los datos del formulario se encuentran en req.body
       const albumData = req.body;
+      albumData.price = 10;
+      
+      // Procesar archivo de coverImage si existe (asegúrate de que Multer lo haya cargado)
+      if (req.files && req.files.coverImage && req.files.coverImage.length > 0) {
+        albumData.coverImage = "http://localhost:5000/assets/images/" + req.files.coverImage [0].filename;
+      }
+  
+      // Procesar los archivos de las pistas (tracks)
+      // Procesar los archivos de las pistas (tracks)
+      if (req.files && req.files.tracks) {
+        // Se espera que los títulos de las pistas se envíen en el campo "trackTitles"
+        let trackTitles = albumData.trackTitles || [];
+        if (!Array.isArray(trackTitles)) {
+          trackTitles = [trackTitles];
+        }
+        // Asocia cada archivo de pista con su título; si no se proporciona, usa el nombre del archivo. 
+        // Además, asigna valores por defecto para "n_reproducciones" y "author".
+        albumData.tracks = req.files.tracks.map((file, index) => ({
+          title: file.originalname, // Título de la pista o nombre del archivo
+          filePath: file.path,
+          url: "http://localhost:5000/assets/music/" + file.filename, // URL por defecto
+          duration: "0:00", // Valor por defecto para la duración
+          n_reproducciones: 0, // Valores por defecto para reproducciones
+          autor: albumData.artist || 'Unknown' // Se toma el artista del álbum o se asigna 'Unknown'
+        }));
+      }
+
+      console.log('albumData recibido:', albumData); // Depuración
+
+      // Crear la entidad álbum usando la fábrica
       const albumEntity = AlbumFactory.createAlbum(albumData);
       const newAlbum = await AlbumDao.createAlbum(albumEntity);
-      const artist = await Artist.findOne({ id: albumData.artistId });
-      if (artist) {
-        artist.albums.push(newAlbum._id);
-        await artist.save();
-      }
       res.status(201).json(new AlbumDTO(newAlbum));
     } catch (error) {
+      console.error('Error en createAlbum:', error);
       res.status(500).json({ error: error.message });
     }
   }
+
   
   async updateAlbum(req, res) {
     try {
