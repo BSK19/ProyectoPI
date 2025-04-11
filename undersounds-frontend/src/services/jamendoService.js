@@ -53,99 +53,173 @@ export const fetchArtists = async () => {
   }
 };
 
-// Función para descargar una pista en el formato seleccionado
-// Actualizar la función downloadTrack para manejar mejor los IDs
-
-// Función para descargar una pista en el formato seleccionado
+// Función mejorada para descargar una pista
 export const downloadTrack = async (trackId, albumId, format = 'mp3') => {
   try {
-    console.log(`Descargando track ${trackId} del álbum ${albumId} en formato ${format}`);
     
-    // Asegurarse de que albumId esté definido
-    if (!albumId) {
-      throw new Error('ID del álbum es requerido para descargar una pista');
+    // Antes de hacer la petición, obtener el título de la pista para usarlo como fallback
+    let trackTitle = `track-${trackId}`;
+    try {
+      const album = await fetchAlbumById(albumId);
+      const track = album.tracks.find(t => String(t.id) === String(trackId));
+      if (track && track.title) {
+        trackTitle = track.title.replace(/[\/\\:*?"<>|]/g, '_');
+      }
+    } catch (e) {
+      console.warn('No se pudo obtener información de la pista, usando ID como nombre:', e);
     }
-    
-    // Asegurar que los IDs sean siempre strings para consistencia
-    const trackIdStr = String(trackId);
-    const albumIdStr = String(albumId);
-    
-    console.log(`Realizando petición a: ${ALBUM_BASE_URL}/${albumIdStr}/download?trackId=${trackIdStr}&format=${format}`);
     
     // La URL incluye el formato solicitado como parámetro de consulta
     const response = await axios({
-      url: `${ALBUM_BASE_URL}/${albumIdStr}/download?trackId=${trackIdStr}&format=${format}`,
+      url: `${ALBUM_BASE_URL}/${albumId}/download?trackId=${trackId}&format=${format}`,
       method: 'GET',
-      responseType: 'blob', // Importante para recibir datos binarios
+      responseType: 'blob',
       withCredentials: true,
+      // Asegurar que los encabezados de respuesta estén disponibles
+      headers: {
+        'Accept': '*/*',
+      }
     });
-    
-    // Resto del código igual...
-    const blob = new Blob([response.data]);
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
+        
+    // Extraer el nombre de archivo del encabezado con mejor soporte para diferentes formatos
+    let filename = `${trackTitle}.${format}`;
     
     const contentDisposition = response.headers['content-disposition'];
-    let filename = `track-${trackIdStr}.${format}`;
-    
     if (contentDisposition) {
-      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-      if (filenameMatch && filenameMatch[1]) {
-        filename = filenameMatch[1];
+      
+      // Probar diferentes patrones de extracción
+      let filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
+      if (!filenameMatch) {
+        filenameMatch = contentDisposition.match(/filename=([^;]+)/);
       }
+      
+      if (filenameMatch && filenameMatch[1]) {
+        // Eliminar posibles comillas extras y espacios
+        filename = filenameMatch[1].trim().replace(/^["']|["']$/g, '');
+      } else {
+        console.warn('No se pudo extraer el nombre del encabezado, usando nombre predeterminado');
+      }
+    } else {
+      console.warn('No se encontró el encabezado Content-Disposition, usando nombre predeterminado');
     }
     
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
+    // Método alternativo usando createObjectURL y un elemento <a>
+    try {
+      const blob = new Blob([response.data], {
+        type: format === 'mp3' ? 'audio/mpeg' : 
+              format === 'wav' ? 'audio/wav' : 
+              'audio/flac'
+      });
+            
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        // Para Internet Explorer
+        window.navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Para navegadores modernos
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename; // Usar el nombre obtenido
+        
+        // Estilos para hacer el enlace invisible
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // Simular clic y luego limpiar
+        link.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        }, 100);
+      }
+    } catch (downloadError) {
+      console.error('Error en la descarga:', downloadError);
+      throw downloadError;
+    }
     
     return true;
   } catch (error) {
-    console.error(`Error downloading track ${trackId} in format ${format}:`, error);
-    if (error.response) {
-      console.error('Respuesta del servidor:', error.response.data);
-    }
+    console.error(`Error downloading track ${trackId}:`, error);
     throw error;
   }
 };
 
-// Función para descargar un álbum completo en el formato seleccionado
+// Función mejorada para descargar un álbum
 export const downloadAlbum = async (albumId, format = 'mp3') => {
   try {
+    // Antes de hacer la petición, obtener el título del álbum para usarlo como fallback
+    let albumTitle = `album-${albumId}`;
+    try {
+      const album = await fetchAlbumById(albumId);
+      if (album && album.title) {
+        albumTitle = album.title.replace(/[\/\\:*?"<>|]/g, '_');
+      }
+    } catch (e) {
+      console.warn('No se pudo obtener información del álbum, usando ID como nombre:', e);
+    }
+    
     const response = await axios({
       url: `${ALBUM_BASE_URL}/${albumId}/download-album?format=${format}`,
       method: 'GET',
       responseType: 'blob',
       withCredentials: true,
+      headers: {
+        'Accept': '*/*',
+      }
     });
-    
-    const blob = new Blob([response.data]);
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
+        
+    // Determinar el nombre del archivo ZIP
+    let filename = `${albumTitle}.zip`;
     
     const contentDisposition = response.headers['content-disposition'];
-    let filename = `album-${albumId}.zip`;
-    
     if (contentDisposition) {
-      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      
+      // Probar diferentes patrones de extracción
+      let filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
+      if (!filenameMatch) {
+        filenameMatch = contentDisposition.match(/filename=([^;]+)/);
+      }
+      
       if (filenameMatch && filenameMatch[1]) {
-        filename = filenameMatch[1];
+        filename = filenameMatch[1].trim().replace(/^["']|["']$/g, '');
+      } else {
+        console.warn('No se pudo extraer el nombre del ZIP, usando nombre predeterminado');
       }
     }
     
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
+    // Método alternativo de descarga
+    try {
+      const blob = new Blob([response.data], { type: 'application/zip' });
+      
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        // Para Internet Explorer
+        window.navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Para navegadores modernos
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        
+        // Hacer el enlace invisible
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // Simular clic y luego limpiar
+        link.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        }, 100);
+      }
+    } catch (downloadError) {
+      console.error('Error en la descarga del ZIP:', downloadError);
+      throw downloadError;
+    }
     
     return true;
   } catch (error) {
-    console.error(`Error downloading album ${albumId} in format ${format}:`, error);
+    console.error(`Error downloading album ${albumId}:`, error);
     throw error;
   }
 };

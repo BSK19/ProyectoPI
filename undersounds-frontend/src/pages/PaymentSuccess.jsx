@@ -65,7 +65,6 @@ const handleDownloadTrack = async (item) => {
   setLoading(prev => ({ ...prev, [item.id]: true }));
   
   try {
-    console.log("Iniciando descarga de track, datos completos:", item);
     
     // Identificar correctamente los IDs
     // Para la descarga de una pista individual, necesitamos:
@@ -75,9 +74,7 @@ const handleDownloadTrack = async (item) => {
     
     // Aquí es crucial usar el ID del álbum que sea el ObjectID de MongoDB
     const albumId = item.id; // Este ya debe ser el ObjectID según tu DTO
-    
-    console.log(`Descargando: trackId=${trackId}, albumId=${albumId}, format=${format}`);
-    
+        
     // Llamar al servicio de descarga
     await downloadTrack(trackId, albumId, format);
     
