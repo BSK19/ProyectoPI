@@ -6,7 +6,9 @@ const AccountSchema = new mongoose.Schema({
   // Permitir que la contraseña sea opcional para usuarios OAuth
   password: { type: String },
   role: { type: String, enum: ['fan', 'band', 'label'], default: 'fan' },
-  profileImage: { type: String, default: '/assets/images/default-user.jpg' },
+  profileImage: { type: String, default: '' },
+  bannerImage: { type: String, default: 'http://localhost:5000/assets/images/default.jpg' },
+  followers: { type: Number, default: 0 },
   bio: { type: String, default: '' },
   socialLinks: {
     facebook: { type: String, default: '' },
@@ -21,6 +23,7 @@ const AccountSchema = new mongoose.Schema({
   purchaseHistory: { type: Array, default: [] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist' },
   // Campos para autenticación vía OAuth2.0
   provider: { type: String },       // Ejemplo: "google", "facebook"
   providerId: { type: String }        // ID único devuelto por el proveedor

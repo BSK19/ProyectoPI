@@ -93,3 +93,17 @@
     font-size: 1rem; /* Tamaño más pequeño para los decimales */
     vertical-align: baseline; /* Para alinearlos un poco más abajo */
   }
+  .track-number {
+    width: 30px;
+    text-align: right;
+    padding-right: 8px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .track-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }

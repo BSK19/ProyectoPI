@@ -34,6 +34,13 @@ const AudioPlayer = () => {
     }
   }, [currentTrack]);
 
+  // Restaurar la visibilidad del reproductor cuando se cambie la pista
+  useEffect(() => {
+    if (currentTrack) {
+      setIsVisible(true);
+    }
+  }, [currentTrack]);
+
   // Actualizar el volumen sin reiniciar la reproducción
   useEffect(() => {
     audioRef.current.volume = volume;
@@ -69,7 +76,7 @@ const AudioPlayer = () => {
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
+};
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -79,24 +86,37 @@ const AudioPlayer = () => {
     }
   };
 
+  // Usamos la lista de pistas enviada en currentTrack.tracklist, si existe, o fallback a tracksData
+  const trackList = currentTrack?.tracklist || tracksData;
+
   const handleSkipNext = () => {
     if (!currentTrack) return;
-    const currentIndex = tracksData.findIndex(t => t.id === currentTrack.id);
-    if (currentIndex !== -1 && currentIndex < tracksData.length - 1) {
-      const nextTrack = tracksData[currentIndex + 1];
-      playTrack(nextTrack);
+    const currentIndex = trackList.findIndex(t => t.id === currentTrack.id);
+    if (currentIndex !== -1 && currentIndex < trackList.length - 1) {
+      const nextTrack = trackList[currentIndex + 1];
+      playTrack({
+        ...nextTrack,
+        title: nextTrack.title || nextTrack.name,
+        coverImage: nextTrack.coverImage || currentTrack.coverImage || '/assets/images/default-cover.jpg',
+        tracklist: trackList
+      });
     } else {
       audioRef.current.currentTime = 0;
       setProgress(0);
     }
   };
-
+  
   const handleSkipPrevious = () => {
     if (!currentTrack) return;
-    const currentIndex = tracksData.findIndex(t => t.id === currentTrack.id);
+    const currentIndex = trackList.findIndex(t => t.id === currentTrack.id);
     if (currentIndex > 0) {
-      const prevTrack = tracksData[currentIndex - 1];
-      playTrack(prevTrack);
+      const prevTrack = trackList[currentIndex - 1];
+      playTrack({
+        ...prevTrack,
+        title: prevTrack.title || prevTrack.name,
+        coverImage: prevTrack.coverImage || currentTrack.coverImage || '/assets/images/default-cover.jpg',
+        tracklist: trackList
+      });
     } else {
       audioRef.current.currentTime = 0;
       setProgress(0);
@@ -108,22 +128,7 @@ const AudioPlayer = () => {
     setIsVisible(false);
   };
 
-  const handlePlaySong = (track) => {
-    const trackDetail = tracksData.find(t => t.id === track.id);
-    if (trackDetail) {
-      playTrack({
-        ...trackDetail,
-        coverImage: trackDetail.coverImage || '/assets/images/default-cover.jpg',
-        title: trackDetail.title,
-        artist: trackDetail.artist,
-      });
-      setActiveTrackId(track.id);
-    } else {
-      console.error('Track not found');
-    }
-  };
-
-  // Mostrar el reproductor solo si se está en la ruta /album, hay una pista y es visible
+  // Mostrar el reproductor solo si estamos en la ruta /album, hay una pista y es visible
   const inReproduction = location.pathname.startsWith('/album');
   const shouldShow = inReproduction && currentTrack && isVisible;
 
@@ -143,7 +148,7 @@ const AudioPlayer = () => {
         zIndex: 1000,
       }}
     >
-      {/* Izquierda: Información de la pista */}
+      {/* Izquierda: Información de la pista (imagen, título y artista) */}
       <Box sx={{ display: 'flex', alignItems: 'center', width: '30%' }}>
         <img
           src={currentTrack?.coverImage || '/assets/images/default-cover.jpg'}

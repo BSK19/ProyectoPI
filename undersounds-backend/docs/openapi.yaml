@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: UnderSounds API Authentication
   version: "1.0.0"
-  description: "API para manejo de usuarios: registro, login, actualización y logout, incluyendo OAuth2.0 con Google y refresh token mediante cookies."
+  description: "API para manejo de usuarios: registro, login, actualización, logout, OAuth2.0 con Google, recuperación de contraseña y refresh token mediante cookies."
 servers:
   - url: http://localhost:5000/api
 paths:
@@ -107,16 +107,15 @@ paths:
                 bio:
                   type: string
                   example: Nueva bio
-                # Campos opcionales para roles específicos:
                 bandName:
                   type: string
-                  example: Nombre de banda
+                  example: The Rockers
                 genre:
                   type: string
                   example: Rock
                 labelName:
                   type: string
-                  example: Nombre del sello
+                  example: Super Records
                 website:
                   type: string
                   example: https://ejemplo.com
@@ -143,6 +142,68 @@ paths:
                   success:
                     type: boolean
                     example: true
+  /auth/forgot-password:
+    post:
+      summary: Solicita recuperación de contraseña.
+      requestBody:
+        description: Email del usuario para enviar el código OTP.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: fan1@example.com
+      responses:
+        "200":
+          description: Mensaje de confirmación (el código se envía si la cuenta existe).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Si el correo existe, se enviará un código de recuperación."
+        "500":
+          description: Error interno.
+  /auth/reset-password:
+    post:
+      summary: Restablece la contraseña utilizando el código OTP.
+      requestBody:
+        description: Email, código OTP y la nueva contraseña.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: fan1@example.com
+                otp:
+                  type: string
+                  example: "AbC123"
+                newPassword:
+                  type: string
+                  example: newPassword123
+      responses:
+        "200":
+          description: Contraseña actualizada exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "400":
+          description: Código OTP inválido o caducado.
+        "500":
+          description: Error interno.
   /auth/google:
     get:
       summary: Inicia autenticación con Google.
@@ -155,6 +216,651 @@ paths:
       responses:
         "302":
           description: Redirige al frontend tras autenticación exitosa.
+  /albums:
+    get:
+      summary: Obtiene todos los álbumes
+      responses:
+        "200":
+          description: Lista de álbumes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crea un nuevo álbum
+      requestBody:
+        description: Datos del álbum a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumInput'
+      responses:
+        "201":
+          description: Álbum creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        "400":
+          description: Datos inválidos
+        "500":
+          description: Error interno del servidor
+  /albums/{id}:
+    get:
+      summary: Obtiene un álbum por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Álbum obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        "404":
+          description: Álbum no encontrado
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un álbum existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos actualizados del álbum
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumInput'
+      responses:
+        "200":
+          description: Álbum actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        "404":
+          description: Álbum no encontrado
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un álbum
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Álbum eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Album deleted successfully"
+        "404":
+          description: Álbum no encontrado
+        "500":
+          description: Error interno del servidor
+  /albums/{id}/ratings:
+    post:
+      summary: Añade una valoración a un álbum
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos de la valoración
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "60d0fe4f5311236168a109ca"
+                rating:
+                  type: number
+                  example: 4.5
+                comment:
+                  type: string
+                  example: "Gran álbum, excelentes pistas"
+                profileImage:
+                  type: string
+                  example: "/assets/images/avatar1.jpg"
+      responses:
+        "200":
+          description: Valoración añadida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  album:
+                    $ref: '#/components/schemas/Album'
+        "404":
+          description: Álbum no encontrado
+        "500":
+          description: Error interno del servidor
+  /albums/{id}/download:
+    get:
+      summary: Descarga una pista específica de un álbum
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: trackId
+          required: true
+          schema:
+            type: string
+          description: ID de la pista a descargar
+        - in: query
+          name: format
+          required: false
+          schema:
+            type: string
+            enum: [mp3, wav, flac]
+            default: mp3
+          description: Formato de audio para la descarga
+      responses:
+        "200":
+          description: Archivo de audio descargado exitosamente
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+            audio/flac:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Parámetros inválidos
+        "404":
+          description: Álbum o pista no encontrados
+        "500":
+          description: Error interno del servidor
+  /albums/{id}/download-album:
+    get:
+      summary: Descarga un álbum completo como archivo ZIP
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: format
+          required: false
+          schema:
+            type: string
+            enum: [mp3, wav, flac]
+            default: mp3
+          description: Formato de audio para las pistas del álbum
+      responses:
+        "200":
+          description: Archivo ZIP descargado exitosamente
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Parámetros inválidos
+        "404":
+          description: Álbum no encontrado o sin pistas
+        "500":
+          description: Error interno del servidor
+  /artists:
+    get:
+      summary: Obtiene todos los artistas
+      responses:
+        "200":
+          description: Lista de artistas obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crea un nuevo artista
+      requestBody:
+        description: Datos del artista a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistInput'
+      responses:
+        "201":
+          description: Artista creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        "400":
+          description: Datos inválidos
+        "500":
+          description: Error interno del servidor
+
+  /artists/{id}:
+    get:
+      summary: Obtiene un artista por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Artista obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        "404":
+          description: Artista no encontrado
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un artista existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos actualizados del artista
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistInput'
+      responses:
+        "200":
+          description: Artista actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        "404":
+          description: Artista no encontrado
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un artista
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Artista eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Artist deleted successfully"
+        "404":
+          description: Artista no encontrado
+        "500":
+          description: Error interno del servidor
+  /merch:
+    get:
+      summary: Obtiene todo el merchandising disponible
+      responses:
+        "200":
+          description: Lista de merchandising obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Merchandise'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crea un nuevo artículo de merchandising
+      requestBody:
+        description: Datos del artículo a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MerchandiseInput'
+      responses:
+        "201":
+          description: Artículo creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        "400":
+          description: Datos inválidos
+        "500":
+          description: Error interno del servidor
+
+  /merch/{id}:
+    get:
+      summary: Obtiene un artículo de merchandising por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Artículo obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        "404":
+          description: Artículo no encontrado
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un artículo de merchandising existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos actualizados del artículo
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MerchandiseInput'
+      responses:
+        "200":
+          description: Artículo actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        "404":
+          description: Artículo no encontrado
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un artículo de merchandising
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Artículo eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Merchandise deleted successfully"
+        "404":
+          description: Artículo no encontrado
+        "500":
+          description: Error interno del servidor
+
+  /merch/artist/{artistId}:
+    get:
+      summary: Obtiene merchandising por artista
+      parameters:
+        - in: path
+          name: artistId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de merchandising del artista obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Merchandise'
+        "404":
+          description: Artista no encontrado
+        "500":
+          description: Error interno del servidor
+  /cart:
+    get:
+      summary: Obtiene el contenido del carrito del usuario
+      responses:
+        "200":
+          description: Contenido del carrito obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
+        "401":
+          description: No autorizado
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Añade un ítem al carrito
+      requestBody:
+        description: Ítem a añadir al carrito
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemInput'
+      responses:
+        "200":
+          description: Ítem añadido exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  cart:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
+        "400":
+          description: Datos inválidos
+        "401":
+          description: No autorizado
+        "500":
+          description: Error interno del servidor
+          
+  /cart/{itemId}:
+    delete:
+      summary: Elimina un ítem del carrito
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ítem eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  cart:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
+        "404":
+          description: Ítem no encontrado
+        "401":
+          description: No autorizado
+        "500":
+          description: Error interno del servidor
+
+  /payment:
+    post:
+      summary: Procesa un pago
+      requestBody:
+        description: Datos del pago a procesar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CartItem'
+                paymentInfo:
+                  type: object
+                  properties:
+                    cardNumber:
+                      type: string
+                      example: "4242424242424242"
+                    expiryDate:
+                      type: string
+                      example: "12/25"
+                    cvc:
+                      type: string
+                      example: "123"
+                shippingInfo:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "Juan Pérez"
+                    address:
+                      type: string
+                      example: "Calle Principal 123"
+                    city:
+                      type: string
+                      example: "Madrid"
+                    postalCode:
+                      type: string
+                      example: "28001"
+                    country:
+                      type: string
+                      example: "España"
+                    email:
+                      type: string
+                      example: "juan@example.com"
+      responses:
+        "200":
+          description: Pago procesado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orderId:
+                    type: string
+                    example: "ord_123456789"
+                  receipt:
+                    type: string
+                    example: "https://example.com/receipt/ord_123456789"
+        "400":
+          description: Datos de pago inválidos
+        "401":
+          description: No autorizado
+        "402":
+          description: Pago rechazado
+        "500":
+          description: Error interno del servidor
+  /payment/orders:
+    get:
+      summary: Obtiene el historial de órdenes del usuario
+      responses:
+        "200":
+          description: Historial de órdenes obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        "401":
+          description: No autorizado
+        "500":
+          description: Error interno del servidor
+  /payment/orders/{orderId}:
+    get:
+      summary: Obtiene detalles de una orden específica
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detalles de orden obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: Orden no encontrada
+        "401":
+          description: No autorizado
+        "500":
+          description: Error interno del servidor
 components:
   schemas:
     Account:
@@ -178,7 +884,6 @@ components:
         bio:
           type: string
           example: Soy un fanático de la música.
-        # Campos opcionales dependiendo del rol:
         bandName:
           type: string
           example: The Rockers
@@ -190,4 +895,400 @@ components:
           example: Super Records
         website:
           type: string
-          example: https://superrecords.com
+          example: https://superrecords.com    
+    Album:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d0fe4f5311236168a109cb"
+        title:
+          type: string
+          example: "Álbum Debut"
+        artistId:
+          type: string
+          example: "60d0fe4f5311236168a109cd"
+        releaseYear:
+          type: number
+          example: 2023
+        coverImage:
+          type: string
+          example: "/assets/images/album1.jpg"
+        genre:
+          type: string
+          example: "Rock"
+        price:
+          type: number
+          example: 9.99
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+        ratings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rating'
+        vinyl:
+          type: boolean
+          example: true
+        cd:
+          type: boolean
+          example: true
+        cassettes:
+          type: boolean
+          example: false
+        destacado:
+          type: boolean
+          example: false
+    AlbumInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Álbum Debut"
+        artistId:
+          type: string
+          example: "60d0fe4f5311236168a109cd"
+        releaseYear:
+          type: number
+          example: 2023
+        coverImage:
+          type: string
+          example: "/assets/images/album1.jpg"
+        genre:
+          type: string
+          example: "Rock"
+        price:
+          type: number
+          example: 9.99
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackInput'
+        vinyl:
+          type: boolean
+          example: true
+        cd:
+          type: boolean
+          example: true
+        cassettes:
+          type: boolean
+          example: false
+        destacado:
+          type: boolean
+          example: false
+      required:
+        - title
+        - artistId
+        - releaseYear
+        - genre
+        - price
+    Track:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: "Canción 1"
+        duration:
+          type: string
+          example: "3:45"
+        url:
+          type: string
+          example: "../music/song1.mp3"
+        autor:
+          type: string
+          example: "Nombre del Artista"
+        n_reproducciones:
+          type: number
+          example: 1500
+    TrackInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Canción 1"
+        duration:
+          type: string
+          example: "3:45"
+        url:
+          type: string
+          example: "../music/song1.mp3"
+        autor:
+          type: string
+          example: "Nombre del Artista"
+      required:
+        - title
+        - url
+    Rating:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "60d0fe4f5311236168a109ca"
+        rating:
+          type: number
+          example: 4.5
+        comment:
+          type: string
+          example: "Gran álbum, excelentes pistas"
+        profileImage:
+          type: string
+          example: "/assets/images/avatar1.jpg"
+    Artist:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d0fe4f5311236168a109cd"
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: "The Soundscapers"
+        profileImage:
+          type: string
+          example: "/assets/images/artist1.jpg"
+        genre:
+          type: string
+          example: "Rock"
+        bio:
+          type: string
+          example: "Una banda de rock emergente conocida por sus actuaciones enérgicas."
+        banner:
+          type: string
+          example: "/assets/images/banner1.jpg"
+        seguidores:
+          type: string
+          example: "2.5M"
+        ubicacion:
+          type: string
+          example: "Londres, RU"
+        albums:
+          type: array
+          items:
+            type: string
+            example: "60d0fe4f5311236168a109cb"
+        socialLinks:
+          type: object
+          properties:
+            facebook:
+              type: string
+              example: "https://facebook.com/thesoundscapers"
+            twitter:
+              type: string
+              example: "https://twitter.com/soundscapers"
+            instagram:
+              type: string
+              example: "https://instagram.com/soundscapers"
+    ArtistInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "The Soundscapers"
+        profileImage:
+          type: string
+          example: "/assets/images/artist1.jpg"
+        genre:
+          type: string
+          example: "Rock"
+        bio:
+          type: string
+          example: "Una banda de rock emergente conocida por sus actuaciones enérgicas."
+        banner:
+          type: string
+          example: "/assets/images/banner1.jpg"
+        ubicacion:
+          type: string
+          example: "Londres, RU"
+        socialLinks:
+          type: object
+          properties:
+            facebook:
+              type: string
+              example: "https://facebook.com/thesoundscapers"
+            twitter:
+              type: string
+              example: "https://twitter.com/soundscapers"
+            instagram:
+              type: string
+              example: "https://instagram.com/soundscapers"
+      required:
+        - name
+        - genre
+    Merchandise:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d0fe4f5311236168a109ce"
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: "Camiseta de Banda"
+        price:
+          type: number
+          example: 19.99
+        image:
+          type: string
+          example: "/assets/images/merch1.jpg"
+        description:
+          type: string
+          example: "Camiseta oficial de la banda, talla M"
+        artistId:
+          type: string
+          example: "60d0fe4f5311236168a109cd"
+        type:
+          type: number
+          example: 3
+          description: "0: vinyl, 1: cd, 2: cassette, 3: camiseta"
+        stock:
+          type: number
+          example: 50
+    MerchandiseInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Camiseta de Banda"
+        price:
+          type: number
+          example: 19.99
+        image:
+          type: string
+          example: "/assets/images/merch1.jpg"
+        description:
+          type: string
+          example: "Camiseta oficial de la banda, talla M"
+        artistId:
+          type: string
+          example: "60d0fe4f5311236168a109cd"
+        type:
+          type: number
+          example: 3
+          description: "0: vinyl, 1: cd, 2: cassette, 3: camiseta"
+        stock:
+          type: number
+          example: 50
+      required:
+        - name
+        - price
+        - image
+        - description
+        - type
+    CartItem:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d0fe4f5311236168a109cf"
+        userId:
+          type: string
+          example: "60d0fe4f5311236168a109ca"
+        itemId:
+          type: string
+          example: "60d0fe4f5311236168a109ce"
+        itemType:
+          type: string
+          enum: [merchandise, album, track]
+          example: "merchandise"
+        name:
+          type: string
+          example: "Camiseta de Banda"
+        price:
+          type: number
+          example: 19.99
+        quantity:
+          type: number
+          example: 1
+        image:
+          type: string
+          example: "/assets/images/merch1.jpg"
+    CartItemInput:
+      type: object
+      properties:
+        itemId:
+          type: string
+          example: "60d0fe4f5311236168a109ce"
+        itemType:
+          type: string
+          enum: [merchandise, album, track]
+          example: "merchandise"
+        quantity:
+          type: number
+          example: 1
+      required:
+        - itemId
+        - itemType
+        - quantity
+    Order:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d0fe4f5311236168a109d0"
+        userId:
+          type: string
+          example: "60d0fe4f5311236168a109ca"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+          example: 29.99
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+          example: "completed"
+        shippingInfo:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Juan Pérez"
+            address:
+              type: string
+              example: "Calle Principal 123"
+            city:
+              type: string
+              example: "Madrid"
+            postalCode:
+              type: string
+              example: "28001"
+            country:
+              type: string
+              example: "España"
+            email:
+              type: string
+              example: "juan@example.com"
+            phone:
+              type: string
+              example: "612345678"
+        paymentInfo:
+          type: object
+          properties:
+            method:
+              type: string
+              enum: [card, paypal]
+              example: "card"
+            transactionId:
+              type: string
+              example: "tx_123456789"
+            lastFourDigits:
+              type: string
+              example: "4242"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-10-15T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-10-15T14:35:00Z"

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, oauthLogin } from '../../services/authService';
 import { RegisterContext } from '../../context/RegisterContext.jsx';
@@ -21,7 +21,6 @@ import { styled, SvgIcon } from '@mui/material';
 import ForgotPassword from './ForgotPassword.jsx';
 import AppTheme from '../themes/AuthTheme/AuthTheme.jsx';
 
-// Función para dibujar el logo de Google
 export function GoogleIcon() {
   return (
     <SvgIcon>
@@ -98,18 +97,32 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [openForgot, setOpenForgot] = useState(false);
   const navigate = useNavigate();
   const { setRegisterType } = useContext(RegisterContext);
-  const { setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  // Limpia errorMessage al montarse el componente
+  useEffect(() => {
+    setErrorMessage('');
+  }, []);
 
   const handleForgotOpen = () => {
+    setErrorMessage('');
     setOpenForgot(true);
   };
 
   const handleForgotClose = () => {
     setOpenForgot(false);
+    setErrorMessage('');
   };
 
   const handleSubmit = async (event) => {
@@ -124,8 +137,7 @@ export default function Login(props) {
     }
 
     try {
-      // Se extrae la propiedad "account" de la respuesta del login
-      const { account } = await login(email, password);
+      const { account } = await login(email, password, remember);
       setUser(account);
       navigate('/');
     } catch (err) {
@@ -145,12 +157,17 @@ export default function Login(props) {
           >
             Inicio sesión
           </Typography>
-          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+          {!openForgot && errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
           >
             <FormControl>
               <FormLabel htmlFor="email">Correo electrónico</FormLabel>
@@ -164,7 +181,10 @@ export default function Login(props) {
                 fullWidth
                 variant="outlined"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrorMessage('');
+                }}
               />
             </FormControl>
             <FormControl>
@@ -183,15 +203,46 @@ export default function Login(props) {
               />
             </FormControl>
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                />
+              }
               label="Recuérdame"
             />
             <ForgotPassword open={openForgot} handleClose={handleForgotClose} />
             <Button type="submit" fullWidth variant="contained">
               Inicia sesión
             </Button>
+            <Link
+              component="button"
+              type="button"
+              onClick={handleForgotOpen}
+              variant="body2"
+              sx={{ alignSelf: 'center' }}
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
           </Box>
           <Divider>o</Divider>
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={oauthLogin}
+            sx={{
+              mt: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textTransform: 'none',
+            }}
+            startIcon={<GoogleIcon />}
+          >
+            Iniciar sesión con Google
+          </Button>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
               ¿No tienes cuenta todavía? Regístrate como{' '}
@@ -232,21 +283,6 @@ export default function Login(props) {
               </Link>
             </Typography>
           </Box>
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={oauthLogin}
-            sx={{
-              mt: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textTransform: 'none'
-            }}
-            startIcon={<GoogleIcon />}
-          >
-            Iniciar sesión con Google
-          </Button>
         </Card>
       </SignInContainer>
     </AppTheme>

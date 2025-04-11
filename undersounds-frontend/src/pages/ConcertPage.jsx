@@ -5,6 +5,8 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { AuthContext } from '../context/AuthContext';
 import artists from '../mockData/artists';
 import '../styles/concert.css';
+import { formatDate } from '../utils/formatters';
+
 
 const ConcertPage = () => {
   const { artistId, concertId } = useParams();
@@ -129,7 +131,7 @@ const ConcertPage = () => {
             marginBottom: '2rem'
           }}>
             <Typography variant="h6" sx={{ color: '#666' }}>
-              Fecha: {concert.date}
+              Fecha: {formatDate(concert.date)}
             </Typography>
             <Typography variant="h6" sx={{ color: '#666' }}>
               Hora: {concert.time}

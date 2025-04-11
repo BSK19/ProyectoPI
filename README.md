@@ -1,64 +1,143 @@
-# UnderSounds - Tienda de Música en Línea
+# UnderSounds - Plataforma de Música para Artistas Independientes
 
-Bienvenido a UnderSounds, una tienda de música en línea que permite a músicos y bandas lanzar y promocionar su música. Esta plataforma ofrece a los usuarios la posibilidad de explorar, reproducir, comprar y descargar música en diversos formatos digitales.
+UnderSounds es una plataforma completa para artistas musicales independientes y sus seguidores. Permite a los músicos distribuir su música, vender merchandising y conectar con fans, mientras que los oyentes pueden descubrir, comprar y disfrutar música en diversos formatos.
 
-## Funcionalidades
+## 🎵 Características principales
 
-### General
-- Explora un catálogo organizado por géneros, artistas, álbumes y pistas.
-- Reproduce música, visualiza carátulas y accede a detalles de canciones y álbumes.
-- Descarga música en formatos como MP3, FLAC y WAV.
-- Sistema de valoraciones, comentarios y colecciones personales.
+### Para oyentes
+- **Descubre música**: Explora un catálogo organizado por géneros, artistas y álbumes
+- **Escucha**: Reproductor integrado para escuchar música antes de comprar
+- **Descarga**: Obtén música en múltiples formatos (MP3, FLAC, WAV)
+- **Colecciona**: Crea tu biblioteca personal con tus artistas favoritos
+- **Conecta**: Valora, comenta y sigue a tus artistas preferidos
 
-### Sistema de Usuarios
-- Registro, autenticación y recuperación de contraseña.
-- Roles de usuario:
-  - **Invitados**: Acceden al catálogo sin necesidad de registro.
-  - **Usuarios registrados**: Pueden comprar música, dejar comentarios y gestionar su perfil.
-  - **Músicos**: Pueden crear y gestionar su perfil, así como administrar su contenido musical (álbumes, sencillos, merchandising).
-- Actualización de perfil con campos dinámicos según el rol (por ejemplo, **bandas** y **sellos** muestran campos adicionales como nombre, género, sitio web, etc.).
+### Para artistas
+- **Distribución digital**: Sube y vende tu música directamente a los fans
+- **Merchandising**: Vende productos relacionados con tu marca
+- **Perfil personalizado**: Cuenta tu historia y conecta con tu audiencia
+- **Análisis**: Datos sobre reproducciones, descargas y ventas
+- **Pagos directos**: Recibe ingresos de tus ventas de forma transparente
 
-### Gestión de Contenido Musical
-- Cada entrada (álbum, sencillo, merchandising) incluye portada, precio, lista de canciones y metadatos relacionados.
-- Reproducción directa de pistas desde la vista de álbum, con integración al reproductor global.
-- Búsqueda y filtrado avanzado por artista, género y palabras clave.
+## 🔧 Arquitectura
 
-### Navegación y Búsqueda
-- Navegación intuitiva a través de menús, tabs y carruseles.
-- Barra de búsqueda en el header con filtrado en vivo que muestra resultados de artistas, álbumes y pistas.
-- Páginas dedicadas: Inicio, Discover, Explore, Artist Profile, Album, Carrito y Payment.
+UnderSounds utiliza el stack MERN completo:
 
-## Estructura del Proyecto
+- **Frontend**: React.js + Vite
+- **Backend**: Node.js + Express.js
+- **Base de datos**: MongoDB
+- **Autenticación**: JWT + OAuth2 (Google)
+- **Pagos**: Stripe
 
-- **src/**: Código fuente de la aplicación React.
-  - **assets/**: Imágenes y otros recursos gráficos.
-  - **components/**: Componentes reutilizables (por ejemplo, Header, Navigation, Footer, Player, y componentes específicos para álbum, artista, autenticación, etc.).
-  - **context/**: Gestores de estado global (AuthContext, CartContext, PlayerContext, AlbumContext, RegisterContext, etc.).
-  - **mockData/**: Datos simulados para desarrollo (por ejemplo, cuentas, álbumes, artistas, pistas y merchandising).
-  - **pages/**: Vistas principales de la aplicación (HomePage, DiscoverPage, AlbumPage, ArtistProfile, UserProfile, ConcertPage, CarritoPage, Payment, News, TshirtPage, etc.).
-  - **services/**: Funciones para comunicación con el backend (autenticación, música, etc.).
-  - **styles/**: Hojas de estilo globales y específicas para cada componente o página.
-  - **utils/**: Funciones utilitarias y helpers (por ejemplo, formateo de duración de álbum, validaciones, etc.).
+## 🚀 Instalación y configuración
 
-## Instalación
+### Requisitos previos
+- Node.js 16.x o superior
+- MongoDB 4.4 o superior
+- FFmpeg (para conversión de archivos de audio)
+- Cuenta en Stripe (para procesamiento de pagos)
+- Proyecto registrado en Google Cloud Platform (para OAuth)
 
-1. Clona el repositorio:
+### Configuración del proyecto
+
+1. **Clonar el repositorio**:
+   ```bash
+   git clone https://github.com/tu-usuario/undersounds.git
+   cd undersounds
    ```
-   git clone <URL_DEL_REPOSITORIO>
-   ```
-2. Navega al directorio del proyecto:
-   ```
-   cd undersounds-frontend
-   ```
-3. Instala las dependencias:
-   ```
+
+2. **Configurar el backend**:
+   ```bash
+   cd undersounds-backend
    npm install
    ```
-4. Inicia la aplicación:
+   
+   Crea un archivo `.env` con:
    ```
-   npm run dev
+   MONGO_URI=mongodb://localhost:27017/undersounds
+   ACCESS_TOKEN_SECRET=tu_clave_secreta_jwt
+   REFRESH_TOKEN_SECRET=otra_clave_secreta_jwt
+   SESSION_SECRET=clave_para_sesiones
+   GOOGLE_CLIENT_ID=id_de_google_oauth
+   GOOGLE_CLIENT_SECRET=secret_de_google_oauth
+   GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
+   STRIPE_SECRET_KEY=clave_secreta_de_stripe
+   ```
+
+   Deberás tener un archivo dbmeta.json y otro dbmeta_local.json, si es tu primera vez al iniciar el servidor el segundo de estos archivos tendrá una versión inferior al otro y por lo tanto se iniciará el proceso de actualización de la BD.
+
+3. **Configurar el frontend**:
+   ```bash
+   cd ../undersounds-frontend
+   npm install
    ```
    
-## Licencia
+   Crea un archivo `.env` con:
+   ```
+   VITE_API_URL=http://localhost:5000/api
+   VITE_STRIPE_PUBLIC_KEY=clave_publica_de_stripe
+   ```
 
-Este proyecto está bajo la Licencia MIT.
+4. **Iniciar la aplicación**:
+   
+   Backend:
+   ```bash
+   cd undersounds-backend
+   node server.js
+   ```
+   
+   Frontend:
+   ```bash
+   cd undersounds-frontend
+   npm start
+   ```
+
+5. **Acceder a la aplicación**:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:5000/api
+   - Documentación API: http://localhost:5000/api-docs
+
+## 📂 Estructura del proyecto
+
+```
+undersounds/
+├── undersounds-frontend/       # Aplicación React
+│   ├── src/
+│   │   ├── assets/             # Recursos estáticos 
+│   │   ├── components/         # Componentes reutilizables
+│   │   ├── context/            # Contextos de React
+│   │   ├── pages/              # Páginas principales
+│   │   ├── services/           # Servicios de API
+│   │   └── utils/              # Utilidades
+│   ├── .env                    # Variables de entorno
+│   └── package.json            # Dependencias frontend
+│
+├── undersounds-backend/        # Servidor Node.js/Express
+│   ├── config/                 # Configuraciones
+│   ├── controller/             # Controladores API
+│   ├── docs/                   # Documentación Swagger
+│   ├── model/                  # Modelos de datos
+│   ├── routes/                 # Rutas API
+│   ├── services/               # Servicios
+│   ├── utils/                  # Utilidades
+│   ├── .env                    # Variables de entorno
+│   └── package.json            # Dependencias backend
+│
+└── README.md                   # Documentación principal
+```
+
+## 🧰 Características técnicas destacadas
+
+- **Reproductor de audio personalizado** integrado en toda la aplicación
+- **Conversión de formatos de audio** en tiempo real (MP3, FLAC, WAV)
+- **Sistema de autenticación avanzado** con JWT, refresh tokens y OAuth
+- **Integración con Stripe** para procesamiento seguro de pagos
+- **Arquitectura escalable** basada en microservicios y API REST
+- **Sistema de búsqueda avanzada** con filtros.
+
+## 📜 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta sus detalles en Github.
+
+---
+
+© 2025 UnderSounds - Plataforma para música independiente.

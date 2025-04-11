@@ -8,6 +8,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Typography } from '@mui/material';
+import axios from 'axios';
+
 
 const CarritoPage = () => {
   const { cartItems, updateQuantity, removeFromCart } = useContext(CartContext);
@@ -17,18 +19,42 @@ const CarritoPage = () => {
   // Calcular el total considerando la cantidad de cada producto
   const total = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
 
+  const handlePago = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/create-checkout-session', {
+        items: cartItems,
+      });
+      window.location.href = response.data.url;
+    } catch (error) {
+      alert('Error al iniciar el pago.');
+    }
+  };
+
   const handleCheckout = () => {
     if (cartItems.length === 0) {
       alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
       return;
     }
     if (!user) {
-      // Si no está logueado, redirigir a la página de login
+      // Redirigir a la página de login si el usuario no está logueado
       navigate('/login');
       return;
     }
-    navigate('/payment'); // Redirigir a la página de pago
+  
+    // Crear el resumen del pedido: items del carrito y total (añadiendo, por ejemplo, gastos de envío)
+    const orderSummary = {
+      items: cartItems,
+      total: total + 5  // Puedes ajustar el coste de envío según corresponda
+    };
+  
+    // Guardar el resumen en localStorage
+    localStorage.setItem('orderSummary', JSON.stringify(orderSummary));
+  
+    // Iniciar el proceso de pago (por ejemplo, llamando a Stripe)
+    handlePago();
   };
+
+
 
   return (
     <div className="carrito-page">
