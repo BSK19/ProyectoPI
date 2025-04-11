@@ -1,75 +1,139 @@
-Collecting workspace informationEl backend está diseñado para ser la base de la API de UnderSounds y soporta varios casos de uso esenciales en una aplicación moderna de música. Entre las funcionalidades principales se encuentran:
+Collecting workspace information# UnderSounds Backend
 
-1. **Registro y Autenticación de Usuarios**  
-   - Endpoint **POST /api/auth/register**: Permite registrar nuevos usuarios (con roles como fan, band o label).  
-   - Endpoint **POST /api/auth/login**: Permite a los usuarios iniciar sesión, retornando un access token y enviando un refresh token en una cookie HttpOnly.  
-   - Endpoint **PUT /api/auth/:id**: Permite la actualización del perfil del usuario según su rol, gestionando campos específicos (por ejemplo, bandName y genre para bandas).  
+El backend de UnderSounds proporciona una API completa para gestionar la plataforma de música, ofreciendo servicios para autenticación, gestión de contenido musical, procesamiento de pagos y más.
 
-2. **Gestión de Tokens con JWT y Refresh Tokens**  
-   - Cada petición protegida verifica el access token enviado en la cabecera.  
-   - Si el access token caduca, el interceptor de axios en el frontend (y la lógica en el backend) utilizan el refresh token almacenado (por ejemplo, en una cookie HttpOnly) para solicitar un nuevo access token mediante el endpoint **POST /api/auth/refresh-token**.
+## Funcionalidades principales
 
-3. **Logout**  
-   - Endpoint **POST /api/auth/logout**: Finaliza la sesión del usuario, eliminando el access token almacenado en memoria y borrando la cookie de refresh token.
+### Autenticación y Usuarios
+- **Registro y login tradicional** con JWT y sistema de refresh tokens
+- **Autenticación OAuth con Google** mediante Passport.js
+- **Recuperación de contraseña** con sistema de OTP
+- **Perfiles de usuario** con distintos roles (fan, banda, sello discográfico)
 
-4. **Integración OAuth2.0 con Google**  
-   - Los endpoints **GET /api/auth/google** y **GET /api/auth/google/callback** usan Passport (configurado en **config/passport.js**) para permitir la autenticación con Google.  
-   - Esto permite a los usuarios iniciar sesión mediante su cuenta de Google sin tener que gestionar manualmente contraseñas.
+### Gestión de Contenido Musical
+- **Catálogo de música**: álbumes, artistas y pistas
+- **Descarga de música** en múltiples formatos (MP3, WAV, FLAC)
+- **Conversión de archivos de audio** mediante FFmpeg
+- **Integración con Jamendo** para ampliar el catálogo musical
 
-5. **Documentación de la API con Swagger**  
-   - Utilizando swagger-jsdoc y swagger-ui-express, la API está documentada y se puede visualizar en **/api-docs**, facilitando el consumo desde el frontend u otras aplicaciones.
+### E-commerce
+- **Carrito de compras** para gestionar artículos seleccionados
+- **Procesamiento de pagos** mediante Stripe
+- **Gestión de merchandising** (camisetas y otros productos)
 
-### Condiciones y Casos Necesarios para su Funcionamiento
+### Otras funcionalidades
+- **Sistema de noticias musicales** (CRUD completo)
+- **Documentación automática** con Swagger
 
-- **Variables de Entorno Correctas:**  
-  Se debe tener un archivo `.env` en la carpeta undersounds-backend configurado con al menos:
-  - `MONGO_URI`: Cadena de conexión a MongoDB.
-  - `SESSION_SECRET`: Clave para las sesiones (si se usan).
-  - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` y `GOOGLE_CALLBACK_URL`: Para configurar el inicio de sesión con Google a través de OAuth2.0.
+## Instalación y configuración
 
-- **Conexión a MongoDB:**  
-  El archivo **config/db.js** se encarga de conectar a la base de datos. La API funciona correctamente si MongoDB está en ejecución y la URI es válida.
+1. **Clonar el repositorio**:
+   ```
+   git clone <URL_DEL_REPOSITORIO>
+   cd undersounds-backend
+   ```
 
-- **Configuración de Passport para OAuth:**  
-  El archivo **config/passport.js** debe estar configurado y exportado correctamente para gestionar el flujo de OAuth, leyendo las variables de entorno correspondientes.
+2. **Instalar dependencias**:
+   ```
+   npm install
+   ```
 
-- **Endpoints REST:**  
-  Las rutas definidas en **routes/AccountRoutes.js** exponen todas las funcionalidades anteriores. Esto permite que el frontend (o herramientas de prueba como Postman) puedan consumir la API para registro, login, logout, actualización de perfil, token refresh y OAuth con Google.
+3. **Configurar variables de entorno**:
+   Crea un archivo `.env` con:
+   ```
+   MONGO_URI=<URI_DE_MONGODB>
+   ACCESS_TOKEN_SECRET=<CLAVE_JWT_ACCESS>
+   REFRESH_TOKEN_SECRET=<CLAVE_JWT_REFRESH>
+   SESSION_SECRET=<CLAVE_SESIONES>
+   GOOGLE_CLIENT_ID=<ID_OAUTH_GOOGLE>
+   GOOGLE_CLIENT_SECRET=<SECRET_OAUTH_GOOGLE>
+   GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
+   STRIPE_SECRET_KEY=<CLAVE_SECRETA_STRIPE>
+   ```
 
-- **Interoperabilidad con el Frontend:**  
-  El frontend en undersounds-frontend debe comunicarse con estos endpoints (por ejemplo, en http://localhost:5000/api/auth) y gestionar correctamente los tokens mediante cookies (configurando axios con `withCredentials = true`).
+4. **Ejecutar el servidor**:
+   ```
+   npm start
+   ```
 
-En resumen, el backend ofrece un conjunto completo de servicios para gestionar usuarios seguros (tanto con método tradicional como mediante OAuth), controlar el ciclo de vida de la sesión usando JWT y refresh tokens, y exponer una API documentada que el frontend actual o futuras integraciones pueden consumir.
+5. **Acceder a la documentación**:
+   Navega a `http://localhost:5000/api-docs` para explorar la API con Swagger.
 
-Los comandos configurados en el package.json permiten importar y exportar datos a MongoDB de forma sencilla:
+## Gestión de base de datos
 
-1. **mongoimport**  
-   - Comando:  
-     ```
-     mongoimport --uri "$MONGO_URI" --collection accounts --file data.json --jsonArray
-     ```  
-   - Función: Importa datos a la colección **accounts**.  
-   - Parámetros:
-     - **--uri "$MONGO_URI"**: Establece la URI de conexión a MongoDB usando la variable de entorno `MONGO_URI`.
-     - **--collection accounts**: Especifica la colección destino en la base de datos.
-     - **--file data.json**: Indica el archivo JSON que contiene los documentos a importar.
-     - **--jsonArray**: Indica que el archivo contiene un array de documentos en formato JSON.
+El backend incluye herramientas para importar y exportar datos de MongoDB:
 
-2. **mongoexport**  
-   - Comando:  
-     ```
-     mongoexport --uri "$MONGO_URI" --collection accounts --out export.json
-     ```  
-   - Función: Exporta los documentos de la colección **accounts** a un archivo.  
-   - Parámetros:
-     - **--uri "$MONGO_URI"**: Usa la URI de conexión definida en la variable de entorno `MONGO_URI`.
-     - **--collection accounts**: Define la colección de la que se exportan los documentos.
-     - **--out export.json**: Especifica el nombre del archivo de salida donde se almacenarán los datos exportados en formato JSON.
+- **Importar datos**:
+  ```
+  npm run mongoimport
+  ```
 
-Con estos comandos, puedes migrar datos a y desde MongoDB, facilitando la administración y respaldo de la base de datos.   - Función: Exporta los documentos de la colección **accounts** a un archivo.  
-   - Parámetros:
-     - **--uri "$MONGO_URI"**: Usa la URI de conexión definida en la variable de entorno `MONGO_URI`.
-     - **--collection accounts**: Define la colección de la que se exportan los documentos.
-     - **--out export.json**: Especifica el nombre del archivo de salida donde se almacenarán los datos exportados en formato JSON.
+- **Exportar datos**:
+  ```
+  npm run mongoexport
+  ```
 
-Con estos comandos, puedes migrar datos a y desde MongoDB, facilitando la administración y respaldo de la base de datos.
+## Endpoints principales
+
+### Autenticación
+- `POST /api/auth/register`: Registro de usuarios
+- `POST /api/auth/login`: Inicio de sesión
+- `POST /api/auth/refresh-token`: Renovación de tokens
+- `POST /api/auth/logout`: Cierre de sesión
+- `GET /api/auth/google`: Autenticación con Google
+- `POST /api/auth/forgot-password`: Solicitud de recuperación
+- `POST /api/auth/reset-password`: Restablecimiento con OTP
+
+### Música
+- `GET /api/albums`: Obtiene todos los álbumes
+- `GET /api/albums/{id}`: Obtiene un álbum específico
+- `GET /api/albums/{id}/download`: Descarga una pista en MP3/WAV/FLAC
+- `GET /api/albums/{id}/download-album`: Descarga un álbum completo en ZIP
+
+### Artistas
+- `GET /api/artists`: Lista de artistas
+- `GET /api/artists/{id}`: Información de un artista específico
+
+### Merchandising
+- `GET /api/merchandising`: Catálogo de productos
+- `GET /api/merchandising/{id}`: Detalles de un producto
+
+### Noticias
+- `GET /api/noticias`: Obtener noticias musicales
+- `POST /api/noticias`: Crear una noticia
+
+### Pagos
+- `POST /create-checkout-session`: Procesa pagos con Stripe
+
+## Tecnologías utilizadas
+
+- **Node.js y Express**: Base del servidor
+- **MongoDB y Mongoose**: Base de datos y ODM
+- **JWT y Passport**: Autenticación y autorización
+- **FFmpeg**: Conversión de formatos de audio
+- **Stripe**: Procesamiento de pagos
+- **Swagger**: Documentación de API
+- **Archiver**: Compresión de archivos para descarga
+
+## Requisitos técnicos
+
+- Node.js 16.x o superior
+- MongoDB 4.4 o superior
+- FFmpeg (instalado globalmente para conversión de audio)
+- Conexión a internet para servicios externos (Stripe, OAuth)
+
+## Estructura del proyecto
+
+```
+undersounds-backend/
+├── config/              # Configuraciones (DB, Passport)
+├── controller/          # Controladores de la API
+├── data-dump/           # Datos exportados de MongoDB
+├── docs/                # Documentación API (Swagger)
+├── model/               # Modelos de datos y DAOs
+├── routes/              # Definición de rutas
+├── services/            # Servicios (conversión de audio, etc.)
+├── utils/               # Utilidades
+├── view/                # Vistas HTML (mínimas)
+├── .env                 # Variables de entorno (no en repo)
+└── server.js            # Punto de entrada

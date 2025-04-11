@@ -4,7 +4,6 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "updateBD": "npm run mongoimport",
     "mongoimport": "node import-db.js",
     "mongoexport": "node export-db.js"
   },
