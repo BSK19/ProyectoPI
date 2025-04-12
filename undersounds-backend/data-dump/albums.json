@@ -1,33 +1,1460 @@
 [
-{"_id":{"$oid":"67f54128413d65a360d02916"},"id":4,"title":"Whispers of the Forest","artist":{"$oid":"67f541302881db471f2dbed8"},"coverImage":"http://localhost:5000/assets/images/EOT1.webp","price":10.99,"releaseYear":2024,"genre":"Ambient","tracks":[{"id":1,"title":"Forest Breeze","duration":"4:10","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":48200},{"id":2,"title":"Morning Dew","duration":"5:20","url":"http://localhost:5000/assets/music/BackInBlack.mp3","autor":"The Soundscapers, DJ Beats","n_reproducciones":20200},{"id":3,"title":"The Calm Before the Storm","duration":"6:00","url":"http://localhost:5000/assets/music/Believer.mp3","autor":"The Soundscapers, Soulful Voices","n_reproducciones":21200}],"ratings":[{"userId":3,"rating":5,"comment":"Another breathtaking masterpiece!"},{"userId":4,"rating":4,"comment":"Very peaceful and serene."}],"vinyl":true,"cd":true,"cassettes":true,"updatedAt":{"$date":"2025-04-09T23:13:26.143Z"}},
-{"_id":{"$oid":"67f6967ea8b078764a272f7b"},"id":10,"title":"Primer Éxito","artist":{"$oid":"67f541302881db471f2dbed7"},"coverImage":"http://localhost:5000/assets/images/primerExitoCover.jpg","price":11.99,"releaseYear":2025,"genre":"Electronic","tracks":[{"id":1,"title":"First Light","duration":"3:30","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"DJ Beats","n_reproducciones":110},{"id":2,"title":"Morning Pulse","duration":"4:00","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"DJ Beats","n_reproducciones":10},{"id":3,"title":"Night Vibes","duration":"4:15","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"DJ Beats","n_reproducciones":350}],"ratings":[{"userId":1,"rating":5,"comment":"Increíble álbum, muy innovador."},{"userId":"67e5d0e55a24feeaed1e1a66","rating":4,"comment":"Pedazo album","profileImage":"http://localhost:5000/assets/images/default.jpg"}],"vinyl":false,"cd":true,"cassettes":false,"updatedAt":{"$date":"2025-04-10T00:26:54.882Z"},"__v":1,"description":"","destacado":false,"label":""},
-{"_id":{"$oid":"67f54128413d65a360d02917"},"id":5,"title":"Electric Dreams","artist":{"$oid":"67f541302881db471f2dbed7"},"coverImage":"http://localhost:5000/assets/images/EOT2.jpg","price":13.99,"releaseYear":2023,"genre":"Electronic","tracks":[{"id":1,"title":"Neon Lights","duration":"4:00","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"DJ Beats, Soulful Voices","n_reproducciones":51200},{"id":2,"title":"Pulse of the City","duration":"4:50","url":"http://localhost:5000/assets/music/BackInBlack.mp3","autor":"DJ Beats","n_reproducciones":12200},{"id":3,"title":"Midnight Rave","duration":"5:30","url":"http://localhost:5000/assets/music/Believer.mp3","autor":"DJ Beats, The Soundscapers","n_reproducciones":11200}],"ratings":[{"userId":5,"rating":4,"comment":"The beats are really strong on this one!"},{"userId":6,"rating":5,"comment":"I love the energy in every track."}],"vinyl":false,"cd":true,"cassettes":true,"updatedAt":{"$date":"2025-04-09T23:13:26.15Z"}},
-{"_id":{"$oid":"67f54128413d65a360d02914"},"id":1,"title":"Echoes of Time","artist":{"$oid":"67f541302881db471f2dbed8"},"coverImage":"http://localhost:5000/assets/images/EOT.jpeg","price":9.99,"releaseYear":2023,"genre":"Ambient","tracks":[{"id":1,"title":"Whispers in the Wind","duration":"4:05","url":"http://localhost:5000/assets/music/Believer.mp3","autor":"The Soundscapers, DJ Beats","n_reproducciones":15200},{"id":2,"title":"Reflections","duration":"5:30","url":"http://localhost:5000/assets/music/BackInBlack.mp3","autor":"The Soundscapers","n_reproducciones":18200},{"id":3,"title":"Distant Shores","duration":"6:15","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":1200}],"ratings":[{"userId":1,"rating":5,"comment":"Absolutely beautiful!"},{"userId":2,"rating":4,"comment":"Very calming and relaxing."}],"vinyl":true,"cd":true,"cassettes":false,"updatedAt":{"$date":"2025-04-09T23:13:26.146Z"}},
-{"_id":{"$oid":"67f69988bd99d6772ca9affc"},"id":7,"title":"Segundo Álbum","artist":{"$oid":"67f541302881db471f2dbed8"},"coverImage":"http://localhost:5000/assets/images/segundoAlbumCover.jpg","price":11.99,"releaseYear":2024,"genre":"Rock","tracks":[{"id":1,"title":"Pulse of Reality","duration":"4:20","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":20000},{"id":2,"title":"Shadows in Time","duration":"5:00","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":15000},{"id":3,"title":"Eternal Echoes","duration":"6:30","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":10000}],"ratings":[{"userId":2,"rating":4,"comment":"Muy bueno, me encantó la producción."},{"userId":3,"rating":5,"comment":"Un subidón de energía de principio a fin."}],"vinyl":true,"cd":true,"cassettes":false,"updatedAt":{"$date":"2025-04-09T23:13:26.153Z"}},
-{"_id":{"$oid":"67f698b9f6bdc54147da5509"},"id":10,"title":"Álbum Debut","artist":{"$oid":"67f541302881db471f2dbed8"},"coverImage":"http://localhost:5000/assets/images/albumDebutCover.jpg","price":9.99,"releaseYear":2023,"genre":"Rock","tracks":[{"id":1,"title":"Whispers in the Wind","duration":"4:05","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers, DJ Beats","n_reproducciones":15200},{"id":2,"title":"Reflections","duration":"5:30","url":"http://localhost:5000/assets/music/BackInBlack.mp3","autor":"The Soundscapers","n_reproducciones":18200},{"id":3,"title":"Distant Shores","duration":"6:15","url":"http://localhost:5000/assets/music/Believer.mp3","autor":"The Soundscapers","n_reproducciones":1200},{"id":4,"title":"New Life","duration":"4:45","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers","n_reproducciones":2}],"ratings":[{"userId":1,"rating":5,"comment":"Absolutely beautiful!"},{"userId":2,"rating":4,"comment":"Very calming and relaxing."}],"vinyl":true,"cd":true,"cassettes":false,"updatedAt":{"$date":"2025-04-09T23:13:26.155Z"}},
-{"_id":{"$oid":"67f699efb8d4eca74755f1e1"},"id":11,"title":"Jazz Suave","artist":{"$oid":"67f541302881db471f2dbed6"},"coverImage":"http://localhost:5000/assets/images/albumJazzSuave.jpg","price":12.99,"releaseYear":2025,"genre":"Jazz","tracks":[{"id":1,"title":"Smooth Nights","duration":"5:00","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"Soulful Voices","n_reproducciones":3500},{"id":2,"title":"Mellow Mornings","duration":"4:30","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"Soulful Voices","n_reproducciones":10000}],"ratings":[{"userId":1,"rating":4,"comment":"Muy bueno, realmente disfruto del ambiente relajado de este álbum."}],"vinyl":true,"cd":true,"cassettes":false,"updatedAt":{"$date":"2025-04-09T23:13:26.157Z"}},
-{"_id":{"$oid":"67f54128413d65a360d02915"},"id":2,"title":"Electronic Vibes","artist":{"$oid":"67f541302881db471f2dbed7"},"coverImage":"http://localhost:5000/assets/images/ROTN.jpg","price":12.99,"releaseYear":2022,"genre":"Electronic","tracks":[{"id":1,"title":"Nightfall","duration":"3:45","url":"http://localhost:5000/assets/music/BackInBlack.mp3","autor":"The Soundscapers","n_reproducciones":48200},{"id":2,"title":"Starlight","duration":"4:20","url":"http://localhost:5000/assets/music/21Questions.mp3","autor":"The Soundscapers, DJ Beats","n_reproducciones":20200},{"id":3,"title":"Dance of Shadows","duration":"5:10","url":"http://localhost:5000/assets/music/Believer.mp3","autor":"The Soundscapers, Soulful Voices","n_reproducciones":21200}],"ratings":[{"userId":3,"rating":4,"comment":"Great beats for a party!"},{"userId":4,"rating":5,"comment":"Loved every track!"}],"vinyl":false,"cd":true,"cassettes":true,"updatedAt":{"$date":"2025-04-09T23:13:26.159Z"}},
-{"_id":{"$oid":"67f7a456789abcdef0123456"},"id":12,"title":"Pop Vibes","artist":{"$oid":"67f541302881db471f2dbed6"},"coverImage":"http://localhost:5000/assets/images/popVibesCover.jpg","price":9.99,"releaseYear":2025,"genre":"Pop","tracks":[{"id":1,"title":"Summer Lights","duration":"3:45","url":"http://localhost:5000/assets/music/summerLights.mp3","autor":"Soulful Voices","n_reproducciones":500},{"id":2,"title":"City Dreams","duration":"4:10","url":"http://localhost:5000/assets/music/cityDreams.mp3","autor":"Soulful Voices","n_reproducciones":450}],"ratings":[],"description":"Un álbum pop vibrante con ritmos contagiosos y melodías pegajosas.","destacado":true,"label":"Universal Music","updatedAt":{"$date":"2025-07-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f7b789abcdef0123456789"},"id":13,"title":"Clásicas Eternas","artist":{"$oid":"67f541302881db471f2dbed8"},"coverImage":"http://localhost:5000/assets/images/clasicasEternasCover.jpg","price":14.99,"releaseYear":2025,"genre":"Classical","tracks":[{"id":1,"title":"Sinfonía No. 9","duration":"8:15","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Orquesta Sinfónica","n_reproducciones":320},{"id":2,"title":"Serenata en Do","duration":"6:30","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Orquesta Sinfónica","n_reproducciones":275}],"ratings":[],"description":"Una colección de obras maestras clásicas, interpretadas con pasión y precisión.","destacado":false,"label":"EMI Classics","updatedAt":{"$date":"2025-08-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f7c999abcdef012345678a"},"id":14,"title":"Street Rhythms","artist":{"$oid":"67f7d01234567890abcdef34"},"coverImage":"http://localhost:5000/assets/images/streetRhythmsCover.jpg","price":10.99,"releaseYear":2025,"genre":"Hiphop","tracks":[{"id":1,"title":"Urban Pulse","duration":"4:00","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"MC Street","n_reproducciones":600},{"id":2,"title":"Rhythm and Graffiti","duration":"3:45","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"MC Street","n_reproducciones":550}],"ratings":[],"description":"Un álbum con poderosos beats de hip-hop y letras que narran la vida en las calles.","destacado":true,"label":"Street Records","updatedAt":{"$date":"2025-09-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f7e111abcdef0123456789"},"id":15,"title":"Blues in the Night","artist":{"$oid":"67f7d999abcdef012345678b"},"coverImage":"http://localhost:5000/assets/images/bluesInTheNightCover.jpg","price":12.99,"releaseYear":2025,"genre":"Blues","tracks":[{"id":1,"title":"Midnight Blues","duration":"4:20","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Blue Soul","n_reproducciones":480},{"id":2,"title":"River of Sorrow","duration":"5:05","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Blue Soul","n_reproducciones":520},{"id":3,"title":"Moonlight Whispers","duration":"3:55","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Blue Soul","n_reproducciones":430}],"ratings":[{"userId":"user123","rating":5,"comment":"Increíble, me transporta al corazón del blues."},{"userId":"user456","rating":4,"comment":"Muy buena iterpretación, recomiendo escucharla en vinilo."}],"description":"Un álbum envolvente que captura la esencia y la emoción del blues tradicional.","destacado":false,"label":"Blue Recordings","updatedAt":{"$date":"2025-10-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f7f222abcdefabcdefabcd"},"id":16,"title":"Reggae Vibes","artist":{"$oid":"67f7d111abcdef012345678a"},"coverImage":"http://localhost:5000/assets/images/reggaeVibesCover.jpg","price":11.49,"releaseYear":2025,"genre":"Reggae","tracks":[{"id":1,"title":"Island Breeze","duration":"4:30","url":"http://localhost:5000/assets/music/islandBreeze.mp3","autor":"Rasta Vibes","n_reproducciones":350},{"id":2,"title":"Sunrise Riddim","duration":"5:00","url":"http://localhost:5000/assets/music/sunriseRiddim.mp3","autor":"Rasta Vibes","n_reproducciones":400},{"id":3,"title":"Dancehall Dreams","duration":"4:15","url":"http://localhost:5000/assets/music/dancehallDreams.mp3","autor":"Rasta Vibes","n_reproducciones":320}],"ratings":[{"userId":"user789","rating":5,"comment":"Vibrante y llena de energía!"},{"userId":"user101","rating":4,"comment":"Muy buena, me transporta a la playa."}],"description":"Un viaje sonoro lleno de ritmo y relajación que captura la esencia del reggae.","destacado":true,"label":"Reggae Roots","updatedAt":{"$date":"2025-11-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800001abcdef012345678"},"id":17,"title":"Metal Mayhem","artist":{"$oid":"67f7eaaaabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/metalMayhemCover.jpg","price":13.99,"releaseYear":2025,"genre":"Metal","tracks":[{"id":1,"title":"Thunderous Roar","duration":"5:00","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Metal Masters","n_reproducciones":400},{"id":2,"title":"Raging Inferno","duration":"4:45","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Metal Masters","n_reproducciones":380}],"ratings":[{"userId":"user201","rating":5,"comment":"Brutal y épico!"}],"description":"Un álbum pesado lleno de riffs intensos y batería implacable.","destacado":true,"label":"Metal Records","updatedAt":{"$date":"2025-12-01T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800002abcdef012345678"},"id":18,"title":"Indie Nights","artist":{"$oid":"67f7efbbabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/indieNightsCover.jpg","price":9.99,"releaseYear":2025,"genre":"Indie","tracks":[{"id":1,"title":"City Lights","duration":"3:50","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Indie Vibes","n_reproducciones":450},{"id":2,"title":"Lost in Transit","duration":"4:10","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Indie Vibes","n_reproducciones":420}],"ratings":[{"userId":"user302","rating":4,"comment":"Atmosférico y refrescante."}],"description":"Un viaje introspectivo con sonidos melódicos y arreglos minimalistas.","destacado":false,"label":"Indie Tunes","updatedAt":{"$date":"2025-12-05T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800003abcdef012345678"},"id":19,"title":"Folk Tales","artist":{"$oid":"67f7fcbbabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/folkTalesCover.jpg","price":8.99,"releaseYear":2025,"genre":"Folk","tracks":[{"id":1,"title":"Rustic Roads","duration":"4:05","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Folk Legends","n_reproducciones":300},{"id":2,"title":"Wandering Soul","duration":"3:55","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Folk Legends","n_reproducciones":320}],"ratings":[{"userId":"user403","rating":5,"comment":"Auténtico y conmovedor."}],"description":"Historias cantadas a la orilla del camino, llenas de nostalgia y encanto.","destacado":false,"label":"Folk Records","updatedAt":{"$date":"2025-11-15T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800004abcdef012345678"},"id":20,"title":"Latin Fire","artist":{"$oid":"67f7fabcabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/latinFireCover.jpg","price":10.99,"releaseYear":2025,"genre":"Latin","tracks":[{"id":1,"title":"Salsa Heat","duration":"4:20","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Latin Beat","n_reproducciones":500},{"id":2,"title":"Rhythm of the Night","duration":"4:00","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Latin Beat","n_reproducciones":480}],"ratings":[{"userId":"user504","rating":4,"comment":"Muy energizante y bailable."}],"description":"Un álbum vibrante que fusiona ritmos latinos con pasión y modernidad.","destacado":true,"label":"Latin Groove","updatedAt":{"$date":"2025-10-20T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800005abcdef012345678"},"id":21,"title":"Country Roads","artist":{"$oid":"67f7fbccabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/countryRoadsCover.jpg","price":9.49,"releaseYear":2025,"genre":"Country","tracks":[{"id":1,"title":"Dusty Trails","duration":"3:55","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Country Stars","n_reproducciones":310},{"id":2,"title":"Sunset on the Farm","duration":"4:10","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Country Stars","n_reproducciones":290}],"ratings":[{"userId":"user605","rating":5,"comment":"Auténtico country con alma."}],"description":"Canciones que evocan la vida en el campo y la libertad de las grandes rutas.","destacado":false,"label":"Country Classics","updatedAt":{"$date":"2025-10-05T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f800006abcdef012345678"},"id":22,"title":"Techno Pulse","artist":{"$oid":"67f7fdddabcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/technoPulseCover.jpg","price":11.99,"releaseYear":2025,"genre":"Techno","tracks":[{"id":1,"title":"Digital Dreams","duration":"5:15","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Techno Beats","n_reproducciones":420},{"id":2,"title":"Neon Nights","duration":"4:50","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Techno Beats","n_reproducciones":400}],"ratings":[{"userId":"user706","rating":4,"comment":"Experimental y vibrante."}],"description":"Un recorrido digital a través de paisajes sonoros llenos de energía y bajos profundos.","destacado":true,"label":"Techno Records","updatedAt":{"$date":"2025-12-10T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900001abcdef012345670"},"id":23,"title":"House Beats","artist":{"$oid":"67f7a000abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/houseBeatsCover.jpg","price":10.49,"releaseYear":2025,"genre":"House","tracks":[{"id":1,"title":"Floor Vibration","duration":"4:05","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"House Master","n_reproducciones":350},{"id":2,"title":"Midnight Groove","duration":"4:20","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"House Master","n_reproducciones":370}],"ratings":[{"userId":"user001","rating":5,"comment":"Con mucho ritmo y energía."}],"description":"Pura energía house para encender la pista de baile.","destacado":true,"label":"House Records","updatedAt":{"$date":"2025-12-15T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900002abcdef012345670"},"id":24,"title":"Trance Odyssey","artist":{"$oid":"67f7a111abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/tranceOdysseyCover.jpg","price":11.49,"releaseYear":2025,"genre":"Trance","tracks":[{"id":1,"title":"Euphoric Journey","duration":"5:10","url":"http://localhost:5000/assets/music/euphoricJourney.mp3","autor":"Trance Vision","n_reproducciones":410},{"id":2,"title":"Celestial Dreams","duration":"5:00","url":"http://localhost:5000/assets/music/celestialDreams.mp3","autor":"Trance Vision","n_reproducciones":395}],"ratings":[{"userId":"user002","rating":4,"comment":"Una experiencia casi mística."}],"description":"Sonidos hipnóticos y envolventes que te llevan a otra dimensión.","destacado":false,"label":"Trance Factory","updatedAt":{"$date":"2025-12-16T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900003abcdef012345670"},"id":25,"title":"Bassquake","artist":{"$oid":"67f7a222abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/bassquakeCover.jpg","price":10.99,"releaseYear":2025,"genre":"Dubstep","tracks":[{"id":1,"title":"Wobble World","duration":"4:30","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Dub Master","n_reproducciones":480},{"id":2,"title":"Bass Invasion","duration":"4:15","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Dub Master","n_reproducciones":460}],"ratings":[{"userId":"user003","rating":5,"comment":"Los graves te hacen vibrar."}],"description":"Un temblor musical con líneas de bajo potentes y agresivas.","destacado":true,"label":"Dubstep HQ","updatedAt":{"$date":"2025-12-17T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900004abcdef012345670"},"id":26,"title":"Soul Essence","artist":{"$oid":"67f7a333abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/soulEssenceCover.jpg","price":9.99,"releaseYear":2025,"genre":"Soul","tracks":[{"id":1,"title":"Deep Emotions","duration":"4:40","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Soul Serenade","n_reproducciones":420}],"ratings":[{"userId":"user004","rating":5,"comment":"Una voz que toca el corazón."}],"description":"Melodías emotivas y voces que evocan el verdadero soul.","destacado":false,"label":"Soul Sounds","updatedAt":{"$date":"2025-12-18T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900005abcdef012345670"},"id":27,"title":"R&B Vibes","artist":{"$oid":"67f7a444abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/rnbVibesCover.jpg","price":10.49,"releaseYear":2025,"genre":"Rnb","tracks":[{"id":1,"title":"Smooth Nights","duration":"4:05","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"RnB Star","n_reproducciones":390}],"ratings":[{"userId":"user005","rating":4,"comment":"La suavidad del R&B en su máxima expresión."}],"description":"Líricas seductoras y ritmos suaves que conquistan el alma.","destacado":true,"label":"RnB Records","updatedAt":{"$date":"2025-12-19T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900006abcdef012345670"},"id":28,"title":"Punk Riot","artist":{"$oid":"67f7a555abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/punkRiotCover.jpg","price":8.99,"releaseYear":2025,"genre":"Punk","tracks":[{"id":1,"title":"Rebel Yell","duration":"3:30","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Punk Rebels","n_reproducciones":450}],"ratings":[{"userId":"user006","rating":5,"comment":"Una descarga de pura rebeldía."}],"description":"Energía y rebeldía en cada acorde punk.","destacado":false,"label":"Punk House","updatedAt":{"$date":"2025-12-20T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900007abcdef012345670"},"id":29,"title":"Electro Dreams","artist":{"$oid":"67f7a666abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/electroDreamsCover.jpg","price":10.99,"releaseYear":2025,"genre":"Electropop","tracks":[{"id":1,"title":"Neon Heartbeat","duration":"3:55","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Electro Star","n_reproducciones":410}],"ratings":[{"userId":"user007","rating":4,"comment":"Pop electrónico con mucho estilo."}],"description":"Una fusión de pop y electrónica con melodías contagiosas.","destacado":true,"label":"Electro Pop Productions","updatedAt":{"$date":"2025-12-21T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900008abcdef012345670"},"id":30,"title":"Synthwave Memories","artist":{"$oid":"67f7a777abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/synthwaveMemoriesCover.jpg","price":11.49,"releaseYear":2025,"genre":"Synthwave","tracks":[{"id":1,"title":"Retro Nights","duration":"4:10","url":"http://localhost:5000/assets/music/yt3.mp3","autor":"Synth Master","n_reproducciones":430}],"ratings":[{"userId":"user008","rating":5,"comment":"Una verdadera explosión retro-futurista."}],"description":"Visuales y sonidos que te transportan a los 80 con un toque moderno.","destacado":false,"label":"Synthwave Sounds","updatedAt":{"$date":"2025-12-22T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900009abcdef012345670"},"id":31,"title":"Dancehall Fever","artist":{"$oid":"67f7a888abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/dancehallFeverCover.jpg","price":10.49,"releaseYear":2025,"genre":"Dancehall","tracks":[{"id":1,"title":"Reggae Pulse","duration":"3:50","url":"http://localhost:5000/assets/music/yt2.mp3","autor":"Dancehall Star","n_reproducciones":440}],"ratings":[{"userId":"user009","rating":4,"comment":"Bailable y auténtico."}],"description":"Ritmos contagiosos que invitan a moverse sin parar.","destacado":true,"label":"Dancehall Groove","updatedAt":{"$date":"2025-12-23T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f90000aabcdef012345670"},"id":32,"title":"Grunge Stories","artist":{"$oid":"67f7a999abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/grungeStoriesCover.jpg","price":9.99,"releaseYear":2025,"genre":"Grunge","tracks":[{"id":1,"title":"Smoky Days","duration":"4:00","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Grunge Band","n_reproducciones":370}],"ratings":[{"userId":"user010","rating":5,"comment":"Intenso y real."}],"description":"Una mirada cruda a la estética grunge, con guitarras distorsionadas y letras profundas.","destacado":false,"label":"Grunge Nation","updatedAt":{"$date":"2025-12-24T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900011abcdef012345670"},"id":39,"title":"Hardrock Revolution","artist":{"$oid":"67f7b012abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/hardrockRevolutionCover.jpg","price":12.99,"releaseYear":2025,"genre":"Hardrock","tracks":[{"id":1,"title":"Riff War","duration":"4:40","url":"http://localhost:5000/assets/music/yt1.mp3","autor":"Hardrock Heroes","n_reproducciones":430}],"ratings":[{"userId":"user017","rating":5,"comment":"Una descarga de energía pura."}],"description":"Potentes riffs y batería incesante, todo el espíritu del Hardrock.","destacado":true,"label":"Hardrock Records","updatedAt":{"$date":"2025-12-31T12:00:00Z"},"__v":0},
-{"_id":{"$oid":"67f900012abcdef012345670"},"id":40,"title":"Chillwave Escape","artist":{"$oid":"67f7b123abcdef0123456789"},"coverImage":"http://localhost:5000/assets/images/chillwaveEscapeCover.jpg","price":9.49,"releaseYear":2025,"genre":"Chillwave","tracks":[{"id":1,"title":"Lazy Afternoon","duration":"4:05","url":"http://localhost:5000/assets/music/yt4.mp3","autor":"Chillwave Collective","n_reproducciones":380}],"ratings":[{"userId":"user018","rating":4,"comment":"Relajante y con buenas vibras."}],"description":"Un recorrido relajado por paisajes sonoros llenos de sintetizadores y calma.","destacado":false,"label":"Chillwave Tunes","updatedAt":{"$date":"2026-01-01T12:00:00Z"},"__v":0}
+    {
+        "_id": {
+            "$oid": "67f54128413d65a360d02916"
+        },
+        "id": 4,
+        "title": "Whispers of the Forest",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed8"
+        },
+        "coverImage": "http://localhost:5000/assets/images/EOT1.webp",
+        "price": 10.99,
+        "releaseYear": 2024,
+        "genre": "Ambient",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Forest Breeze",
+                "duration": "4:10",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 48200
+            },
+            {
+                "id": 2,
+                "title": "Morning Dew",
+                "duration": "5:20",
+                "url": "http://localhost:5000/assets/music/BackInBlack.mp3",
+                "autor": "The Soundscapers, DJ Beats",
+                "n_reproducciones": 20200
+            },
+            {
+                "id": 3,
+                "title": "The Calm Before the Storm",
+                "duration": "6:00",
+                "url": "http://localhost:5000/assets/music/Believer.mp3",
+                "autor": "The Soundscapers, Soulful Voices",
+                "n_reproducciones": 21200
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 3,
+                "rating": 5,
+                "comment": "Another breathtaking masterpiece!"
+            },
+            {
+                "userId": 4,
+                "rating": 4,
+                "comment": "Very peaceful and serene."
+            }
+        ],
+        "vinyl": true,
+        "cd": true,
+        "cassettes": true,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.143Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f6967ea8b078764a272f7b"
+        },
+        "id": 10,
+        "title": "Primer Éxito",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed7"
+        },
+        "coverImage": "http://localhost:5000/assets/images/primerExitoCover.jpg",
+        "price": 11.99,
+        "releaseYear": 2025,
+        "genre": "Electronic",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "First Light",
+                "duration": "3:30",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "DJ Beats",
+                "n_reproducciones": 110
+            },
+            {
+                "id": 2,
+                "title": "Morning Pulse",
+                "duration": "4:00",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "DJ Beats",
+                "n_reproducciones": 10
+            },
+            {
+                "id": 3,
+                "title": "Night Vibes",
+                "duration": "4:15",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "DJ Beats",
+                "n_reproducciones": 350
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 1,
+                "rating": 5,
+                "comment": "Increíble álbum, muy innovador."
+            },
+            {
+                "userId": "67e5d0e55a24feeaed1e1a66",
+                "rating": 4,
+                "comment": "Pedazo album",
+                "profileImage": "http://localhost:5000/assets/images/default.jpg"
+            }
+        ],
+        "vinyl": false,
+        "cd": true,
+        "cassettes": false,
+        "updatedAt": {
+            "$date": "2025-04-10T00:26:54.882Z"
+        },
+        "__v": 1,
+        "description": "",
+        "destacado": false,
+        "label": ""
+    },
+    {
+        "_id": {
+            "$oid": "67f54128413d65a360d02917"
+        },
+        "id": 5,
+        "title": "Electric Dreams",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed7"
+        },
+        "coverImage": "http://localhost:5000/assets/images/EOT2.jpg",
+        "price": 13.99,
+        "releaseYear": 2023,
+        "genre": "Electronic",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Neon Lights",
+                "duration": "4:00",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "DJ Beats, Soulful Voices",
+                "n_reproducciones": 51200
+            },
+            {
+                "id": 2,
+                "title": "Pulse of the City",
+                "duration": "4:50",
+                "url": "http://localhost:5000/assets/music/BackInBlack.mp3",
+                "autor": "DJ Beats",
+                "n_reproducciones": 12200
+            },
+            {
+                "id": 3,
+                "title": "Midnight Rave",
+                "duration": "5:30",
+                "url": "http://localhost:5000/assets/music/Believer.mp3",
+                "autor": "DJ Beats, The Soundscapers",
+                "n_reproducciones": 11200
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 5,
+                "rating": 4,
+                "comment": "The beats are really strong on this one!"
+            },
+            {
+                "userId": 6,
+                "rating": 5,
+                "comment": "I love the energy in every track."
+            }
+        ],
+        "vinyl": false,
+        "cd": true,
+        "cassettes": true,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.15Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f54128413d65a360d02914"
+        },
+        "id": 1,
+        "title": "Echoes of Time",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed8"
+        },
+        "coverImage": "http://localhost:5000/assets/images/EOT.jpeg",
+        "price": 9.99,
+        "releaseYear": 2023,
+        "genre": "Ambient",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Whispers in the Wind",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/Believer.mp3",
+                "autor": "The Soundscapers, DJ Beats",
+                "n_reproducciones": 15200
+            },
+            {
+                "id": 2,
+                "title": "Reflections",
+                "duration": "5:30",
+                "url": "http://localhost:5000/assets/music/BackInBlack.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 18200
+            },
+            {
+                "id": 3,
+                "title": "Distant Shores",
+                "duration": "6:15",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 1200
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 1,
+                "rating": 5,
+                "comment": "Absolutely beautiful!"
+            },
+            {
+                "userId": 2,
+                "rating": 4,
+                "comment": "Very calming and relaxing."
+            }
+        ],
+        "vinyl": true,
+        "cd": true,
+        "cassettes": false,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.146Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f69988bd99d6772ca9affc"
+        },
+        "id": 7,
+        "title": "Segundo Álbum",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed8"
+        },
+        "coverImage": "http://localhost:5000/assets/images/segundoAlbumCover.jpg",
+        "price": 11.99,
+        "releaseYear": 2024,
+        "genre": "Rock",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Pulse of Reality",
+                "duration": "4:20",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 20000
+            },
+            {
+                "id": 2,
+                "title": "Shadows in Time",
+                "duration": "5:00",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 15000
+            },
+            {
+                "id": 3,
+                "title": "Eternal Echoes",
+                "duration": "6:30",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 10000
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 2,
+                "rating": 4,
+                "comment": "Muy bueno, me encantó la producción."
+            },
+            {
+                "userId": 3,
+                "rating": 5,
+                "comment": "Un subidón de energía de principio a fin."
+            }
+        ],
+        "vinyl": true,
+        "cd": true,
+        "cassettes": false,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.153Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f698b9f6bdc54147da5509"
+        },
+        "id": 10,
+        "title": "Álbum Debut",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed8"
+        },
+        "coverImage": "http://localhost:5000/assets/images/albumDebutCover.jpg",
+        "price": 9.99,
+        "releaseYear": 2023,
+        "genre": "Rock",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Whispers in the Wind",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers, DJ Beats",
+                "n_reproducciones": 15200
+            },
+            {
+                "id": 2,
+                "title": "Reflections",
+                "duration": "5:30",
+                "url": "http://localhost:5000/assets/music/BackInBlack.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 18200
+            },
+            {
+                "id": 3,
+                "title": "Distant Shores",
+                "duration": "6:15",
+                "url": "http://localhost:5000/assets/music/Believer.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 1200
+            },
+            {
+                "id": 4,
+                "title": "New Life",
+                "duration": "4:45",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 2
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 1,
+                "rating": 5,
+                "comment": "Absolutely beautiful!"
+            },
+            {
+                "userId": 2,
+                "rating": 4,
+                "comment": "Very calming and relaxing."
+            }
+        ],
+        "vinyl": true,
+        "cd": true,
+        "cassettes": false,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.155Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f699efb8d4eca74755f1e1"
+        },
+        "id": 11,
+        "title": "Jazz Suave",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed6"
+        },
+        "coverImage": "http://localhost:5000/assets/images/albumJazzSuave.jpg",
+        "price": 12.99,
+        "releaseYear": 2025,
+        "genre": "Jazz",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Smooth Nights",
+                "duration": "5:00",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "Soulful Voices",
+                "n_reproducciones": 3500
+            },
+            {
+                "id": 2,
+                "title": "Mellow Mornings",
+                "duration": "4:30",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "Soulful Voices",
+                "n_reproducciones": 10000
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 1,
+                "rating": 4,
+                "comment": "Muy bueno, realmente disfruto del ambiente relajado de este álbum."
+            }
+        ],
+        "vinyl": true,
+        "cd": true,
+        "cassettes": false,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.157Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f54128413d65a360d02915"
+        },
+        "id": 2,
+        "title": "Electronic Vibes",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed7"
+        },
+        "coverImage": "http://localhost:5000/assets/images/ROTN.jpg",
+        "price": 12.99,
+        "releaseYear": 2022,
+        "genre": "Electronic",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Nightfall",
+                "duration": "3:45",
+                "url": "http://localhost:5000/assets/music/BackInBlack.mp3",
+                "autor": "The Soundscapers",
+                "n_reproducciones": 48200
+            },
+            {
+                "id": 2,
+                "title": "Starlight",
+                "duration": "4:20",
+                "url": "http://localhost:5000/assets/music/21Questions.mp3",
+                "autor": "The Soundscapers, DJ Beats",
+                "n_reproducciones": 20200
+            },
+            {
+                "id": 3,
+                "title": "Dance of Shadows",
+                "duration": "5:10",
+                "url": "http://localhost:5000/assets/music/Believer.mp3",
+                "autor": "The Soundscapers, Soulful Voices",
+                "n_reproducciones": 21200
+            }
+        ],
+        "ratings": [
+            {
+                "userId": 3,
+                "rating": 4,
+                "comment": "Great beats for a party!"
+            },
+            {
+                "userId": 4,
+                "rating": 5,
+                "comment": "Loved every track!"
+            }
+        ],
+        "vinyl": false,
+        "cd": true,
+        "cassettes": true,
+        "updatedAt": {
+            "$date": "2025-04-09T23:13:26.159Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "67f7a456789abcdef0123456"
+        },
+        "id": 12,
+        "title": "Pop Vibes",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed6"
+        },
+        "coverImage": "http://localhost:5000/assets/images/popVibesCover.jpg",
+        "price": 9.99,
+        "releaseYear": 2025,
+        "genre": "Pop",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Summer Lights",
+                "duration": "3:45",
+                "url": "http://localhost:5000/assets/music/summerLights.mp3",
+                "autor": "Soulful Voices",
+                "n_reproducciones": 500
+            },
+            {
+                "id": 2,
+                "title": "City Dreams",
+                "duration": "4:10",
+                "url": "http://localhost:5000/assets/music/cityDreams.mp3",
+                "autor": "Soulful Voices",
+                "n_reproducciones": 450
+            }
+        ],
+        "ratings": [],
+        "description": "Un álbum pop vibrante con ritmos contagiosos y melodías pegajosas.",
+        "destacado": true,
+        "label": "Universal Music",
+        "updatedAt": {
+            "$date": "2025-07-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f7b789abcdef0123456789"
+        },
+        "id": 13,
+        "title": "Clásicas Eternas",
+        "artist": {
+            "$oid": "67f541302881db471f2dbed8"
+        },
+        "coverImage": "http://localhost:5000/assets/images/clasicasEternasCover.jpg",
+        "price": 14.99,
+        "releaseYear": 2025,
+        "genre": "Classical",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Sinfonía No. 9",
+                "duration": "8:15",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Orquesta Sinfónica",
+                "n_reproducciones": 320
+            },
+            {
+                "id": 2,
+                "title": "Serenata en Do",
+                "duration": "6:30",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Orquesta Sinfónica",
+                "n_reproducciones": 275
+            }
+        ],
+        "ratings": [],
+        "description": "Una colección de obras maestras clásicas, interpretadas con pasión y precisión.",
+        "destacado": false,
+        "label": "EMI Classics",
+        "updatedAt": {
+            "$date": "2025-08-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f7c999abcdef012345678a"
+        },
+        "id": 14,
+        "title": "Street Rhythms",
+        "artist": {
+            "$oid": "67f7d01234567890abcdef34"
+        },
+        "coverImage": "http://localhost:5000/assets/images/streetRhythmsCover.jpg",
+        "price": 10.99,
+        "releaseYear": 2025,
+        "genre": "Hiphop",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Urban Pulse",
+                "duration": "4:00",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "MC Street",
+                "n_reproducciones": 600
+            },
+            {
+                "id": 2,
+                "title": "Rhythm and Graffiti",
+                "duration": "3:45",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "MC Street",
+                "n_reproducciones": 550
+            }
+        ],
+        "ratings": [],
+        "description": "Un álbum con poderosos beats de hip-hop y letras que narran la vida en las calles.",
+        "destacado": true,
+        "label": "Street Records",
+        "updatedAt": {
+            "$date": "2025-09-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f7e111abcdef0123456789"
+        },
+        "id": 15,
+        "title": "Blues in the Night",
+        "artist": {
+            "$oid": "67f7d999abcdef012345678b"
+        },
+        "coverImage": "http://localhost:5000/assets/images/bluesInTheNightCover.jpg",
+        "price": 12.99,
+        "releaseYear": 2025,
+        "genre": "Blues",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Midnight Blues",
+                "duration": "4:20",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Blue Soul",
+                "n_reproducciones": 480
+            },
+            {
+                "id": 2,
+                "title": "River of Sorrow",
+                "duration": "5:05",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Blue Soul",
+                "n_reproducciones": 520
+            },
+            {
+                "id": 3,
+                "title": "Moonlight Whispers",
+                "duration": "3:55",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Blue Soul",
+                "n_reproducciones": 430
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user123",
+                "rating": 5,
+                "comment": "Increíble, me transporta al corazón del blues."
+            },
+            {
+                "userId": "user456",
+                "rating": 4,
+                "comment": "Muy buena iterpretación, recomiendo escucharla en vinilo."
+            }
+        ],
+        "description": "Un álbum envolvente que captura la esencia y la emoción del blues tradicional.",
+        "destacado": false,
+        "label": "Blue Recordings",
+        "updatedAt": {
+            "$date": "2025-10-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f7f222abcdefabcdefabcd"
+        },
+        "id": 16,
+        "title": "Reggae Vibes",
+        "artist": {
+            "$oid": "67f7d111abcdef012345678a"
+        },
+        "coverImage": "http://localhost:5000/assets/images/reggaeVibesCover.jpg",
+        "price": 11.49,
+        "releaseYear": 2025,
+        "genre": "Reggae",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Island Breeze",
+                "duration": "4:30",
+                "url": "http://localhost:5000/assets/music/islandBreeze.mp3",
+                "autor": "Rasta Vibes",
+                "n_reproducciones": 350
+            },
+            {
+                "id": 2,
+                "title": "Sunrise Riddim",
+                "duration": "5:00",
+                "url": "http://localhost:5000/assets/music/sunriseRiddim.mp3",
+                "autor": "Rasta Vibes",
+                "n_reproducciones": 400
+            },
+            {
+                "id": 3,
+                "title": "Dancehall Dreams",
+                "duration": "4:15",
+                "url": "http://localhost:5000/assets/music/dancehallDreams.mp3",
+                "autor": "Rasta Vibes",
+                "n_reproducciones": 320
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user789",
+                "rating": 5,
+                "comment": "Vibrante y llena de energía!"
+            },
+            {
+                "userId": "user101",
+                "rating": 4,
+                "comment": "Muy buena, me transporta a la playa."
+            }
+        ],
+        "description": "Un viaje sonoro lleno de ritmo y relajación que captura la esencia del reggae.",
+        "destacado": true,
+        "label": "Reggae Roots",
+        "updatedAt": {
+            "$date": "2025-11-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800001abcdef012345678"
+        },
+        "id": 17,
+        "title": "Metal Mayhem",
+        "artist": {
+            "$oid": "67f7eaaaabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/metalMayhemCover.jpg",
+        "price": 13.99,
+        "releaseYear": 2025,
+        "genre": "Metal",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Thunderous Roar",
+                "duration": "5:00",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Metal Masters",
+                "n_reproducciones": 400
+            },
+            {
+                "id": 2,
+                "title": "Raging Inferno",
+                "duration": "4:45",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Metal Masters",
+                "n_reproducciones": 380
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user201",
+                "rating": 5,
+                "comment": "Brutal y épico!"
+            }
+        ],
+        "description": "Un álbum pesado lleno de riffs intensos y batería implacable.",
+        "destacado": true,
+        "label": "Metal Records",
+        "updatedAt": {
+            "$date": "2025-12-01T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800002abcdef012345678"
+        },
+        "id": 18,
+        "title": "Indie Nights",
+        "artist": {
+            "$oid": "67f7efbbabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/indieNightsCover.jpg",
+        "price": 9.99,
+        "releaseYear": 2025,
+        "genre": "Indie",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "City Lights",
+                "duration": "3:50",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Indie Vibes",
+                "n_reproducciones": 450
+            },
+            {
+                "id": 2,
+                "title": "Lost in Transit",
+                "duration": "4:10",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Indie Vibes",
+                "n_reproducciones": 420
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user302",
+                "rating": 4,
+                "comment": "Atmosférico y refrescante."
+            }
+        ],
+        "description": "Un viaje introspectivo con sonidos melódicos y arreglos minimalistas.",
+        "destacado": false,
+        "label": "Indie Tunes",
+        "updatedAt": {
+            "$date": "2025-12-05T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800003abcdef012345678"
+        },
+        "id": 19,
+        "title": "Folk Tales",
+        "artist": {
+            "$oid": "67f7fcbbabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/folkTalesCover.jpg",
+        "price": 8.99,
+        "releaseYear": 2025,
+        "genre": "Folk",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Rustic Roads",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Folk Legends",
+                "n_reproducciones": 300
+            },
+            {
+                "id": 2,
+                "title": "Wandering Soul",
+                "duration": "3:55",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Folk Legends",
+                "n_reproducciones": 320
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user403",
+                "rating": 5,
+                "comment": "Auténtico y conmovedor."
+            }
+        ],
+        "description": "Historias cantadas a la orilla del camino, llenas de nostalgia y encanto.",
+        "destacado": false,
+        "label": "Folk Records",
+        "updatedAt": {
+            "$date": "2025-11-15T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800004abcdef012345678"
+        },
+        "id": 20,
+        "title": "Latin Fire",
+        "artist": {
+            "$oid": "67f7fabcabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/latinFireCover.jpg",
+        "price": 10.99,
+        "releaseYear": 2025,
+        "genre": "Latin",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Salsa Heat",
+                "duration": "4:20",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Latin Beat",
+                "n_reproducciones": 500
+            },
+            {
+                "id": 2,
+                "title": "Rhythm of the Night",
+                "duration": "4:00",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Latin Beat",
+                "n_reproducciones": 480
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user504",
+                "rating": 4,
+                "comment": "Muy energizante y bailable."
+            }
+        ],
+        "description": "Un álbum vibrante que fusiona ritmos latinos con pasión y modernidad.",
+        "destacado": true,
+        "label": "Latin Groove",
+        "updatedAt": {
+            "$date": "2025-10-20T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800005abcdef012345678"
+        },
+        "id": 21,
+        "title": "Country Roads",
+        "artist": {
+            "$oid": "67f7fbccabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/countryRoadsCover.jpg",
+        "price": 9.49,
+        "releaseYear": 2025,
+        "genre": "Country",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Dusty Trails",
+                "duration": "3:55",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Country Stars",
+                "n_reproducciones": 310
+            },
+            {
+                "id": 2,
+                "title": "Sunset on the Farm",
+                "duration": "4:10",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Country Stars",
+                "n_reproducciones": 290
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user605",
+                "rating": 5,
+                "comment": "Auténtico country con alma."
+            }
+        ],
+        "description": "Canciones que evocan la vida en el campo y la libertad de las grandes rutas.",
+        "destacado": false,
+        "label": "Country Classics",
+        "updatedAt": {
+            "$date": "2025-10-05T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f800006abcdef012345678"
+        },
+        "id": 22,
+        "title": "Techno Pulse",
+        "artist": {
+            "$oid": "67f7fdddabcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/technoPulseCover.jpg",
+        "price": 11.99,
+        "releaseYear": 2025,
+        "genre": "Techno",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Digital Dreams",
+                "duration": "5:15",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Techno Beats",
+                "n_reproducciones": 420
+            },
+            {
+                "id": 2,
+                "title": "Neon Nights",
+                "duration": "4:50",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Techno Beats",
+                "n_reproducciones": 400
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user706",
+                "rating": 4,
+                "comment": "Experimental y vibrante."
+            }
+        ],
+        "description": "Un recorrido digital a través de paisajes sonoros llenos de energía y bajos profundos.",
+        "destacado": true,
+        "label": "Techno Records",
+        "updatedAt": {
+            "$date": "2025-12-10T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900001abcdef012345670"
+        },
+        "id": 23,
+        "title": "House Beats",
+        "artist": {
+            "$oid": "67f7a000abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/houseBeatsCover.jpg",
+        "price": 10.49,
+        "releaseYear": 2025,
+        "genre": "House",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Floor Vibration",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "House Master",
+                "n_reproducciones": 350
+            },
+            {
+                "id": 2,
+                "title": "Midnight Groove",
+                "duration": "4:20",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "House Master",
+                "n_reproducciones": 370
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user001",
+                "rating": 5,
+                "comment": "Con mucho ritmo y energía."
+            }
+        ],
+        "description": "Pura energía house para encender la pista de baile.",
+        "destacado": true,
+        "label": "House Records",
+        "updatedAt": {
+            "$date": "2025-12-15T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900002abcdef012345670"
+        },
+        "id": 24,
+        "title": "Trance Odyssey",
+        "artist": {
+            "$oid": "67f7a111abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/tranceOdysseyCover.jpg",
+        "price": 11.49,
+        "releaseYear": 2025,
+        "genre": "Trance",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Euphoric Journey",
+                "duration": "5:10",
+                "url": "http://localhost:5000/assets/music/euphoricJourney.mp3",
+                "autor": "Trance Vision",
+                "n_reproducciones": 410
+            },
+            {
+                "id": 2,
+                "title": "Celestial Dreams",
+                "duration": "5:00",
+                "url": "http://localhost:5000/assets/music/celestialDreams.mp3",
+                "autor": "Trance Vision",
+                "n_reproducciones": 395
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user002",
+                "rating": 4,
+                "comment": "Una experiencia casi mística."
+            }
+        ],
+        "description": "Sonidos hipnóticos y envolventes que te llevan a otra dimensión.",
+        "destacado": false,
+        "label": "Trance Factory",
+        "updatedAt": {
+            "$date": "2025-12-16T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900003abcdef012345670"
+        },
+        "id": 25,
+        "title": "Bassquake",
+        "artist": {
+            "$oid": "67f7a222abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/bassquakeCover.jpg",
+        "price": 10.99,
+        "releaseYear": 2025,
+        "genre": "Dubstep",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Wobble World",
+                "duration": "4:30",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Dub Master",
+                "n_reproducciones": 480
+            },
+            {
+                "id": 2,
+                "title": "Bass Invasion",
+                "duration": "4:15",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Dub Master",
+                "n_reproducciones": 460
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user003",
+                "rating": 5,
+                "comment": "Los graves te hacen vibrar."
+            }
+        ],
+        "description": "Un temblor musical con líneas de bajo potentes y agresivas.",
+        "destacado": true,
+        "label": "Dubstep HQ",
+        "updatedAt": {
+            "$date": "2025-12-17T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900004abcdef012345670"
+        },
+        "id": 26,
+        "title": "Soul Essence",
+        "artist": {
+            "$oid": "67f7a333abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/soulEssenceCover.jpg",
+        "price": 9.99,
+        "releaseYear": 2025,
+        "genre": "Soul",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Deep Emotions",
+                "duration": "4:40",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Soul Serenade",
+                "n_reproducciones": 420
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user004",
+                "rating": 5,
+                "comment": "Una voz que toca el corazón."
+            }
+        ],
+        "description": "Melodías emotivas y voces que evocan el verdadero soul.",
+        "destacado": false,
+        "label": "Soul Sounds",
+        "updatedAt": {
+            "$date": "2025-12-18T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900005abcdef012345670"
+        },
+        "id": 27,
+        "title": "R&B Vibes",
+        "artist": {
+            "$oid": "67f7a444abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/rnbVibesCover.jpg",
+        "price": 10.49,
+        "releaseYear": 2025,
+        "genre": "Rnb",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Smooth Nights",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "RnB Star",
+                "n_reproducciones": 390
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user005",
+                "rating": 4,
+                "comment": "La suavidad del R&B en su máxima expresión."
+            }
+        ],
+        "description": "Líricas seductoras y ritmos suaves que conquistan el alma.",
+        "destacado": true,
+        "label": "RnB Records",
+        "updatedAt": {
+            "$date": "2025-12-19T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900006abcdef012345670"
+        },
+        "id": 28,
+        "title": "Punk Riot",
+        "artist": {
+            "$oid": "67f7a555abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/punkRiotCover.jpg",
+        "price": 8.99,
+        "releaseYear": 2025,
+        "genre": "Punk",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Rebel Yell",
+                "duration": "3:30",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Punk Rebels",
+                "n_reproducciones": 450
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user006",
+                "rating": 5,
+                "comment": "Una descarga de pura rebeldía."
+            }
+        ],
+        "description": "Energía y rebeldía en cada acorde punk.",
+        "destacado": false,
+        "label": "Punk House",
+        "updatedAt": {
+            "$date": "2025-12-20T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900007abcdef012345670"
+        },
+        "id": 29,
+        "title": "Electro Dreams",
+        "artist": {
+            "$oid": "67f7a666abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/electroDreamsCover.jpg",
+        "price": 10.99,
+        "releaseYear": 2025,
+        "genre": "Electropop",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Neon Heartbeat",
+                "duration": "3:55",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Electro Star",
+                "n_reproducciones": 410
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user007",
+                "rating": 4,
+                "comment": "Pop electrónico con mucho estilo."
+            }
+        ],
+        "description": "Una fusión de pop y electrónica con melodías contagiosas.",
+        "destacado": true,
+        "label": "Electro Pop Productions",
+        "updatedAt": {
+            "$date": "2025-12-21T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900008abcdef012345670"
+        },
+        "id": 30,
+        "title": "Synthwave Memories",
+        "artist": {
+            "$oid": "67f7a777abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/synthwaveMemoriesCover.jpg",
+        "price": 11.49,
+        "releaseYear": 2025,
+        "genre": "Synthwave",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Retro Nights",
+                "duration": "4:10",
+                "url": "http://localhost:5000/assets/music/yt3.mp3",
+                "autor": "Synth Master",
+                "n_reproducciones": 430
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user008",
+                "rating": 5,
+                "comment": "Una verdadera explosión retro-futurista."
+            }
+        ],
+        "description": "Visuales y sonidos que te transportan a los 80 con un toque moderno.",
+        "destacado": false,
+        "label": "Synthwave Sounds",
+        "updatedAt": {
+            "$date": "2025-12-22T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900009abcdef012345670"
+        },
+        "id": 31,
+        "title": "Dancehall Fever",
+        "artist": {
+            "$oid": "67f7a888abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/dancehallFeverCover.jpg",
+        "price": 10.49,
+        "releaseYear": 2025,
+        "genre": "Dancehall",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Reggae Pulse",
+                "duration": "3:50",
+                "url": "http://localhost:5000/assets/music/yt2.mp3",
+                "autor": "Dancehall Star",
+                "n_reproducciones": 440
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user009",
+                "rating": 4,
+                "comment": "Bailable y auténtico."
+            }
+        ],
+        "description": "Ritmos contagiosos que invitan a moverse sin parar.",
+        "destacado": true,
+        "label": "Dancehall Groove",
+        "updatedAt": {
+            "$date": "2025-12-23T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f90000aabcdef012345670"
+        },
+        "id": 32,
+        "title": "Grunge Stories",
+        "artist": {
+            "$oid": "67f7a999abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/grungeStoriesCover.jpg",
+        "price": 9.99,
+        "releaseYear": 2025,
+        "genre": "Grunge",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Smoky Days",
+                "duration": "4:00",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Grunge Band",
+                "n_reproducciones": 370
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user010",
+                "rating": 5,
+                "comment": "Intenso y real."
+            }
+        ],
+        "description": "Una mirada cruda a la estética grunge, con guitarras distorsionadas y letras profundas.",
+        "destacado": false,
+        "label": "Grunge Nation",
+        "updatedAt": {
+            "$date": "2025-12-24T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900011abcdef012345670"
+        },
+        "id": 39,
+        "title": "Hardrock Revolution",
+        "artist": {
+            "$oid": "67f7b012abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/hardrockRevolutionCover.jpg",
+        "price": 12.99,
+        "releaseYear": 2025,
+        "genre": "Hardrock",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Riff War",
+                "duration": "4:40",
+                "url": "http://localhost:5000/assets/music/yt1.mp3",
+                "autor": "Hardrock Heroes",
+                "n_reproducciones": 430
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user017",
+                "rating": 5,
+                "comment": "Una descarga de energía pura."
+            }
+        ],
+        "description": "Potentes riffs y batería incesante, todo el espíritu del Hardrock.",
+        "destacado": true,
+        "label": "Hardrock Records",
+        "updatedAt": {
+            "$date": "2025-12-31T12:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "67f900012abcdef012345670"
+        },
+        "id": 40,
+        "title": "Chillwave Escape",
+        "artist": {
+            "$oid": "67f7b123abcdef0123456789"
+        },
+        "coverImage": "http://localhost:5000/assets/images/chillwaveEscapeCover.jpg",
+        "price": 9.49,
+        "releaseYear": 2025,
+        "genre": "Chillwave",
+        "tracks": [
+            {
+                "id": 1,
+                "title": "Lazy Afternoon",
+                "duration": "4:05",
+                "url": "http://localhost:5000/assets/music/yt4.mp3",
+                "autor": "Chillwave Collective",
+                "n_reproducciones": 380
+            }
+        ],
+        "ratings": [
+            {
+                "userId": "user018",
+                "rating": 4,
+                "comment": "Relajante y con buenas vibras."
+            }
+        ],
+        "description": "Un recorrido relajado por paisajes sonoros llenos de sintetizadores y calma.",
+        "destacado": false,
+        "label": "Chillwave Tunes",
+        "updatedAt": {
+            "$date": "2026-01-01T12:00:00Z"
+        },
+        "__v": 0
+    }
 ]

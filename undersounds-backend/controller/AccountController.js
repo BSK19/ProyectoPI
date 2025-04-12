@@ -106,7 +106,7 @@ class AccountController {
 
       // Si es una banda y tiene artistId, cargar datos completos
       let accountToReturn = account;
-      if (account.role === 'band' && account.artistId) {
+      if (account.role === 'band') {
         accountToReturn = await AccountDao.findByIdWithArtist(account._id);
       }
 
