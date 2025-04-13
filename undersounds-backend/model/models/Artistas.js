@@ -23,6 +23,7 @@ const SocialLinksSchema = new mongoose.Schema({
 }, { _id: false });
 
 const ArtistSchema = new mongoose.Schema({
+    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
     id: { type: Number, required: true },
     name: { type: String, required: true },
     profileImage: { type: String, default: '' },

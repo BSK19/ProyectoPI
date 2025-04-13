@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // URL base para tus endpoints de álbumes y artistas
 const ALBUM_BASE_URL = "http://localhost:5000/api/albums";
+const ARTIST_BASE_URL = "http://localhost:5000/api/artists";
 
 // Función para obtener álbumes (usando los endpoints de AlbumController)
 export const fetchAlbums = async () => {
@@ -12,6 +13,19 @@ export const fetchAlbums = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching albums from AlbumController:', error);
+    throw error;
+  }
+};
+
+// Función para obtener artistas (usando los endpoints de AlbumController)
+export const fetchArtistsList = async () => {
+  try {
+    const response = await axios.get(`${ARTIST_BASE_URL}`, {
+      withCredentials: true,
+    });
+    return response.data.results || response.data;
+  } catch (error) {
+    console.error('Error fetching Artist from AlbumController:', error);
     throw error;
   }
 };

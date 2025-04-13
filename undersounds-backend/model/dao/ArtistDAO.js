@@ -68,6 +68,7 @@ class ArtistDAO {
   async getArtists(filter = {}) {
     try {
       return await Artist.find(filter)
+        .select('_id id name profileImage genre bio banner seguidores ubicacion albums concerts merchandising socialLinks createdAt updatedAt')
         .populate({
           path: 'albums',
           select: '_id id title coverImage releaseYear price genre tracks ratings'

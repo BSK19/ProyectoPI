@@ -1,10 +1,11 @@
-import React, { useState, useContext } from 'react';
-import { 
-  Dialog, DialogTitle, DialogContent, TextField, DialogActions, 
+import React, { useState, useContext, useEffect } from 'react';
+import {
+  Dialog, DialogTitle, DialogContent, TextField, DialogActions,
   Button, Box, FormControlLabel, Checkbox, MenuItem, Select,
   InputLabel, FormControl, Typography, Grid
 } from '@mui/material';
 import { createAlbum } from '../../services/jamendoService';
+import { fetchArtistsList } from '../../services/jamendoService';
 import { AuthContext } from '../../context/AuthContext';
 
 const UploadAlbumForm = ({ open, onClose }) => {
@@ -19,36 +20,51 @@ const UploadAlbumForm = ({ open, onClose }) => {
   const [price, setPrice] = useState(9.99);
   const [label, setLabel] = useState('');
 
+  const [artistsList, setArtistsList] = useState([]);
+  const [selectedArtist, setSelectedArtist] = useState('');
+
   // Usar artistId en lugar de id para la relación correcta
-  const artistId = user.artistId || '';
+  const [artistId, setArtistId] = useState(user.artistId || '');
   const artistName = user.bandName || user.username || 'Unknown Artist';
-  
+
   // Verificar si es una banda sin artistId vinculado
   const showArtistIdWarning = user.role === 'band' && !user.artistId;
 
+  //funcion para obtener la lista de artistas en caso de que el usuario sea un sello discográfico
+  useEffect(() => {
+    if (user.role === 'label') {
+      fetchArtistsList()
+        .then(data => {
+          // Suponiendo que fetchArtists devuelve un objeto con la propiedad artists.
+          setArtistsList(data || []);
+          console.log("Artistas:", data);
+        })
+        .catch((error) => console.error('Error fetching artists:', error));
+    }
+  }, [user.role]);
   // Función para extraer la duración del archivo de audio
   const getAudioDuration = (file) => {
     return new Promise((resolve) => {
       // Usar URL.createObjectURL para crear una URL temporal para el archivo
       const url = URL.createObjectURL(file);
-      
+
       // Crear un elemento de audio para obtener metadatos
       const audio = new Audio();
       audio.src = url;
-      
+
       // Cuando los metadatos estén cargados, obtenemos la duración
       audio.addEventListener('loadedmetadata', () => {
         // Liberar la URL temporal
         URL.revokeObjectURL(url);
-        
+
         // Formatear la duración a minutos:segundos
         const minutes = Math.floor(audio.duration / 60);
         const seconds = Math.floor(audio.duration % 60);
         const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        
+
         resolve(formattedDuration);
       });
-      
+
       // Si hay algún error, resolver con un valor por defecto
       audio.addEventListener('error', () => {
         console.error('Error al leer la duración del archivo de audio');
@@ -60,8 +76,8 @@ const UploadAlbumForm = ({ open, onClose }) => {
 
   // Agregar una nueva pista vacía
   const addTrack = () => {
-    setTracks([...tracks, { 
-      title: '', 
+    setTracks([...tracks, {
+      title: '',
       file: null,
       duration: '0:00', // Duración predeterminada
       autor: artistName // Autor predeterminado (el artista actual)
@@ -82,40 +98,48 @@ const UploadAlbumForm = ({ open, onClose }) => {
       return;
     }
 
-    // Validar que exista un artistId válido
-    if (!artistId) {
+    // Validar para usuario que no es sello y que debe tener artistId
+    if (user.role === 'band' && !artistId) {
       alert("Error: No se puede subir un álbum sin una cuenta de artista vinculada. Contacta al administrador.");
       return;
     }
 
+    // Validar para sello discogrático que se haya seleccionado un artista representante
+    if (user.role === 'label' && !selectedArtist) {
+      alert("Por favor, selecciona el artista representante para el álbum.");
+      return;
+    }
+
+
     // Formato para enviar
     const formData = new FormData();
-    
+
     // Campos básicos
     formData.append('title', title);
-    formData.append('artistId', artistId);
+    formData.append('artistId', user.role === 'label' ? selectedArtist : artistId);
     formData.append('description', description);
     formData.append('releaseYear', releaseYear);
     formData.append('genre', genre);
     formData.append('price', price);
     formData.append('label', label);
-        
+
     // Archivo de portada
     formData.append('coverImage', coverImage);
-    
+
     // Tracks - enviamos tanto los metadatos como los archivos
     tracks.forEach((track, index) => {
       // Metadatos de cada pista
       formData.append(`trackTitles[${index}]`, track.title);
       formData.append(`trackDurations[${index}]`, track.duration);
       formData.append(`trackAutors[${index}]`, track.autor);
-      
+
       // Archivo de audio
       if (track.file) {
         formData.append('tracks', track.file);
       }
     });
-    
+
+
     try {
       const response = await createAlbum(formData);
       if (response.success) {
@@ -135,12 +159,12 @@ const UploadAlbumForm = ({ open, onClose }) => {
       <DialogTitle>Subir Nuevo Álbum</DialogTitle>
       <DialogContent>
         {showArtistIdWarning && (
-          <Box sx={{ 
-            backgroundColor: '#fff3cd', 
-            color: '#856404', 
-            padding: 2, 
+          <Box sx={{
+            backgroundColor: '#fff3cd',
+            color: '#856404',
+            padding: 2,
             borderRadius: 1,
-            marginBottom: 2 
+            marginBottom: 2
           }}>
             <Typography variant="body2">
               <strong>Atención:</strong> Tu cuenta de artista no está correctamente configurada.
@@ -163,7 +187,7 @@ const UploadAlbumForm = ({ open, onClose }) => {
               onChange={(e) => setAlbumName(e.target.value)}
               required
             />
-            
+
             <TextField
               margin="dense"
               label="Descripción"
@@ -175,7 +199,7 @@ const UploadAlbumForm = ({ open, onClose }) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            
+
             <TextField
               margin="dense"
               label="Género Musical *"
@@ -186,7 +210,8 @@ const UploadAlbumForm = ({ open, onClose }) => {
               onChange={(e) => setGenre(e.target.value)}
               required
             />
-            
+
+
             <Box mt={2} mb={2} sx={{ display: 'flex', alignItems: 'center' }}>
               <Button
                 variant="contained"
@@ -212,7 +237,7 @@ const UploadAlbumForm = ({ open, onClose }) => {
               )}
             </Box>
           </Grid>
-          
+
           {/* Columna derecha */}
           <Grid item xs={12} md={6}>
             <TextField
@@ -226,7 +251,7 @@ const UploadAlbumForm = ({ open, onClose }) => {
               inputProps={{ min: 1900, max: new Date().getFullYear() + 5 }}
               required
             />
-            
+
             <TextField
               margin="dense"
               label="Precio (€) *"
@@ -238,9 +263,34 @@ const UploadAlbumForm = ({ open, onClose }) => {
               inputProps={{ step: 0.01, min: 0 }}
               required
             />
+            {/* Mostrar casilla para seleccionar artista solo si el rol es "label" */}
+            {user.role === 'label' && (
+              <FormControl fullWidth margin="dense" required>
+                <InputLabel id="select-artist-label">Artista Representante</InputLabel>
+                <Select
+                  labelId="select-artist-label"
+                  value={selectedArtist ||""}
+                  label="Artista Representante"
+                  
+                  onChange={(e) =>{                  
+                     setSelectedArtist(e.target.value)
+                     setArtistId(e.target.value)
+                     console.log("artistId", artistId)
+                     
+                     console.log("selectectArtist", e.target.value);
+                  }}
+                >
+                  {artistsList.map((artist) => (
+                    <MenuItem key={artist._id} value={artist._id}>
+                      {artist.name ||  'Sin Nombre'}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
           </Grid>
         </Grid>
-        
+
         {/* Sección de pistas */}
         <Box mt={3}>
           <Typography variant="h6">Pistas del Álbum *</Typography>
@@ -249,7 +299,7 @@ const UploadAlbumForm = ({ open, onClose }) => {
               Añade al menos una pista a tu álbum
             </Typography>
           )}
-          
+
           {tracks.map((track, index) => (
             <Box key={index} mb={2} p={2} sx={{ backgroundColor: '#f5f5f5', borderRadius: 1 }}>
               <Grid container spacing={2}>
@@ -300,10 +350,10 @@ const UploadAlbumForm = ({ open, onClose }) => {
                       onChange={async (e) => {
                         if (e.target.files.length > 0) {
                           const audioFile = e.target.files[0];
-                          
+
                           // Actualizar el archivo en el estado
                           updateTrack(index, 'file', audioFile);
-                          
+
                           try {
                             // Obtener y actualizar la duración automáticamente
                             const duration = await getAudioDuration(audioFile);
@@ -325,10 +375,10 @@ const UploadAlbumForm = ({ open, onClose }) => {
               </Grid>
             </Box>
           ))}
-          
-          <Button 
-            variant="outlined" 
-            onClick={addTrack} 
+
+          <Button
+            variant="outlined"
+            onClick={addTrack}
             startIcon={<span>+</span>}
             sx={{ mt: 1 }}
           >
@@ -338,9 +388,9 @@ const UploadAlbumForm = ({ open, onClose }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="inherit">Cancelar</Button>
-        <Button 
-          onClick={handleSubmit} 
-          variant="contained" 
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
           color="primary"
           disabled={!title || !genre || !coverImage || tracks.length === 0 || !artistId}
         >

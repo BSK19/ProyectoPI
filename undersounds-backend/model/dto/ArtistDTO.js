@@ -1,5 +1,6 @@
 class ArtistDTO {
     constructor(artist) {
+        this._id = artist._id; // ID de MongoDB
         this.id = artist.id;
         this.name = artist.name;
         this.profileImage = artist.profileImage;
