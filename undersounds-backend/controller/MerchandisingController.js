@@ -1,6 +1,6 @@
 const MerchDAO = require('../model/dao/MerchandisingDAO');
 const MerchFactory = require('../model/factory/MerchandisingFactory');
-
+const MerchDTO = require('../model/dto/MerchandisingDTO');
 
 const MerchandisingController = {
   // Obtener todos los productos
@@ -38,9 +38,18 @@ const MerchandisingController = {
   // Crear nuevo (más adelante lo usaréis con admin)
   async createMerch(req, res) {
     try {
-      const newMerch = MerchFactory.createMerch(req.body);
-      const savedMerch = await MerchDAO.create(newMerch);
-      res.status(201).json(savedMerch);
+      const merchData = { ...req.body };
+      merchData.price = parseFloat(merchData.price); // Convertir precio a número
+      merchData.type = parseInt(merchData.type); // Convertir tipo a número
+      merchData.artistId = parseInt(merchData.artistId); // Convertir artistId a número
+      if (req.file) {
+        merchData.image = "http://localhost:5000/assets/images/" + req.file.filename;
+      }
+      const savedMerch = await MerchFactory.createMerch(merchData);
+      res.status(201).json({ 
+        success: true,
+        merchandising: new MerchDTO(savedMerch)
+      });
     } catch (error) {
       res.status(500).json({ message: 'Error al crear el merchandising', error });
     }

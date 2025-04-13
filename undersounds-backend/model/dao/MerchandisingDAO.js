@@ -1,40 +1,34 @@
 const Merch = require('../models/Merchandising');
 
+class MerchDAO {
+  async getByArtistId(artistId) {
+    return await Merch.find({ artistId }).exec();
+  }
 
+  async createMerch(merchData) {
+    const merch = new Merch(merchData);
+    return await merch.save();
+  }
 
-const MerchDAO = {
-    // Recuperar todo el merchandising asociado a un artista
-    getByArtistId: async (artistId) => {
-        return await Merch.find({ artistId })
-            .select() // Todos los campos
-            .exec();
-    },
+  async getBasicMerchByType(type) {
+    return await Merch.find({ type })
+      .select('name image price')
+      .exec();
+  }
 
-    // Recuperar merchandising básico (solo título, foto y precio)
-    getBasicMerchByType: async (type) => {
-        return await Merch.find({ type })
-            .select('name image price') // Solo estos campos
-            .exec();
-    },
-    
+  async getBasicMerchByArtistAndType(artistId, type) {
+    return await Merch.find({ artistId, type })
+      .select('name image price')
+      .exec();
+  }
 
-    // Recuperar merchandising básico de un artista, filtrado por tipo (camisetas, vinilos, etc.)
-    getBasicMerchByArtistAndType: async (artistId, type) => {
-        return await Merch.find({ artistId, type })
-            .select('name image price') // Solo estos campos
-            .exec();
-    },
+  async getAllMerch() {
+    return await Merch.find().exec();
+  }
 
-    // Recuperar todo el merchandising (sin filtros específicos)
-    getAllMerch: async () => {
-        return await Merch.find().exec();
-    },
+  async getById(id) {
+    return await Merch.findById(id).exec();
+  }
+}
 
-    getById: async (id) => {
-        return await Merch.findById(id)
-            .select()
-            .exec();
-    }
-};
-
-module.exports = MerchDAO;
+module.exports = new MerchDAO();

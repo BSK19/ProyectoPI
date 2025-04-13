@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { updateUserProfile } from '../services/authService';
 import Button from '@mui/material/Button';
 import UploadAlbumForm from '../components/Upload/Upload';
+import UploadMerchForm from '../components/Upload/UploadMerch';
 
 import '../styles/userprofile.css';
 
@@ -259,6 +260,12 @@ const UserProfile = () => {
         <UploadAlbumForm 
           open={openAlbumModal} 
           onClose={() => setOpenAlbumModal(false)} 
+        />
+      )}
+      {openMerchModal && (
+        <UploadMerchForm 
+          open={openMerchModal} 
+          onClose={() => setOpenMerchModal(false)} 
         />
       )}
 
