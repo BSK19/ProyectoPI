@@ -5,6 +5,7 @@ import { updateUserProfile } from '../services/authService';
 import Button from '@mui/material/Button';
 import UploadAlbumForm from '../components/Upload/Upload';
 import UploadMerchForm from '../components/Upload/UploadMerch';
+import UploadArtistForm from '../components/Upload/UploadArtist';
 
 import '../styles/userprofile.css';
 
@@ -268,6 +269,13 @@ const UserProfile = () => {
           onClose={() => setOpenMerchModal(false)} 
         />
       )}
+      {openRegisterArtistModal && (
+        <UploadArtistForm 
+          open={openRegisterArtistModal} 
+          onClose={() => setOpenRegisterArtistModal(false)} 
+        />
+      )}
+
 
     </div>
   );

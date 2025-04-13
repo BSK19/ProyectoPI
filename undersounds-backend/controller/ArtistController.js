@@ -29,9 +29,22 @@ class ArtistController {
   async createArtist(req, res) {
     try {
       const artistData = req.body;
+      if(req.files) {
+        if (req.files.profileImage) {
+          artistData.profileImage = "http://localhost:5000/assets/images/" + req.files.profileImage[0].filename;
+        }
+        if (req.files.banner) {
+          artistData.banner = "http://localhost:5000/assets/images/" + req.files.banner[0].filename;
+        }
+      }
       const artistEntity = ArtistaFactory.createArtist(artistData);
+      
       const newArtist = await ArtistDAO.createArtist(artistEntity);
-      res.status(201).json(new ArtistDTO(newArtist));
+
+      res.status(201).json({
+        success : true,
+        artista: new ArtistDTO(newArtist)
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

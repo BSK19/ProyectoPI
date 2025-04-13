@@ -9,6 +9,15 @@ export const fetchArtists = async () => {
     }
 };
 
+export const createArtist = async (artistData) => {
+    try {
+        const response = await axios.post('http://localhost:5000/api/artists', artistData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const fetchArtistById = async (id) => {
     try {
         const response = await axios.get(`http://localhost:5000/api/artists/${id}`);
