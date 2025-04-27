@@ -10,34 +10,31 @@ let accessToken = null;
 
 // Interceptor para agregar el header de autorización si el access token existe
 axios.interceptors.request.use(
-  (config) => {
+  config => {
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 );
 
 // Interceptor para refrescar el access token usando la cookie del refresh token
 axios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     const originalRequest = error.config;
-    
-    // Evita intentar refrescar si la petición era al endpoint de refresh-token o a endpoints de autenticación como /login o /register
     if (
-      originalRequest.url.includes('/refresh-token') ||
-      originalRequest.url.includes('/login') ||
-      originalRequest.url.includes('/register')
+      originalRequest.url.includes('/api/auth/refresh-token') ||
+      originalRequest.url.includes('/api/auth/login') ||
+      originalRequest.url.includes('/api/auth/register')
     ) {
       return Promise.reject(error);
     }
-    
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const { data } = await axios.post(`${API_URL}/refresh-token`);
+        const { data } = await axios.post(`${API_URL}/api/auth/refresh-token`);
         accessToken = data.accessToken;
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -46,60 +43,71 @@ axios.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-    
     return Promise.reject(error);
   }
 );
 
-// Función de login: espera que el backend devuelva el access token en el body y envíe el refresh token en una cookie HttpOnly
+// Funciones de autenticación
 export const login = async (email, password, remember) => {
-  const response = await axios.post(`${API_URL}/login`, { email, password, remember });
-  const { accessToken: at } = response.data;
-  accessToken = at;
-  return response.data;
+  const { data } = await axios.post(
+    `${API_URL}/api/auth/login`,
+    { email, password, remember }
+  );
+  accessToken = data.accessToken;
+  return data;
 };
 
-export const register = async (formData) => {
-  const response = await axios.post(`${API_URL}/register`, formData);
-  return response.data;
+export const register = async formData => {
+  const { data } = await axios.post(
+    `${API_URL}/api/auth/register`,
+    formData
+  );
+  return data;
 };
 
 export const logout = async () => {
   accessToken = null;
-  const response = await axios.post(`${API_URL}/logout`);
-  return response.data;
+  const { data } = await axios.post(`${API_URL}/api/auth/logout`);
+  return data;
 };
 
-export const updateUserProfile = async (updatedUser) => {
+export const updateUserProfile = async updatedUser => {
   try {
-    // Usar updatedUser._id y concatenar con una barra '/' entre API_URL y el _id
-    const response = await axios.put(`${API_URL}/${updatedUser.id}`, updatedUser);
-    return response.data;
+    const { data } = await axios.put(
+      `${API_URL}/api/auth/${updatedUser.id}`,
+      updatedUser
+    );
+    return data;
   } catch (error) {
-    console.error("Error in updateUserProfile:", error.response?.data || error);
-    return { success: false };
+    console.error('Error updating profile:', error.response?.data || error);
+    throw error;
   }
 };
 
 export const refreshToken = async () => {
-  const response = await axios.post(`${API_URL}/refresh-token`);
-  accessToken = response.data.accessToken;
-  return response.data; // se espera { account, accessToken }
+  const { data } = await axios.post(`${API_URL}/api/auth/refresh-token`);
+  accessToken = data.accessToken;
+  return data;
 };
 
-// Para manejar OAuth, redirige al backend
 export const oauthLogin = () => {
-  window.location.href = `${API_URL}/google`;
+  window.location.href = `${API_URL}/api/auth/google`;
 };
 
-export const forgotPassword = async (email) => {
-  const response = await axios.post(`${API_URL}/forgot-password`, { email });
-  return response.data;
+export const forgotPassword = async email => {
+  const { data } = await axios.post(
+    `${API_URL}/api/auth/forgot-password`,
+    { email }
+  );
+  return data;
 };
 
 export const resetPassword = async (email, otp, newPassword, otpToken) => {
-  const response = await axios.post(`${API_URL}/reset-password`, { email, otp, newPassword, otpToken });
-  return response.data;
+  const { data } = await axios.post(
+    `${API_URL}/api/auth/reset-password`,
+    { email, otp, newPassword, otpToken }
+  );
+  return data;
 };
 
-export const authService = { login, register, logout, updateUserProfile, refreshToken, oauthLogin, forgotPassword, resetPassword };
+export const authService = {login,register,logout,updateUserProfile,refreshToken,oauthLogin,forgotPassword,resetPassword};
