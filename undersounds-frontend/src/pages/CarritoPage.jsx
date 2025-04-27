@@ -21,7 +21,7 @@ const CarritoPage = () => {
 
   const handlePago = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/create-checkout-session', {
+      const response = await axios.post('/create-checkout-session', {
         items: cartItems,
       });
       window.location.href = response.data.url;

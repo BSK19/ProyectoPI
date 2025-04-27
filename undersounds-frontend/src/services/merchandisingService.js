@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base del backend para merchandising
-const API_URL = 'http://localhost:5000/api/merchandising';
+const API_URL = '/api/merchandising';
 
 // Obtener todo el merchandising
 export const getAllMerch = async () => {

@@ -24,7 +24,7 @@ mongoose.set('strictQuery', false);
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io',
   credentials: true
 }));
 app.use(express.json());
@@ -44,8 +44,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/assets', express.static(path.join(__dirname, '../undersounds-frontend/src/assets')));
-
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Conectar a MongoDB
@@ -61,7 +59,7 @@ const swaggerOptions = {
       description: 'Documentación de la API de UnderSounds'
     },
     servers: [
-      { url: 'http://localhost:5000/api' }
+      { url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/api' }
     ]
   },
   apis: ['./docs/openapi.yaml']
@@ -70,6 +68,18 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use((req, res, next) => {
+  const _json = res.json;
+  res.json = function(body) {
+    // serializa → reemplaza → parsea de nuevo
+    const cleaned = JSON.parse(
+      JSON.stringify(body).replace(/https?:\/\/localhost:5000/g, '')
+    );
+    return _json.call(this, cleaned);
+  };
+  next();
+});
+
 // Rutas de la API
 app.use('/api/auth', accountRoutes);
 app.use('/api/albums', albumRoutes);
@@ -77,11 +87,14 @@ app.use('/api/artists', artistRoutes);
 app.use('/api/noticias', noticiasMusica);
 app.use('/api/merchandising', MerchRoutes);
 
+// 1) Sirve los assets de Vite build
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
+// 2) Sirve el resto de ficheros estáticos (CSS, JS, index.html…)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Configuración de la vista (MVC tradicional) ---
-app.use(express.static(path.join(__dirname, 'view')));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'view', 'index.html'));
+// 3) Catch‑all para SPA: devuelve siempre index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
@@ -235,8 +248,8 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: 'http://localhost:3000/paymentSuccess',
-      cancel_url: 'http://localhost:3000/',
+      success_url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/paymentSuccess',
+      cancel_url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/',
     });
 
     res.json({ url: session.url });

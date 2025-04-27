@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // URL base para tus endpoints de álbumes y artistas
-const ALBUM_BASE_URL = "http://localhost:5000/api/albums";
-const ARTIST_BASE_URL = "http://localhost:5000/api/artists";
+const ALBUM_BASE_URL = "/api/albums";
+const ARTIST_BASE_URL = "/api/artists";
 
 // Función para obtener álbumes (usando los endpoints de AlbumController)
 export const fetchAlbums = async () => {

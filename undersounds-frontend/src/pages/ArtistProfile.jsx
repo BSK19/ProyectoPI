@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, Box, Grid, Tab, Tabs } from '@mui/material';
-import '../styles/artistProfile.css';
+import '../styles/artistprofile.css';
 import { AuthContext } from '../context/AuthContext';
 import albumIMG from '../assets/images/albumPortada.jpg';
 import { fetchArtistById } from '../services/artistService';

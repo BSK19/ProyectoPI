@@ -1,4 +1,4 @@
-const AccountDao = require('../model/dao/AccountDao');
+const AccountDao = require('../model/dao/AccountDAO');
 const AccountDTO = require('../model/dto/AccountDTO');
 const AccountFactory = require('../model/factory/AccountFactory');
 const bcrypt = require('bcrypt');

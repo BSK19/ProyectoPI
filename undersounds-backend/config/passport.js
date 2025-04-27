@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const AccountDao = require('../model/dao/AccountDao');
+const AccountDao = require('../model/dao/AccountDAO');
 
 passport.serializeUser((user, done) => {
   done(null, user._id);

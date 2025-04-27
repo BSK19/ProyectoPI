@@ -43,7 +43,7 @@ const MerchandisingController = {
       merchData.type = parseInt(merchData.type); // Convertir tipo a número
       merchData.artistId = parseInt(merchData.artistId); // Convertir artistId a número
       if (req.file) {
-        merchData.image = "http://localhost:5000/assets/images/" + req.file.filename;
+        merchData.image = "/assets/images/" + req.file.filename;
       }
       const savedMerch = await MerchFactory.createMerch(merchData);
       res.status(201).json({ 

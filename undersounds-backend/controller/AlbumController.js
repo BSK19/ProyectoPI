@@ -1,4 +1,4 @@
-const AlbumDao = require('../model/dao/AlbumDao');
+const AlbumDao = require('../model/dao/AlbumDAO');
 const AlbumDTO = require('../model/dto/AlbumDTO');
 const AlbumFactory = require('../model/factory/AlbumFactory');
 const { Artist } = require('../model/models/Artistas');
@@ -167,7 +167,7 @@ class AlbumController {
       
       // Procesar archivo de coverImage si existe
       if (req.files && req.files.coverImage && req.files.coverImage.length > 0) {
-        albumData.coverImage = "http://localhost:5000/assets/images/" + req.files.coverImage[0].filename;
+        albumData.coverImage = "/assets/images/" + req.files.coverImage[0].filename;
       }
   
       // Procesar los archivos de las pistas (tracks)
@@ -187,7 +187,7 @@ class AlbumController {
           id: index + 1,
           title: (trackTitles[index] || file.originalname).trim(),
           duration: (trackDurations[index] || '0:00').trim(),
-          url: "http://localhost:5000/assets/music/" + file.filename,
+          url: "/assets/music/" + file.filename,
           autor: (trackAutors[index] || albumData.artistName || 'Unknown').trim(),
           n_reproducciones: 0
         }));

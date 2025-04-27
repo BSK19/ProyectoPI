@@ -1,0 +1,8 @@
+node_modules
+undersounds-backend/node_modules
+undersounds-frontend/node_modules
+dist
+build
+.git
+.env
+*.log
