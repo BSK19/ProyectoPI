@@ -24,7 +24,7 @@ mongoose.set('strictQuery', false);
 const app = express();
 
 app.use(cors({
-  origin: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io',
+  origin: 'http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000',
   credentials: true
 }));
 app.use(express.json());
@@ -59,7 +59,7 @@ const swaggerOptions = {
       description: 'Documentación de la API de UnderSounds'
     },
     servers: [
-      { url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/api' }
+      { url: 'http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000/api' }
     ]
   },
   apis: ['./docs/openapi.yaml']
@@ -248,8 +248,8 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/paymentSuccess',
-      cancel_url: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/',
+      success_url: 'http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000/paymentSuccess',
+      cancel_url: 'http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000/',
     });
 
     res.json({ url: session.url });

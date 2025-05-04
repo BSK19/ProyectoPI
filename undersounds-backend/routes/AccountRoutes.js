@@ -20,13 +20,13 @@ router.get('/google',
 );
 
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: 'https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/login' }),
+  passport.authenticate('google', { failureRedirect: 'http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000/login' }),
   (req, res) => {
     // Generar un token JWT para mantener la sesión en el frontend
     const token = AccountController.generateToken(req.user);
     
     // Redirige a la HomePage del frontend con el token
-    res.redirect(`https://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io/?token=${token}`);
+    res.redirect(`http://undersounds.g7chghasfqa5hhek.spaincentral.azurecontainer.io:5000/?token=${token}`);
   }
 );
 
